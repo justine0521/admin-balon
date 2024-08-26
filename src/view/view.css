@@ -1,0 +1,9 @@
+@media print {
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .header-container{
+        display: none;
+    }
+  }
