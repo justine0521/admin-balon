@@ -1,27 +1,36 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-
-//Import Icons Here
+import axios from 'axios';
 import { FaFileAlt } from "react-icons/fa";
 
 function BusinessClearance() {
-
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const [requests, setRequests] = useState([]);
+
+  useEffect(() => {
+    // Fetch data from the backend when the component mounts
+    const fetchRequests = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/certificates?certId=5'); // Use certId for Business Clearance
+        setRequests(response.data);
+      } catch (error) {
+        console.error('Error fetching requests:', error);
+      }
+    };
+
+    fetchRequests();
+  }, []);
+
   const startIndex = (currentPage - 1) * entriesToShow;
   const endIndex = startIndex + entriesToShow;
 
   const handleEntriesChange = (event) => {
     setEntriesToShow(Number(event.target.value));
     setCurrentPage(1);
-  }
+  };
 
-  const data = [
-    {fname: 'Justine', mname: 'Ribano', lname: 'Santos', gender: 'Male', age: '21', status: 'Inactive'},
-    {fname: 'Justine', mname: 'Ribano', lname: 'Santos', gender: 'Male', age: '21', status: 'Active'},
-  ]
-
-  const totalPages = Math.ceil(data.length / entriesToShow);
+  const totalPages = Math.ceil(requests.length / entriesToShow);
 
   const handlePreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
@@ -31,94 +40,75 @@ function BusinessClearance() {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
-
   return (
     <div className="w-4/5 h-screen mt-14 left-56 p-7 absolute">
       <div className="bg-White">
         <div className="flex justify-between items-center h-16 bg-White px-5 w-full border border-b-gray-300">
           <p className='text-xl'>Business Clearance Issuance</p>
-
-            <div className='flex justify-center items-center gap-x-2'>
+          <div className='flex justify-center items-center gap-x-2'>
             <NavLink to={'/certificates'}>
-              {({isActive}) => (
-                <p className={`${isActive ? 'text-gray-300' : 'text-Green'}`}>Certificates</p> 
+              {({ isActive }) => (
+                <p className={`${isActive ? 'text-gray-300' : 'text-Green'}`}>Certificates</p>
               )}
             </NavLink>
-              / 
+            /
             <NavLink to={'/business-clearance'}>
-              {({isActive}) => (
-                <p className={`${isActive ? 'text-gray-300' : 'text-Green'}`} >Business Clearance</p>
+              {({ isActive }) => (
+                <p className={`${isActive ? 'text-gray-300' : 'text-Green'}`}>Business Clearance</p>
               )}
             </NavLink>
-            </div>
-
+          </div>
         </div>
-
 
         <div className="flex justify-between items-center p-5">
           <div className="flex items-center gap-x-2">
-              <label htmlFor="entries">Show Entries:</label>
-              <select id="entries" value={entriesToShow} onChange={handleEntriesChange} className="border border-gray-300 rounded-md px-3 py-1">
-                <option value={10}>10</option>
-                <option value={25}>25</option>
-                <option value={50}>50</option>
-                <option value={100}>100</option>
-              </select>
-            </div>
+            <label htmlFor="entries">Show Entries:</label>
+            <select id="entries" value={entriesToShow} onChange={handleEntriesChange} className="border border-gray-300 rounded-md px-3 py-1">
+              <option value={10}>10</option>
+              <option value={25}>25</option>
+              <option value={50}>50</option>
+              <option value={100}>100</option>
+            </select>
+          </div>
 
           <form action="">
             <label htmlFor="search">Search: </label>
-
-            <input type="text" name="search" id="search" className="border border-gray-300 rounded-md px-3 py-1 focus:outline-none focus:border-Green"/>
+            <input type="text" name="search" id="search" className="border border-gray-300 rounded-md px-3 py-1 focus:outline-none focus:border-Green" />
           </form>
         </div>
 
         <div className='overflow-x-auto'>
-            <table className="w-full border-collapse">
-              <thead className="bg-Green">
-                <tr>
-                  <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Picture</th>
-                  <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">First Name</th>
-                  <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Middle Name</th>
-                  <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Last Name</th>
-                  <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Gender</th>
-                  <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Age</th>
-                  <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Voter Status</th>
-                  <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Action</th>
+          <table className="w-full border-collapse">
+            <thead className="bg-Green">
+              <tr>
+                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Full Name</th>
+                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Contact Number</th>
+                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Type</th>
+                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Tracking Code</th>
+                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Action</th>
+              </tr>
+            </thead>
+            <tbody className="text-center bg-white divide-y divide-gray-300">
+              {requests.slice(startIndex, endIndex).map((request) => (
+                <tr key={request._id} className="hover:bg-gray-100">
+                  <td className="px-6 py-4">{request.fullName}</td>
+                  <td className="px-6 py-3">{request.contactNumber}</td>
+                  <td className="px-6 py-3">{request.selectType}</td>
+                  <td className="px-6 py-3">{request.trackingCode}</td>
+                  <td>
+                    <NavLink to={`/barangay-certificate-of-business-clearance`}>
+                      <button title='Generate Certificate'>
+                        <FaFileAlt className='text-Blue' />
+                      </button>
+                    </NavLink>
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="text-center bg-white divide-y divide-gray-300">
-                {data.slice(startIndex, endIndex).map((resident, index) => (
-                  <tr className="hover:bg-gray-100">
-                    <td className="px-6 py-4 flex justify-center items-center">
-                      <img src="https://via.placeholder.com/50" alt="Profile" className="w-10 h-10 rounded-full" />
-                    </td>
-                    <td className="px-6 py-3">{resident.fname}</td>
-                    <td className="px-6 py-3">{resident.mname}</td>
-                    <td className="px-6 py-3">{resident.lname}</td>
-                    <td className="px-6 py-3">{resident.gender}</td>
-                    <td className="px-6 py-3">{resident.age}</td>
-                    <td className="px-6 py-3">
-                      <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium ${resident.status === 'Active' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
-                        {resident.status}
-                      </span>
-                    </td>
-                    <td>
-                      <NavLink to={'/barangay-certificate-of-business-clearance'}>
-                        <button title='Generate Certificate'>
-                          <FaFileAlt className='text-Blue'/>
-                        </button>
-                      </NavLink>
-                    </td>
-                  </tr>
-                ))}
-                  
-              </tbody>
-            </table>
-      </div>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-      {/* This is for Previous and Next Button */}
-      <div className="flex justify-between items-center p-5">
+        <div className="flex justify-between items-center p-5">
           <button
             onClick={handlePreviousPage}
             className={`p-2 border border-Green rounded-md ${currentPage === 1 && 'opacity-50 cursor-not-allowed'}`}
@@ -135,13 +125,9 @@ function BusinessClearance() {
             Next
           </button>
         </div>
-
-
+      </div>
     </div>
-
-
-    </div>
-  )
+  );
 }
 
-export default BusinessClearance
+export default BusinessClearance;
