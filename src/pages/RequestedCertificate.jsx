@@ -105,6 +105,7 @@ function RequestedCertificate() {
                 <p className="text-gray-600 mb-1"><strong>Payment:</strong> {request.paymentMethod}</p>
                 <p className="text-gray-600 mb-1"><strong>Reference No:</strong> {request.referenceNo ? request.referenceNo : 'N/A'}</p>
                 <p className="text-gray-600 mb-1"><strong>Requested at:</strong> {request.createdAt ? format(new Date(request.createdAt), 'Pp') : 'N/A'}</p>
+                <p className="text-gray-600 mb-1"><strong>Pick up Date:</strong> {request.pickUpDate ? format(new Date(request.pickUpDate), 'P') : 'N/A'}</p>
                 <p className="text-gray-600 mb-1"><strong>Purpose:</strong> {request.selectedPurpose}</p>
               </div>
               <div className="flex justify-between items-center mt-4">
