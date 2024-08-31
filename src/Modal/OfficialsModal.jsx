@@ -5,12 +5,12 @@ import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import axios from 'axios';
 
 // AWS S3 setup
-const bucketName = 'ustine-next-ecommerce';
+const bucketName = import.meta.env.VITE_AWS_BUCKET_NAME;
 const s3Client = new S3Client({
-    region: 'ap-southeast-2',
+    region: import.meta.env.VITE_AWS_REGION,
     credentials: {
-        accessKeyId: "AKIASBWLCXJE45KYBAPV",
-        secretAccessKey: "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",
+        accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID,
+        secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY,
     },
 });
 
