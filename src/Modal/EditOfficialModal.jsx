@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Profile from '../images/defaultProfile.png';
 import { IoClose } from "react-icons/io5";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
@@ -14,14 +14,26 @@ const s3Client = new S3Client({
     },
 });
 
-function OfficialsModal({ isOpen, onClose }) {
-    const [imageUrl, setImageUrl] = useState(null);
+function EditOfficialModal({ isOpen, onClose, officialData, onUpdateOfficial }) {
+    const [imageUrl, setImageUrl] = useState(Profile);
     const [formData, setFormData] = useState({
         fullname: '',
         position: '',
         dateAdded: '',
         status: '',
     });
+
+    useEffect(() => {
+        if (officialData) {
+            setFormData({
+                fullname: officialData.fullname,
+                position: officialData.position,
+                dateAdded: officialData.dateAdded,
+                status: officialData.status,
+            });
+            setImageUrl(officialData.imageUrl || Profile);
+        }
+    }, [officialData]);
 
     async function handleImageChange(event) {
         const file = event.target.files[0];
@@ -42,8 +54,6 @@ function OfficialsModal({ isOpen, onClose }) {
             } catch (err) {
                 console.error("Error uploading image: ", err);
             }
-        } else {
-            setImageUrl(Profile);
         }
     }
 
@@ -58,16 +68,18 @@ function OfficialsModal({ isOpen, onClose }) {
     async function handleSubmit(event) {
         event.preventDefault();
 
-        const officialData = {
+        const updatedOfficial = {
             ...formData,
             imageUrl
         };
 
         try {
-            await axios.post('http://localhost:5000/api/officials', officialData);
+            console.log('Updating official with data:', updatedOfficial); // Log the data being sent
+            const response = await axios.put(`http://localhost:5000/api/officials/${officialData._id}`, updatedOfficial);
+            onUpdateOfficial(response.data);
             onClose();
         } catch (error) {
-            console.error('Error saving official data:', error);
+            console.error('Error updating official data:', error.response ? error.response.data : error.message);
         }
     }
 
@@ -77,19 +89,14 @@ function OfficialsModal({ isOpen, onClose }) {
         <div className="fixed inset-0 bg-gray-800 bg-opacity-70 flex justify-center items-center z-50 overflow-auto">
             <div className="bg-white p-6 w-full max-w-lg mx-4 rounded-lg shadow-lg">
                 <header className="flex justify-between items-center text-lg border-b-2 border-green-500 pb-3 mb-4">
-                    <h2 className="text-xl font-semibold">New Official</h2>
+                    <h2 className="text-xl font-semibold">Edit Official</h2>
                     <button onClick={onClose} className="text-red-500 text-2xl hover:bg-gray-200 rounded-full p-1"><IoClose /></button>
                 </header>
 
                 <form onSubmit={handleSubmit} className='flex flex-col gap-6'>
-                    <div className='flex flex-col items-center mb-4'>
-                        <img src={imageUrl || Profile} alt="Preview" className="w-32 h-32 border border-gray-300 rounded-full object-cover mb-4" />
-                        <input
-                            onChange={handleImageChange}
-                            type="file"
-                            accept="image/*"
-                            className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-green-500"
-                        />
+                    <div className='flex flex-col items-center'>
+                        <img src={imageUrl} alt="Preview" className="w-32 h-32 border border-gray-300 rounded-full object-cover mb-4" />
+                        <input onChange={handleImageChange} type="file" accept="image/*" className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-green-500" />
                     </div>
 
                     <div className='flex flex-col gap-4'>
@@ -161,4 +168,4 @@ function OfficialsModal({ isOpen, onClose }) {
     );
 }
 
-export default OfficialsModal;
+export default EditOfficialModal;
