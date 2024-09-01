@@ -1,6 +1,6 @@
 // Sidebar.jsx
 
-import React, { useState,  useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Logo from '../images/Logo.png';
 import LogoContext from '../pages/LogoContext'
@@ -54,17 +54,6 @@ function Sidebar() {
                             )}
                         </NavLink>
 
-                        <NavLink to={"/deceased"}>
-                            {({ isActive }) => (
-                                <li className={`${isActive ? 'bg-Green text-white' : 'hover:text-Green'} px-4 py-2 mx-2 text-black rounded-lg transition duration-500`}>
-                                    <div className='flex items-center'>
-                                        <FaBookDead className='mr-3' />
-                                        Deceased
-                                    </div>
-                                </li>
-                            )}
-                        </NavLink>
-
                         <NavLink to={"/certificates"}>
                             {({ isActive }) => (
                                 <li className={`${isActive ? 'bg-Green text-white' : 'hover:text-Green'} px-4 py-2 mx-2 text-black rounded-lg transition duration-500`}>
@@ -76,45 +65,12 @@ function Sidebar() {
                             )}
                         </NavLink>
 
-                        <NavLink to={"blotter"}>
-                            {({ isActive }) => (
-                                <li className={`${isActive ? 'bg-Green text-white' : 'hover:text-Green'} px-4 py-2 mx-2 text-black rounded-lg transition duration-500`}>
-                                    <div className='flex items-center'>
-                                        <RiStackFill className='mr-3' />
-                                        Blotter
-                                    </div>
-                                </li>
-                            )}
-                        </NavLink>
-
                         <NavLink to={"officials-and-staff"}>
                             {({ isActive }) => (
                                 <li className={`${isActive ? 'bg-Green text-white' : 'hover:text-Green'} px-4 py-2 mx-2 text-black rounded-lg transition duration-500`}>
                                     <div className='flex items-center'>
                                         <HiUsers className='mr-3' />
                                         Officials and Staff
-                                    </div>
-                                </li>
-                            )}
-                        </NavLink>
-
-                        <NavLink to={"revenue"}>
-                            {({ isActive }) => (
-                                <li className={`${isActive ? 'bg-Green text-white' : 'hover:text-Green'} px-4 py-2 mx-2 text-black rounded-lg transition duration-500`}>
-                                    <div className='flex items-center'>
-                                        <TbCurrencyPeso className='mr-3 text-xl' />
-                                        Revenue
-                                    </div>
-                                </li>
-                            )}
-                        </NavLink>
-
-                        <NavLink to={"accounts"}>
-                            {({ isActive }) => (
-                                <li className={`${isActive ? 'bg-Green text-white' : 'hover:text-Green'} px-4 py-2 mx-2 text-black rounded-lg transition duration-500`}>
-                                    <div className='flex items-center'>
-                                        <FaUser className='mr-3' />
-                                        Accounts
                                     </div>
                                 </li>
                             )}
