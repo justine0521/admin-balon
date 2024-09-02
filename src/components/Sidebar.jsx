@@ -1,6 +1,6 @@
 // Sidebar.jsx
 
-import React, { useState,  useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Logo from '../images/Logo.png';
 import LogoContext from '../pages/LogoContext'
@@ -10,6 +10,7 @@ import { FaUsers, FaBookDead, FaCertificate, FaUser, FaFile, FaBell } from 'reac
 import { HiUsers } from "react-icons/hi2";
 import { RiStackFill } from "react-icons/ri";
 import { MdDashboard } from "react-icons/md";
+import { MdAnnouncement } from "react-icons/md";
 import { TbCurrencyPeso } from "react-icons/tb";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { BsPersonFillSlash } from "react-icons/bs";
@@ -54,17 +55,6 @@ function Sidebar() {
                             )}
                         </NavLink>
 
-                        {/* <NavLink to={"/deceased"}>
-                            {({ isActive }) => (
-                                <li className={`${isActive ? 'bg-Green text-white' : 'hover:text-Green'} px-4 py-2 mx-2 text-black rounded-lg transition duration-500`}>
-                                    <div className='flex items-center'>
-                                        <FaBookDead className='mr-3' />
-                                        Deceased
-                                    </div>
-                                </li>
-                            )}
-                        </NavLink> */}
-
                         <NavLink to={"/certificates"}>
                             {({ isActive }) => (
                                 <li className={`${isActive ? 'bg-Green text-white' : 'hover:text-Green'} px-4 py-2 mx-2 text-black rounded-lg transition duration-500`}>
@@ -75,17 +65,6 @@ function Sidebar() {
                                 </li>
                             )}
                         </NavLink>
-
-                        {/* <NavLink to={"blotter"}>
-                            {({ isActive }) => (
-                                <li className={`${isActive ? 'bg-Green text-white' : 'hover:text-Green'} px-4 py-2 mx-2 text-black rounded-lg transition duration-500`}>
-                                    <div className='flex items-center'>
-                                        <RiStackFill className='mr-3' />
-                                        Blotter
-                                    </div>
-                                </li>
-                            )}
-                        </NavLink> */}
 
                         <NavLink to={"officials-and-staff"}>
                             {({ isActive }) => (
@@ -98,27 +77,6 @@ function Sidebar() {
                             )}
                         </NavLink>
 
-                        {/* <NavLink to={"revenue"}>
-                            {({ isActive }) => (
-                                <li className={`${isActive ? 'bg-Green text-white' : 'hover:text-Green'} px-4 py-2 mx-2 text-black rounded-lg transition duration-500`}>
-                                    <div className='flex items-center'>
-                                        <TbCurrencyPeso className='mr-3 text-xl' />
-                                        Revenue
-                                    </div>
-                                </li>
-                            )}
-                        </NavLink> */}
-
-                        {/* <NavLink to={"accounts"}>
-                            {({ isActive }) => (
-                                <li className={`${isActive ? 'bg-Green text-white' : 'hover:text-Green'} px-4 py-2 mx-2 text-black rounded-lg transition duration-500`}>
-                                    <div className='flex items-center'>
-                                        <FaUser className='mr-3' />
-                                        Accounts
-                                    </div>
-                                </li>
-                            )}
-                        </NavLink> */}
 
                         <NavLink to={"requested-certificate"}>
                             {({ isActive }) => (
@@ -126,6 +84,17 @@ function Sidebar() {
                                     <div className='flex items-center'>
                                         <FaFile className='mr-3' />
                                         <p className='text-sm'>Requested Certificate</p>
+                                    </div>
+                                </li>
+                            )}
+                        </NavLink> */}
+
+                        <NavLink to={"announcement"}>
+                            {({ isActive }) => (
+                                <li className={`${isActive ? 'bg-Green text-white' : 'hover:text-Green'} px-4 py-2 mx-2 text-black rounded-lg transition duration-500`}>
+                                    <div className='flex items-center'>
+                                        <MdAnnouncement className='mr-3' />
+                                        News and Updates
                                     </div>
                                 </li>
                             )}
