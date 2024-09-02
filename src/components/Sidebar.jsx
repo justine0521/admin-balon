@@ -87,7 +87,7 @@ function Sidebar() {
                                     </div>
                                 </li>
                             )}
-                        </NavLink> */}
+                        </NavLink>
 
                         <NavLink to={"announcement"}>
                             {({ isActive }) => (
