@@ -77,6 +77,7 @@ function Sidebar() {
                             )}
                         </NavLink>
 
+
                         <NavLink to={"requested-certificate"}>
                             {({ isActive }) => (
                                 <li className={`${isActive ? 'bg-Green text-white' : 'hover:text-Green'} px-4 py-2 mx-2 text-black rounded-lg transition duration-500`}>
@@ -86,7 +87,7 @@ function Sidebar() {
                                     </div>
                                 </li>
                             )}
-                        </NavLink>
+                        </NavLink> */}
 
                         <NavLink to={"announcement"}>
                             {({ isActive }) => (

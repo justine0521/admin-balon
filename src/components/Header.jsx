@@ -5,6 +5,7 @@ import '../App.css';
 
 // IMPORT ICONS
 import { GiHamburgerMenu } from "react-icons/gi";
+import { MdSupervisorAccount } from "react-icons/md";
 import { FaBell, FaUserAlt } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { BiLogOut } from "react-icons/bi";
@@ -54,7 +55,7 @@ function Header() {
     <header className="bg-White w-full h-14 z-10 fixed top-0 flex justify-end items-center pr-8 ring-2 ring-slate-900/10">
       <div className="flex justify-center items-center gap-x-5">
         <button onClick={toggleDarkMode} className="text-lg">
-          {isDarkMode ? <FaSun /> : <FaMoon />}
+          {isDarkMode ? <FaSun className="text-green-500"/> : <FaMoon />}
         </button>
 
         <button className="flex justify-between text-Green">

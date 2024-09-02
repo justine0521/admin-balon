@@ -38,7 +38,7 @@ function RequestedCertificate() {
   const handleStatusChange = async (id, newStatus) => {
     try {
       await axios.patch(`http://localhost:5000/api/certificates/${id}/status`, { status: newStatus });
-      // Update the status in the local state to reflect the change immediately
+
       setData(data.map(request => request._id === id ? { ...request, status: newStatus } : request));
     } catch (error) {
       console.error("Error updating status:", error);
@@ -72,9 +72,6 @@ function RequestedCertificate() {
       <div className='bg-White'>
         <div className='flex justify-between items-center py-4 px-3 border-b-2'>
           <p className="text-2xl">Requested Certificates</p>
-          <button className='flex items-center gap-1 bg-Green hover:bg-green-500 text-White py-1 px-2 rounded-md'>
-            <FaFile /> Documents
-          </button>
         </div>
 
         <div className="flex justify-between items-center p-4">
