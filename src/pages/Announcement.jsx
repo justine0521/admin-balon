@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import axios from 'axios';
-import { FaCheck, FaSpinner, FaEdit, FaTrash } from 'react-icons/fa'; // Import additional icons
+import { FaCheck, FaSpinner, FaEdit, FaTrash } from 'react-icons/fa';
 
 // AWS S3 setup
 const bucketName = import.meta.env.VITE_AWS_BUCKET_NAME;
