@@ -23,37 +23,37 @@ function Home() {
 
     useEffect(() => {
         const fetchData = async () => {
-        try {
-            const response = await axios.get('http://localhost:5000/api/certificates');
-            setData(response.data);
+            try {
+                const response = await axios.get('http://localhost:5000/api/certificates');
+                setData(response.data);
 
-            const brgyClearanceCount = response.data.filter(cert => cert.certificateType === 'Barangay Clearance').length;
-            const certResidencyCount = response.data.filter(cert => cert.certificateType === 'Certificate Of Residency').length;
-            const certIndigencyCount = response.data.filter(cert => cert.certificateType === 'Certificate Of Indigency').length;
-            const businessClearanceCount = response.data.filter(cert => cert.certificateType === 'Business Clearance').length;
-            const certLowIncomeCount = response.data.filter(cert => cert.certificateType === 'Certificate Of Low Income').length;
-            const certSoloParentCount = response.data.filter(cert => cert.certificateType === 'Certificate For Solo Parent').length;
-            const certDeathCount = response.data.filter(cert => cert.certificateType === 'Certificate Of Death').length;
-            const certGoodMoralCount = response.data.filter(cert => cert.certificateType === 'Certificate Of Good Moral').length;
-            const certNewResidentCount = response.data.filter(cert => cert.certificateType === 'Certificate Of New Resident').length;
-            const certNoPropertyCount = response.data.filter(cert => cert.certificateType === 'Certificate Of No Property').length;
+                const brgyClearanceCount = response.data.filter(cert => cert.certId === 1).length;
+                const certResidencyCount = response.data.filter(cert => cert.certId === 2).length;
+                const certIndigencyCount = response.data.filter(cert => cert.certId === 3).length;
+                const businessClearanceCount = response.data.filter(cert => cert.certId === 4).length;
+                const certLowIncomeCount = response.data.filter(cert => cert.certId === 5).length;
+                const certSoloParentCount = response.data.filter(cert => cert.certId === 6).length;
+                const certDeathCount = response.data.filter(cert => cert.certId === 7).length;
+                const certGoodMoralCount = response.data.filter(cert => cert.certId === 8).length;
+                const certNewResidentCount = response.data.filter(cert => cert.certId === 9).length;
+                const certNoPropertyCount = response.data.filter(cert => cert.certId === 10).length;
 
-            setBarangayClearanceCount(brgyClearanceCount);
-            setResidencyCertificateCount(certResidencyCount);
-            setIndigencyCertificateCount(certIndigencyCount);
-            setBusinessClearanceCount(businessClearanceCount);
-            setLowIncomeCertificateCount(certLowIncomeCount);
-            setSoloParentCertificateCount(certSoloParentCount);
-            setDeathCertificateCount(certDeathCount);
-            setGoodMoralCertificateCount(certGoodMoralCount);
-            setNewResidentCertificateCount(certNewResidentCount);
-            setNoPropertyCertificateCount(certNoPropertyCount);
+                setBarangayClearanceCount(brgyClearanceCount);
+                setResidencyCertificateCount(certResidencyCount);
+                setIndigencyCertificateCount(certIndigencyCount);
+                setBusinessClearanceCount(businessClearanceCount);
+                setLowIncomeCertificateCount(certLowIncomeCount);
+                setSoloParentCertificateCount(certSoloParentCount);
+                setDeathCertificateCount(certDeathCount);
+                setGoodMoralCertificateCount(certGoodMoralCount);
+                setNewResidentCertificateCount(certNewResidentCount);
+                setNoPropertyCertificateCount(certNoPropertyCount);
 
-            setLoading(false);
-        } catch (error) {
-            setError(error);
-            setLoading(false);
-        }
+                setLoading(false);
+            } catch (error) {
+                setError(error);
+                setLoading(false);
+            }
         };
 
         fetchData();
@@ -62,209 +62,209 @@ function Home() {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
 
-  return (
-    <section className="w-4/5 h-full mt-14 left-56 p-3 absolute">
-        <div className='flex flex-wrap gap-3'>
+    return (
+        <section className="w-4/5 h-full mt-14 left-56 p-3 absolute">
+            <div className='flex flex-wrap gap-3'>
 
-            <div className='w-72 h-32 p-3 flex  items-center rounded shadow-xl'>
-                <FaCertificate className='text-6xl text-green-500' />
-                
-                <div className='space-y-3 flex-col justify-end w-full'>
-                    <div className='flex justify-end gap-5'>
-                        <div>
-                            <p className='text-3xl font-semibold'>{barangayClearanceCount}</p>
-                            <p className='text-sm text-gray-500'>Current</p>
+                <div className='w-72 h-32 p-3 flex  items-center rounded shadow-xl'>
+                    <FaCertificate className='text-6xl text-green-500' />
+
+                    <div className='space-y-3 flex-col justify-end w-full'>
+                        <div className='flex justify-end gap-5'>
+                            <div>
+                                <p className='text-3xl font-semibold'>{barangayClearanceCount}</p>
+                                <p className='text-sm text-gray-500'>Current</p>
+                            </div>
+                            <div>
+                                <p className='text-3xl font-semibold'>{barangayClearanceCount}</p>
+                                <p className='text-sm text-gray-500'>Total</p>
+                            </div>
                         </div>
-                        <div>
-                            <p className='text-3xl font-semibold'>{barangayClearanceCount}</p>
-                            <p className='text-sm text-gray-500'>Total</p>
-                        </div>
+                        <p className='font-semibold text-green-500 flex justify-end'>Barangay Clearance</p>
                     </div>
-                    <p className='font-semibold text-green-500 flex justify-end'>Barangay Clearance</p>
+                </div>
+
+                <div className='w-72 h-32 p-3 flex justify-around items-center rounded shadow-xl' >
+                    <FaCertificate className='text-6xl text-green-500' />
+
+                    <div className='space-y-3 flex-col justify-end w-full'>
+                        <div className='flex justify-end gap-5'>
+                            <div>
+                                <p className='text-3xl font-semibold'>{businessClearanceCount}</p>
+                                <p className='text-sm text-gray-500'>Current</p>
+                            </div>
+
+                            <div>
+                                <p className='text-3xl font-semibold'>{businessClearanceCount}</p>
+                                <p className='text-sm text-gray-500'>Total</p>
+                            </div>
+                        </div>
+                        <p className='font-semibold text-green-500 flex justify-end'>Business Clearance</p>
+                    </div>
+                </div>
+
+                <div className='w-72 h-32 p-3 flex justify-around items-center rounded shadow-xl' >
+                    <FaCertificate className='text-6xl text-green-500' />
+
+                    <div className='space-y-3 flex-col justify-end w-full'>
+                        <div className='flex justify-end gap-5'>
+                            <div>
+                                <p className='text-3xl font-semibold'>{indigencyCertificateCount}</p>
+                                <p className='text-sm text-gray-500'>Current</p>
+                            </div>
+
+                            <div>
+                                <p className='text-3xl font-semibold'>{indigencyCertificateCount}</p>
+                                <p className='text-sm text-gray-500'>Total</p>
+                            </div>
+                        </div>
+
+                        <p className='font-semibold text-green-500 flex justify-end'>Certificate of Indigency</p>
+                    </div>
+                </div>
+
+                <div className='w-72 h-32 p-3 flex justify-around items-center rounded shadow-xl' >
+                    <FaCertificate className='text-6xl text-green-500' />
+
+                    <div className='space-y-3 flex-col justify-end w-full'>
+                        <div className='flex justify-end gap-5'>
+                            <div>
+                                <p className='text-3xl font-semibold'>{lowIncomeCertificateCount}</p>
+                                <p className='text-sm text-gray-500'>Current</p>
+                            </div>
+
+                            <div>
+                                <p className='text-3xl font-semibold'>{lowIncomeCertificateCount}</p>
+                                <p className='text-sm text-gray-500'>Total</p>
+                            </div>
+                        </div>
+
+                        <p className='font-semibold text-green-500 flex justify-end'>Certificate of Low Income</p>
+                    </div>
+                </div>
+
+                <div className='w-72 h-32 p-3 flex justify-around items-center rounded shadow-xl' >
+                    <FaCertificate className='text-6xl text-green-500' />
+
+                    <div className='space-y-3 flex-col justify-end w-full'>
+                        <div className='flex justify-end gap-5'>
+                            <div>
+                                <p className='text-3xl font-semibold'>{residencyCertificateCount}</p>
+                                <p className='text-sm text-gray-500'>Current</p>
+                            </div>
+
+                            <div>
+                                <p className='text-3xl font-semibold'>{residencyCertificateCount}</p>
+                                <p className='text-sm text-gray-500'>Total</p>
+                            </div>
+                        </div>
+
+                        <p className='font-semibold text-green-500 flex justify-end'>Certificate of Residency</p>
+                    </div>
+                </div>
+
+                <div className='w-72 h-32 p-3 flex justify-around items-center rounded shadow-xl' >
+                    <FaCertificate className='text-6xl text-green-500' />
+
+                    <div className='space-y-3 flex-col justify-end w-full'>
+                        <div className='flex justify-end gap-5'>
+                            <div>
+                                <p className='text-3xl font-semibold'>{soloParentCertificateCount}</p>
+                                <p className='text-sm text-gray-500'>Current</p>
+                            </div>
+
+                            <div>
+                                <p className='text-3xl font-semibold'>{soloParentCertificateCount}</p>
+                                <p className='text-sm text-gray-500'>Total</p>
+                            </div>
+                        </div>
+
+                        <p className='font-semibold text-green-500 flex justify-end'>Certificate for Solo Parent</p>
+                    </div>
+                </div>
+
+                <div className='w-72 h-32 p-3 flex justify-around items-center rounded shadow-xl' >
+                    <FaCertificate className='text-6xl text-green-500' />
+
+                    <div className='space-y-3 flex-col justify-end w-full'>
+                        <div className='flex justify-end gap-5'>
+                            <div>
+                                <p className='text-3xl font-semibold'>{deathCertificateCount}</p>
+                                <p className='text-sm text-gray-500'>Current</p>
+                            </div>
+
+                            <div>
+                                <p className='text-3xl font-semibold'>{deathCertificateCount}</p>
+                                <p className='text-sm text-gray-500'>Total</p>
+                            </div>
+                        </div>
+
+                        <p className='font-semibold text-green-500 flex justify-end'>Certificate of Death</p>
+                    </div>
+                </div>
+
+                <div className='w-72 h-32 p-3 flex justify-around items-center rounded shadow-xl' >
+                    <FaCertificate className='text-6xl text-green-500' />
+
+                    <div className='space-y-3 flex-col justify-end w-full'>
+                        <div className='flex justify-end gap-5 '>
+                            <div>
+                                <p className='text-3xl font-semibold'>{goodMoralCertificate}</p>
+                                <p className='text-sm text-gray-500'>Current</p>
+                            </div>
+
+                            <div>
+                                <p className='text-3xl font-semibold'>{goodMoralCertificate}</p>
+                                <p className='text-sm text-gray-500'>Total</p>
+                            </div>
+                        </div>
+
+                        <p className='font-semibold text-green-500 flex justify-end'>Certificate of Good Moral</p>
+                    </div>
+                </div>
+
+                <div className='w-72 h-32 p-3 flex justify-around items-center rounded shadow-xl' >
+                    <FaCertificate className='text-6xl text-green-500' />
+
+                    <div className='space-y-3 flex-col justify-end w-full'>
+                        <div className='flex justify-end gap-5'>
+                            <div>
+                                <p className='text-3xl font-semibold'>{newResidentCertificateCount}</p>
+                                <p className='text-sm text-gray-500'>Current</p>
+                            </div>
+
+                            <div>
+                                <p className='text-3xl font-semibold'>{newResidentCertificateCount}</p>
+                                <p className='text-sm text-gray-500'>Total</p>
+                            </div>
+                        </div>
+
+                        <p className='font-semibold text-green-500 flex justify-end'>Certificate of New Resident</p>
+                    </div>
+                </div>
+
+                <div className='w-72 h-32 p-3 flex justify-around items-center rounded shadow-xl' >
+                    <FaCertificate className='text-6xl text-green-500' />
+
+                    <div className='space-y-3 flex-col justify-end w-full'>
+                        <div className='flex justify-end gap-5'>
+                            <div>
+                                <p className='text-3xl font-semibold'>{noPropertyCertificateCount}</p>
+                                <p className='text-sm text-gray-500'>Current</p>
+                            </div>
+
+                            <div>
+                                <p className='text-3xl font-semibold'>{noPropertyCertificateCount}</p>
+                                <p className='text-sm text-gray-500'>Total</p>
+                            </div>
+                        </div>
+
+                        <p className='font-semibold text-green-500 flex justify-end'>Certificate of No Property</p>
+                    </div>
                 </div>
             </div>
-
-            <div className='w-72 h-32 p-3 flex justify-around items-center rounded shadow-xl' > 
-                <FaCertificate className='text-6xl text-green-500'/>
-                
-                <div className='space-y-3 flex-col justify-end w-full'>
-                    <div className='flex justify-end gap-5'>
-                        <div>
-                            <p className='text-3xl font-semibold'>{businessClearanceCount}</p>
-                            <p className='text-sm text-gray-500'>Current</p>
-                        </div>
-
-                        <div>
-                            <p className='text-3xl font-semibold'>{businessClearanceCount}</p>
-                            <p className='text-sm text-gray-500'>Total</p>
-                        </div>
-                    </div>
-                    <p className='font-semibold text-green-500 flex justify-end'>Business Clearance</p>
-                </div>
-            </div>
-
-            <div className='w-72 h-32 p-3 flex justify-around items-center rounded shadow-xl' > 
-                <FaCertificate className='text-6xl text-green-500'/>
-
-                <div className='space-y-3 flex-col justify-end w-full'>
-                    <div className='flex justify-end gap-5'>
-                        <div>
-                            <p className='text-3xl font-semibold'>{indigencyCertificateCount}</p>
-                            <p className='text-sm text-gray-500'>Current</p>
-                        </div>
-
-                        <div>
-                            <p className='text-3xl font-semibold'>{indigencyCertificateCount}</p>
-                            <p className='text-sm text-gray-500'>Total</p>
-                        </div>
-                    </div>
-
-                    <p className='font-semibold text-green-500 flex justify-end'>Certificate of Indigency</p>
-                </div>
-            </div>
-
-            <div className='w-72 h-32 p-3 flex justify-around items-center rounded shadow-xl' > 
-                <FaCertificate className='text-6xl text-green-500'/>
-
-                <div className='space-y-3 flex-col justify-end w-full'>
-                    <div className='flex justify-end gap-5'>
-                        <div>
-                            <p className='text-3xl font-semibold'>{lowIncomeCertificateCount}</p>
-                            <p className='text-sm text-gray-500'>Current</p>
-                        </div>
-
-                        <div>
-                            <p className='text-3xl font-semibold'>{lowIncomeCertificateCount}</p>
-                            <p className='text-sm text-gray-500'>Total</p>
-                        </div>
-                    </div>
-
-                    <p className='font-semibold text-green-500 flex justify-end'>Certificate of Low Income</p>
-                </div>
-            </div>
-
-            <div className='w-72 h-32 p-3 flex justify-around items-center rounded shadow-xl' > 
-                <FaCertificate className='text-6xl text-green-500'/>
-
-                <div className='space-y-3 flex-col justify-end w-full'>
-                    <div className='flex justify-end gap-5'>
-                        <div>
-                            <p className='text-3xl font-semibold'>{residencyCertificateCount}</p>
-                            <p className='text-sm text-gray-500'>Current</p>
-                        </div>
-
-                        <div>
-                            <p className='text-3xl font-semibold'>{residencyCertificateCount}</p>
-                            <p className='text-sm text-gray-500'>Total</p>
-                        </div>
-                    </div>
-
-                    <p className='font-semibold text-green-500 flex justify-end'>Certificate of Residency</p>
-                </div>
-            </div>
-
-            <div className='w-72 h-32 p-3 flex justify-around items-center rounded shadow-xl' > 
-                <FaCertificate className='text-6xl text-green-500'/>
-
-                <div className='space-y-3 flex-col justify-end w-full'>
-                    <div className='flex justify-end gap-5'>
-                        <div>
-                            <p className='text-3xl font-semibold'>{soloParentCertificateCount}</p>
-                            <p className='text-sm text-gray-500'>Current</p>
-                        </div>
-
-                        <div>
-                            <p className='text-3xl font-semibold'>{soloParentCertificateCount}</p>
-                            <p className='text-sm text-gray-500'>Total</p>
-                        </div>
-                    </div>
-
-                    <p className='font-semibold text-green-500 flex justify-end'>Certificate for Solo Parent</p>
-                </div>
-            </div>
-
-            <div className='w-72 h-32 p-3 flex justify-around items-center rounded shadow-xl' > 
-                <FaCertificate className='text-6xl text-green-500'/>
-                
-                <div className='space-y-3 flex-col justify-end w-full'>
-                    <div className='flex justify-end gap-5'>
-                        <div>
-                            <p className='text-3xl font-semibold'>{deathCertificateCount}</p>
-                            <p className='text-sm text-gray-500'>Current</p>
-                        </div>
-
-                        <div>
-                            <p className='text-3xl font-semibold'>{deathCertificateCount}</p>
-                            <p className='text-sm text-gray-500'>Total</p>
-                        </div>
-                    </div>
-
-                    <p className='font-semibold text-green-500 flex justify-end'>Certificate of Death</p>
-                </div>
-            </div>
-
-            <div className='w-72 h-32 p-3 flex justify-around items-center rounded shadow-xl' > 
-                <FaCertificate className='text-6xl text-green-500'/>
-                
-                <div className='space-y-3 flex-col justify-end w-full'>
-                    <div className='flex justify-end gap-5 '>
-                        <div>
-                            <p className='text-3xl font-semibold'>{goodMoralCertificate}</p>
-                            <p className='text-sm text-gray-500'>Current</p>
-                        </div>
-
-                        <div>
-                            <p className='text-3xl font-semibold'>{goodMoralCertificate}</p>
-                            <p className='text-sm text-gray-500'>Total</p>
-                        </div>
-                    </div>
-
-                    <p className='font-semibold text-green-500 flex justify-end'>Certificate of Good Moral</p>
-                </div>
-            </div>
-
-            <div className='w-72 h-32 p-3 flex justify-around items-center rounded shadow-xl' > 
-                <FaCertificate className='text-6xl text-green-500'/>
-                
-                <div className='space-y-3 flex-col justify-end w-full'>
-                    <div className='flex justify-end gap-5'>
-                        <div>
-                            <p className='text-3xl font-semibold'>{newResidentCertificateCount}</p>
-                            <p className='text-sm text-gray-500'>Current</p>
-                        </div>
-
-                        <div>
-                            <p className='text-3xl font-semibold'>{newResidentCertificateCount}</p>
-                            <p className='text-sm text-gray-500'>Total</p>
-                        </div>
-                    </div>
-
-                    <p className='font-semibold text-green-500 flex justify-end'>Certificate of New Resident</p>
-                </div>
-            </div>
-
-            <div className='w-72 h-32 p-3 flex justify-around items-center rounded shadow-xl' > 
-                <FaCertificate className='text-6xl text-green-500'/>
-                
-                <div className='space-y-3 flex-col justify-end w-full'>
-                    <div className='flex justify-end gap-5'>
-                        <div>
-                            <p className='text-3xl font-semibold'>{noPropertyCertificateCount}</p>
-                            <p className='text-sm text-gray-500'>Current</p>
-                        </div>
-
-                        <div>
-                            <p className='text-3xl font-semibold'>{noPropertyCertificateCount}</p>
-                            <p className='text-sm text-gray-500'>Total</p>
-                        </div>
-                    </div>
-
-                    <p className='font-semibold text-green-500 flex justify-end'>Certificate of No Property</p>
-                </div>
-            </div>
-        </div>
-    </section>
-  )
+        </section>
+    )
 }
 
 export default Home
