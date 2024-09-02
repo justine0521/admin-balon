@@ -54,7 +54,7 @@ function Sidebar() {
                             )}
                         </NavLink>
 
-                        <NavLink to={"/deceased"}>
+                        {/* <NavLink to={"/deceased"}>
                             {({ isActive }) => (
                                 <li className={`${isActive ? 'bg-Green text-white' : 'hover:text-Green'} px-4 py-2 mx-2 text-black rounded-lg transition duration-500`}>
                                     <div className='flex items-center'>
@@ -63,7 +63,7 @@ function Sidebar() {
                                     </div>
                                 </li>
                             )}
-                        </NavLink>
+                        </NavLink> */}
 
                         <NavLink to={"/certificates"}>
                             {({ isActive }) => (
@@ -76,7 +76,7 @@ function Sidebar() {
                             )}
                         </NavLink>
 
-                        <NavLink to={"blotter"}>
+                        {/* <NavLink to={"blotter"}>
                             {({ isActive }) => (
                                 <li className={`${isActive ? 'bg-Green text-white' : 'hover:text-Green'} px-4 py-2 mx-2 text-black rounded-lg transition duration-500`}>
                                     <div className='flex items-center'>
@@ -85,7 +85,7 @@ function Sidebar() {
                                     </div>
                                 </li>
                             )}
-                        </NavLink>
+                        </NavLink> */}
 
                         <NavLink to={"officials-and-staff"}>
                             {({ isActive }) => (
@@ -98,7 +98,7 @@ function Sidebar() {
                             )}
                         </NavLink>
 
-                        <NavLink to={"revenue"}>
+                        {/* <NavLink to={"revenue"}>
                             {({ isActive }) => (
                                 <li className={`${isActive ? 'bg-Green text-white' : 'hover:text-Green'} px-4 py-2 mx-2 text-black rounded-lg transition duration-500`}>
                                     <div className='flex items-center'>
@@ -107,9 +107,9 @@ function Sidebar() {
                                     </div>
                                 </li>
                             )}
-                        </NavLink>
+                        </NavLink> */}
 
-                        <NavLink to={"accounts"}>
+                        {/* <NavLink to={"accounts"}>
                             {({ isActive }) => (
                                 <li className={`${isActive ? 'bg-Green text-white' : 'hover:text-Green'} px-4 py-2 mx-2 text-black rounded-lg transition duration-500`}>
                                     <div className='flex items-center'>
@@ -118,7 +118,7 @@ function Sidebar() {
                                     </div>
                                 </li>
                             )}
-                        </NavLink>
+                        </NavLink> */}
 
                         <NavLink to={"requested-certificate"}>
                             {({ isActive }) => (

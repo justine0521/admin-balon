@@ -10,11 +10,10 @@ import Certificates from './pages/Certificates';
 import Blotter from './pages/Blotter';
 import Officials from './pages/Officials';
 import Revenue from './pages/Revenue';
-import Accounts from './pages/Accounts';
 import Footer from './components/Footer';
 import ViewResidentProfile from './view/ViewResidentProfile';
 import Blocked from './pages/Blocked';
-import Logout from './pages/Logout'
+import Logout from './pages/Logout';
 import Login from './auth/Login';
 import RequestedCertificate from './pages/RequestedCertificate';
 import BarangayClearance from './pages/CertificatePages/BarangayClearance';
@@ -39,86 +38,85 @@ import CertificateOfNewResident from './Certificates/CertificateOfNewResident';
 import CertificateForSoloParent from './Certificates/CertificateForSoloParent';
 import EditResidence from './Modal/EditResidenceModal';
 import Settings from './pages/Settings';
-import Chairmanship from './settings/Chairmanship'
-import Street from './settings/Street'
-import Precinct from './settings/Precinct'
 import BarangayInfo from './settings/BarangayInfo';
 import Profile from './pages/Profile';
+import Accounts from './settings/Accounts';
+import CreateAccount from './auth/CreateAccount';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') === 'true');
 
-    const handleLogin = () => {
-        localStorage.setItem('isLoggedIn', 'true');
-        setIsLoggedIn(true);
-    };
+  const handleLogin = () => {
+    localStorage.setItem('isLoggedIn', 'true');
+    setIsLoggedIn(true);
+  };
 
-    const handleLogout = () => {
-        localStorage.removeItem('isLoggedIn');
-        setIsLoggedIn(false);
-    };
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    setIsLoggedIn(false);
+  };
 
   return (
-    <main>
-      {isLoggedIn ? (
-        <BrowserRouter>
-          <Header />
-          <Sidebar />
-          
-          <Routes>
-            {/* Sidebar Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path='/residence-Record' element={<Residence />} />
-            <Route path='/deceased' element={<Deceased />} />
-            <Route path='/certificates' element={<Certificates />} />
-            <Route path='/blotter' element={<Blotter />} />
-            <Route path='/officials-and-staff' element={<Officials />} />
-            <Route path='/revenue' element={<Revenue />} />
-            <Route path='/accounts' element={<Accounts />} />
-            <Route path='/requested-certificate' element={<RequestedCertificate />} />
-            <Route path='/blocklisted' element={<Blocked />} />
-            <Route path='/settings' element={<Settings />} />
-            <Route path='/logout' element={<Logout onLogout={handleLogout}/>} />
-            <Route path='profile' element={<Profile />}/>
+    <BrowserRouter>
+      <main>
+        {isLoggedIn ? (
+          <>
+            <Header />
+            <Sidebar />
 
-            <Route path='/view-resident-profile' element={<ViewResidentProfile />} />
-            <Route path='/edit-residence-profile' element={<EditResidence />} />
+            <Routes>
+              <Route path='signup' element={<CreateAccount />}/>
 
-            {/* Certificate Pages */}
-            <Route path='/barangay-clearance' element={<BarangayClearance />} />
-            <Route path='/certificate-of-residency' element={<CertificateResidency />} />
-            <Route path='/certificate-of-indigency' element={<CertificateIndigency />} />
-            <Route path='/certificate-of-good-moral-character' element={<GoodMoralCertificate />} />
-            <Route path='/business-clearance' element={<BusinessClearance />} />
-            <Route path='/certificate-of-death' element={<DeathCertificate />} />
-            <Route path='/certificate-of-no-property' element={<NoPropertyCertificate />} />
-            <Route path='/certificate-of-low-income' element={<CertificateLowIncome />} />
-            <Route path='/certificate-of-registration-for-new-residents' element={<NewResidentCertificate />} />
-            <Route path='/certificate-for-solo-parent' element={<CertificateSoloParent />} />
-            {/* Barangay Certificates */}
-            <Route path='/barangay-clearance-certificate' element={<BrgyClearance />} />
-            <Route path='/barangay-certificate-of-residency' element={<CertificateOfRecidency />} />
-            <Route path='/barangay-certificate-of-indigency' element={<CertificateOfIndigency />} />
-            <Route path='/barangay-certificate-of-good-moral' element={<CertificateOfGoodMoral />} />
-            <Route path='/barangay-certificate-of-business-clearance' element={<CertificateOfBusinessClearance />} />
-            <Route path='/barangay-certificate-of-death' element={<CertificateOfDeath />} />
-            <Route path='/barangay-certificate-of-no-property' element={<CertificateOfNoProperty />} />
-            <Route path='/barangay-certificate-of-low-income' element={<CertificateOfLowIncome />} />
-            <Route path='/barangay-certificate-of-new-resident' element={<CertificateOfNewResident />} />
-            <Route path='/barangay-certificate-for-solo-parent' element={<CertificateForSoloParent />} />
+              {/* Sidebar Routes */}
+              <Route path="/" element={<Home />} />
+              <Route path='/residence-Record' element={<Residence />} />
+              <Route path='/deceased' element={<Deceased />} />
+              <Route path='/certificates' element={<Certificates />} />
+              <Route path='/blotter' element={<Blotter />} />
+              <Route path='/officials-and-staff' element={<Officials />} />
+              <Route path='/revenue' element={<Revenue />} />
+              <Route path='/requested-certificate' element={<RequestedCertificate />} />
+              <Route path='/blocklisted' element={<Blocked />} />
+              <Route path='/settings' element={<Settings />} />
+              <Route path='/logout' element={<Logout onLogout={handleLogout}/>} />
+              <Route path='profile' element={<Profile />}/>
 
-            {/* Settings */}
-            <Route path='/barangayInfo' element={<BarangayInfo />}/>
-            <Route path='/chairmanship' element={<Chairmanship />}/>
-            <Route path='/street' element={<Street />}/>
-            <Route path='/precinct' element={<Precinct />}/>
+              <Route path='/view-resident-profile' element={<ViewResidentProfile />} />
+              <Route path='/edit-residence-profile' element={<EditResidence />} />
 
-          </Routes>
-        </BrowserRouter>
-      ) : (
-        <Login onLogin={handleLogin} />
-      )}
-    </main>
+              {/* Certificate Pages */}
+              <Route path='/barangay-clearance' element={<BarangayClearance />} />
+              <Route path='/certificate-of-residency' element={<CertificateResidency />} />
+              <Route path='/certificate-of-indigency' element={<CertificateIndigency />} />
+              <Route path='/certificate-of-good-moral-character' element={<GoodMoralCertificate />} />
+              <Route path='/business-clearance' element={<BusinessClearance />} />
+              <Route path='/certificate-of-death' element={<DeathCertificate />} />
+              <Route path='/certificate-of-no-property' element={<NoPropertyCertificate />} />
+              <Route path='/certificate-of-low-income' element={<CertificateLowIncome />} />
+              <Route path='/certificate-of-registration-for-new-residents' element={<NewResidentCertificate />} />
+              <Route path='/certificate-for-solo-parent' element={<CertificateSoloParent />} />
+              {/* Barangay Certificates */}
+              <Route path='/barangay-clearance-certificate' element={<BrgyClearance />} />
+              <Route path='/barangay-certificate-of-residency' element={<CertificateOfRecidency />} />
+              <Route path='/barangay-certificate-of-indigency' element={<CertificateOfIndigency />} />
+              <Route path='/barangay-certificate-of-good-moral' element={<CertificateOfGoodMoral />} />
+              <Route path='/barangay-certificate-of-business-clearance' element={<CertificateOfBusinessClearance />} />
+              <Route path='/barangay-certificate-of-death' element={<CertificateOfDeath />} />
+              <Route path='/barangay-certificate-of-no-property' element={<CertificateOfNoProperty />} />
+              <Route path='/barangay-certificate-of-low-income' element={<CertificateOfLowIncome />} />
+              <Route path='/barangay-certificate-of-new-resident' element={<CertificateOfNewResident />} />
+              <Route path='/barangay-certificate-for-solo-parent' element={<CertificateForSoloParent />} />
+
+              {/* Settings */}
+              <Route path='/barangayInfo' element={<BarangayInfo />}/>
+              <Route path='/accounts' element={<Accounts />} />
+            </Routes>
+          </>
+        ) : (
+          <Login onLogin={handleLogin} />
+        )}
+      </main>
+    </BrowserRouter>
   );
 }
 
