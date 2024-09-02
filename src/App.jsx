@@ -12,6 +12,7 @@ import Officials from './pages/Officials';
 import Revenue from './pages/Revenue';
 import Footer from './components/Footer';
 import ViewResidentProfile from './view/ViewResidentProfile';
+import Announcement from './pages/Announcement';
 import Blocked from './pages/Blocked';
 import Logout from './pages/Logout';
 import Login from './auth/Login';
@@ -65,7 +66,7 @@ function App() {
             <Sidebar />
 
             <Routes>
-              <Route path='signup' element={<CreateAccount />}/>
+              <Route path='signup' element={<CreateAccount />} />
 
               {/* Sidebar Routes */}
               <Route path="/" element={<Home />} />
@@ -76,10 +77,11 @@ function App() {
               <Route path='/officials-and-staff' element={<Officials />} />
               <Route path='/revenue' element={<Revenue />} />
               <Route path='/requested-certificate' element={<RequestedCertificate />} />
+              <Route path='/announcement' element={<Announcement />} />
               <Route path='/blocklisted' element={<Blocked />} />
               <Route path='/settings' element={<Settings />} />
-              <Route path='/logout' element={<Logout onLogout={handleLogout}/>} />
-              <Route path='profile' element={<Profile />}/>
+              <Route path='/logout' element={<Logout onLogout={handleLogout} />} />
+              <Route path='profile' element={<Profile />} />
 
               <Route path='/view-resident-profile' element={<ViewResidentProfile />} />
               <Route path='/edit-residence-profile' element={<EditResidence />} />
@@ -108,7 +110,7 @@ function App() {
               <Route path='/barangay-certificate-for-solo-parent' element={<CertificateForSoloParent />} />
 
               {/* Settings */}
-              <Route path='/barangayInfo' element={<BarangayInfo />}/>
+              <Route path='/barangayInfo' element={<BarangayInfo />} />
               <Route path='/accounts' element={<Accounts />} />
             </Routes>
           </>
