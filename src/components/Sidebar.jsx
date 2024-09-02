@@ -10,6 +10,7 @@ import { FaUsers, FaBookDead, FaCertificate, FaUser, FaFile, FaBell } from 'reac
 import { HiUsers } from "react-icons/hi2";
 import { RiStackFill } from "react-icons/ri";
 import { MdDashboard } from "react-icons/md";
+import { MdAnnouncement } from "react-icons/md";
 import { TbCurrencyPeso } from "react-icons/tb";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { BsPersonFillSlash } from "react-icons/bs";
@@ -82,6 +83,17 @@ function Sidebar() {
                                     <div className='flex items-center'>
                                         <FaFile className='mr-3' />
                                         <p className='text-sm'>Requested Certificate</p>
+                                    </div>
+                                </li>
+                            )}
+                        </NavLink>
+
+                        <NavLink to={"announcement"}>
+                            {({ isActive }) => (
+                                <li className={`${isActive ? 'bg-Green text-white' : 'hover:text-Green'} px-4 py-2 mx-2 text-black rounded-lg transition duration-500`}>
+                                    <div className='flex items-center'>
+                                        <MdAnnouncement className='mr-3' />
+                                        News and Updates
                                     </div>
                                 </li>
                             )}
