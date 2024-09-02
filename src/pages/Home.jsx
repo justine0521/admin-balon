@@ -30,13 +30,13 @@ function Home() {
                 const brgyClearanceCount = response.data.filter(cert => cert.certId === 1).length;
                 const certResidencyCount = response.data.filter(cert => cert.certId === 2).length;
                 const certIndigencyCount = response.data.filter(cert => cert.certId === 3).length;
-                const businessClearanceCount = response.data.filter(cert => cert.certId === 4).length;
-                const certLowIncomeCount = response.data.filter(cert => cert.certId === 5).length;
-                const certSoloParentCount = response.data.filter(cert => cert.certId === 6).length;
-                const certDeathCount = response.data.filter(cert => cert.certId === 7).length;
+                const certLowIncomeCount = response.data.filter(cert => cert.certId === 4).length;
+                const businessClearanceCount = response.data.filter(cert => cert.certId === 5).length;
+                const certDeathCount = response.data.filter(cert => cert.certId === 6).length;
+                const certNoPropertyCount = response.data.filter(cert => cert.certId === 7).length;
                 const certGoodMoralCount = response.data.filter(cert => cert.certId === 8).length;
                 const certNewResidentCount = response.data.filter(cert => cert.certId === 9).length;
-                const certNoPropertyCount = response.data.filter(cert => cert.certId === 10).length;
+                const certSoloParentCount = response.data.filter(cert => cert.certId === 10).length;
 
                 setBarangayClearanceCount(brgyClearanceCount);
                 setResidencyCertificateCount(certResidencyCount);
@@ -90,16 +90,17 @@ function Home() {
                     <div className='space-y-3 flex-col justify-end w-full'>
                         <div className='flex justify-end gap-5'>
                             <div>
-                                <p className='text-3xl font-semibold'>{businessClearanceCount}</p>
+                                <p className='text-3xl font-semibold'>{residencyCertificateCount}</p>
                                 <p className='text-sm text-gray-500'>Current</p>
                             </div>
 
                             <div>
-                                <p className='text-3xl font-semibold'>{businessClearanceCount}</p>
+                                <p className='text-3xl font-semibold'>{residencyCertificateCount}</p>
                                 <p className='text-sm text-gray-500'>Total</p>
                             </div>
                         </div>
-                        <p className='font-semibold text-green-500 flex justify-end'>Business Clearance</p>
+
+                        <p className='font-semibold text-green-500 flex justify-end'>Certificate of Residency</p>
                     </div>
                 </div>
 
@@ -149,37 +150,16 @@ function Home() {
                     <div className='space-y-3 flex-col justify-end w-full'>
                         <div className='flex justify-end gap-5'>
                             <div>
-                                <p className='text-3xl font-semibold'>{residencyCertificateCount}</p>
+                                <p className='text-3xl font-semibold'>{businessClearanceCount}</p>
                                 <p className='text-sm text-gray-500'>Current</p>
                             </div>
 
                             <div>
-                                <p className='text-3xl font-semibold'>{residencyCertificateCount}</p>
+                                <p className='text-3xl font-semibold'>{businessClearanceCount}</p>
                                 <p className='text-sm text-gray-500'>Total</p>
                             </div>
                         </div>
-
-                        <p className='font-semibold text-green-500 flex justify-end'>Certificate of Residency</p>
-                    </div>
-                </div>
-
-                <div className='w-72 h-32 p-3 flex justify-around items-center rounded shadow-xl' >
-                    <FaCertificate className='text-6xl text-green-500' />
-
-                    <div className='space-y-3 flex-col justify-end w-full'>
-                        <div className='flex justify-end gap-5'>
-                            <div>
-                                <p className='text-3xl font-semibold'>{soloParentCertificateCount}</p>
-                                <p className='text-sm text-gray-500'>Current</p>
-                            </div>
-
-                            <div>
-                                <p className='text-3xl font-semibold'>{soloParentCertificateCount}</p>
-                                <p className='text-sm text-gray-500'>Total</p>
-                            </div>
-                        </div>
-
-                        <p className='font-semibold text-green-500 flex justify-end'>Certificate for Solo Parent</p>
+                        <p className='font-semibold text-green-500 flex justify-end'>Business Clearance</p>
                     </div>
                 </div>
 
@@ -200,6 +180,26 @@ function Home() {
                         </div>
 
                         <p className='font-semibold text-green-500 flex justify-end'>Certificate of Death</p>
+                    </div>
+                </div>
+
+                <div className='w-72 h-32 p-3 flex justify-around items-center rounded shadow-xl' >
+                    <FaCertificate className='text-6xl text-green-500' />
+
+                    <div className='space-y-3 flex-col justify-end w-full'>
+                        <div className='flex justify-end gap-5'>
+                            <div>
+                                <p className='text-3xl font-semibold'>{noPropertyCertificateCount}</p>
+                                <p className='text-sm text-gray-500'>Current</p>
+                            </div>
+
+                            <div>
+                                <p className='text-3xl font-semibold'>{noPropertyCertificateCount}</p>
+                                <p className='text-sm text-gray-500'>Total</p>
+                            </div>
+                        </div>
+
+                        <p className='font-semibold text-green-500 flex justify-end'>Certificate of No Property</p>
                     </div>
                 </div>
 
@@ -249,19 +249,20 @@ function Home() {
                     <div className='space-y-3 flex-col justify-end w-full'>
                         <div className='flex justify-end gap-5'>
                             <div>
-                                <p className='text-3xl font-semibold'>{noPropertyCertificateCount}</p>
+                                <p className='text-3xl font-semibold'>{soloParentCertificateCount}</p>
                                 <p className='text-sm text-gray-500'>Current</p>
                             </div>
 
                             <div>
-                                <p className='text-3xl font-semibold'>{noPropertyCertificateCount}</p>
+                                <p className='text-3xl font-semibold'>{soloParentCertificateCount}</p>
                                 <p className='text-sm text-gray-500'>Total</p>
                             </div>
                         </div>
 
-                        <p className='font-semibold text-green-500 flex justify-end'>Certificate of No Property</p>
+                        <p className='font-semibold text-green-500 flex justify-end'>Certificate for Solo Parent</p>
                     </div>
                 </div>
+
             </div>
         </section>
     )
