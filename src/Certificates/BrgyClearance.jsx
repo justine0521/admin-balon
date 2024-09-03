@@ -6,6 +6,8 @@ import { IoMdSkipBackward } from "react-icons/io";
 import { FaPrint } from "react-icons/fa";
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function BrgyClearance() {
     const { imageUrl } = useContext(LogoContext);
     const { id } = useParams(); // Get the ID from the URL
