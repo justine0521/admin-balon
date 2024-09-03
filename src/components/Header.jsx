@@ -29,7 +29,6 @@ function Header() {
     const fetchNotifications = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/api/certificates`); // Fetch the certificates
-        console.log("Fetched notifications:", response.data); // Debug log
         const fetchedNotifications = response.data; // Get the notifications data
         setNotifications(fetchedNotifications); // Set notifications
         setNotificationCount(fetchedNotifications.length); // Set notification count
