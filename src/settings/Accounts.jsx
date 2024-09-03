@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
-import DafualtProfile from '../images/defaultProfile.png';
-
 import { FaPlus, FaEdit, FaFileExport, FaEye } from 'react-icons/fa';
 import { IoMdArrowDropdown } from "react-icons/io";
 import { MdDelete } from 'react-icons/md';
@@ -88,7 +85,7 @@ function Accounts() {
                         {accounts.map((account) =>
                             <tr key={account._id}>
                                 <td className='text-left py-3'>
-                                    <img src={DafualtProfile} alt="" className='h-12 w-12 rounded-full' />
+                                    <img src={account.imageUrl} alt="" className='h-12 w-12 rounded-full' />
                                 </td>
                                 <td className='text-left py-3'>{account.fullName}</td>
                                 <td className='text-left py-3'>{account.position}</td>

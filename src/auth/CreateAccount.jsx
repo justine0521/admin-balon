@@ -1,7 +1,19 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import Profile from '../images/defaultProfile.png';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+// AWS S3 setup
+const bucketName = import.meta.env.VITE_AWS_BUCKET_NAME;
+const s3Client = new S3Client({
+  region: import.meta.env.VITE_AWS_REGION,
+  credentials: {
+    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID,
+    secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY,
+  },
+});
 
 function CreateAccount() {
   const [formData, setFormData] = useState({
@@ -10,6 +22,7 @@ function CreateAccount() {
     email: '',
     password: '',
     confirmPassword: '',
+    imageUrl: Profile,  // Initialize with default profile image
   });
 
   const handleChange = (e) => {
@@ -17,6 +30,36 @@ function CreateAccount() {
       ...formData,
       [e.target.id]: e.target.value,
     });
+  };
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const params = {
+        Bucket: bucketName,
+        Key: `profiles/${file.name}`,
+        Body: file,
+        ContentType: file.type,
+        ACL: 'public-read',
+      };
+
+      try {
+        const command = new PutObjectCommand(params);
+        await s3Client.send(command);
+        const url = `https://${bucketName}.s3.ap-southeast-2.amazonaws.com/profiles/${file.name}`;
+        setFormData(prevData => ({
+          ...prevData,
+          imageUrl: url
+        }));
+      } catch (err) {
+        console.error("Error uploading image: ", err);
+      }
+    } else {
+      setFormData(prevData => ({
+        ...prevData,
+        imageUrl: Profile
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -38,6 +81,7 @@ function CreateAccount() {
           email: '',
           password: '',
           confirmPassword: '',
+          imageUrl: Profile,
         });
       }
     } catch (error) {
@@ -51,6 +95,16 @@ function CreateAccount() {
         <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
           <h2 className="text-2xl font-bold text-center mb-6">Create Account</h2>
           <form className="space-y-4" onSubmit={handleSubmit}>
+            <div className='flex flex-col items-center mb-4'>
+              <img src={formData.imageUrl} alt="Profile Preview" className="w-32 h-32 border border-gray-300 rounded-full object-cover mb-4" />
+              <input
+                onChange={handleImageChange}
+                type="file"
+                accept="image/*"
+                className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-green-500"
+              />
+            </div>
+
             <div>
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="fullName">
                 Full Name
