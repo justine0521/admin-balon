@@ -3,6 +3,8 @@ import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 import { FaFileAlt } from "react-icons/fa";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function BarangayClearance() {
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
