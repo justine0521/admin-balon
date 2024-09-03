@@ -100,6 +100,11 @@ function Announcements() {
         }
     };
 
+    function stripHtmlTags(html) {
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        return doc.body.textContent || "";
+    }
+
     return (
         <section className="w-4/5 h-full mt-14 left-56 p-7 absolute hide-scrollbar">
             <div className="bg-white rounded-xl shadow-md">
@@ -171,9 +176,9 @@ function Announcements() {
                                         </td>
                                         <td className="px-4 py-2">{announcement.title}</td>
                                         <td className="px-4 py-2">
-                                            {announcement.description.length > 100
-                                                ? `${announcement.description.substring(0, 100)}...`
-                                                : announcement.description}
+                                            {stripHtmlTags(announcement.description).length > 100
+                                                ? `${stripHtmlTags(announcement.description).substring(0, 100)}...`
+                                                : stripHtmlTags(announcement.description)}
                                         </td>
                                         <td className="px-4 py-2">{new Date(announcement.createdAt).toLocaleDateString()}</td>
                                         <td className="px-4 py-2 space-x-2">
