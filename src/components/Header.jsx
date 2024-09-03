@@ -4,6 +4,8 @@ import ProfileContext from '../pages/ProfileContext';
 import '../App.css';
 import { NavLink } from 'react-router-dom';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 // IMPORT ICONS
 import { GiHamburgerMenu } from "react-icons/gi";
 import { MdSupervisorAccount } from "react-icons/md";
@@ -26,7 +28,7 @@ function Header() {
     // Fetch notification count and notifications when the component mounts
     const fetchNotifications = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/certificates'); // Fetch the certificates
+        const response = await axios.get(`${API_BASE_URL}/api/certificates`); // Fetch the certificates
         console.log("Fetched notifications:", response.data); // Debug log
         const fetchedNotifications = response.data; // Get the notifications data
         setNotifications(fetchedNotifications); // Set notifications

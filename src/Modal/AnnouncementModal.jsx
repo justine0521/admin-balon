@@ -5,6 +5,8 @@ import { FaCheck, FaSpinner } from 'react-icons/fa'; // Import icons
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import styles for React Quill
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 // AWS S3 setup
 const bucketName = import.meta.env.VITE_AWS_BUCKET_NAME;
 const s3Client = new S3Client({
@@ -66,7 +68,7 @@ function AnnouncementModal({ isOpen, onClose }) {
         };
 
         try {
-            await axios.post('http://localhost:5000/api/announcements', announcementData);
+            await axios.post(`${API_BASE_URL}/api/announcements`, announcementData);
             alert('Announcement added successfully!');
             setTitle('');
             setDescription('');

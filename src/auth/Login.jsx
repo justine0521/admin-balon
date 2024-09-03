@@ -5,13 +5,15 @@ import { useNavigate, NavLink } from "react-router-dom"; // Import navigate hook
 
 import Logo from '../images/Logo.png';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function Login({ onLogin }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     useEffect(() => {
         const isLoggedIn = localStorage.getItem('isLoggedIn');
@@ -28,7 +30,7 @@ function Login({ onLogin }) {
         setError('');
 
         try {
-            const response = await axios.post('http://localhost:5000/api/login', { email, password });
+            const response = await axios.post(`${API_BASE_URL}/api/login`, { email, password });
 
             if (response.status === 200) {
                 localStorage.setItem('isLoggedIn', 'true');

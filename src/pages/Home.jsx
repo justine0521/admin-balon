@@ -4,6 +4,8 @@ import axios from 'axios';
 // IMPORT ICONS
 import { FaCertificate } from "react-icons/fa6";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function Home() {
 
     const [data, setData] = useState([]);
@@ -24,7 +26,7 @@ function Home() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/certificates');
+                const response = await axios.get(`${API_BASE_URL}/api/certificates`);
                 setData(response.data);
 
                 const brgyClearanceCount = response.data.filter(cert => cert.certId === 1).length;

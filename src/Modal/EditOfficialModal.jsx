@@ -4,6 +4,8 @@ import { IoClose } from "react-icons/io5";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 // AWS S3 setup
 const bucketName = import.meta.env.VITE_AWS_BUCKET_NAME;
 const s3Client = new S3Client({
@@ -75,7 +77,7 @@ function EditOfficialModal({ isOpen, onClose, officialData, onUpdateOfficial }) 
 
         try {
             console.log('Updating official with data:', updatedOfficial); // Log the data being sent
-            const response = await axios.put(`http://localhost:5000/api/officials/${officialData._id}`, updatedOfficial);
+            const response = await axios.put(`${API_BASE_URL}/api/officials/${officialData._id}`, updatedOfficial);
             onUpdateOfficial(response.data);
             onClose();
         } catch (error) {

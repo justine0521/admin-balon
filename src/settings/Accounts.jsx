@@ -9,6 +9,8 @@ import { MdDelete } from 'react-icons/md';
 import { BsPersonFillSlash } from 'react-icons/bs';
 import { NavLink } from 'react-router-dom';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function Accounts() {
     const [openDropdown, setOpenDropdown] = useState(null);
     const [accounts, setAccounts] = useState([]);
@@ -16,7 +18,7 @@ function Accounts() {
     useEffect(() => {
         const fetchAccounts = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/accounts');
+                const response = await axios.get(`${API_BASE_URL}/api/accounts`);
                 setAccounts(response.data);
             } catch (error) {
                 console.error("Error fetching accounts: ", error);
@@ -33,7 +35,7 @@ function Accounts() {
     const toggleStatus = async (accountId, currentStatus) => {
         try {
             const newStatus = currentStatus === 'Active' ? 'Deactivated' : 'Active';
-            await axios.patch(`http://localhost:5000/api/accounts/${accountId}/status`, { status: newStatus });
+            await axios.patch(`${API_BASE_URL}/api/accounts/${accountId}/status`, { status: newStatus });
 
             setAccounts(accounts.map(account =>
                 account._id === accountId ? { ...account, status: newStatus } : account
@@ -48,7 +50,7 @@ function Accounts() {
 
     const deleteAccount = async (accountId) => {
         try {
-            await axios.delete(`http://localhost:5000/api/accounts/${accountId}`);
+            await axios.delete(`${API_BASE_URL}/api/accounts/${accountId}`);
 
             setAccounts(accounts.filter(account => account._id !== accountId));
 

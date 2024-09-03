@@ -4,6 +4,8 @@ import { MdDelete } from "react-icons/md";
 import { FaFile } from "react-icons/fa";
 import { format } from 'date-fns';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function RequestedCertificate() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,7 +16,7 @@ function RequestedCertificate() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/certificates');
+        const response = await axios.get(`${API_BASE_URL}/api/certificates`);
         setData(response.data);
         setLoading(false);
       } catch (error) {
@@ -28,7 +30,7 @@ function RequestedCertificate() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/certificates/${id}`);
+      await axios.delete(`${API_BASE_URL}/api/certificates/${id}`);
       setData(data.filter(request => request._id !== id));
     } catch (error) {
       console.error("There was an error deleting the certificate:", error);
@@ -37,7 +39,7 @@ function RequestedCertificate() {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      await axios.patch(`http://localhost:5000/api/certificates/${id}/status`, { status: newStatus });
+      await axios.patch(`${API_BASE_URL}/api/certificates/${id}/status`, { status: newStatus });
 
       setData(data.map(request => request._id === id ? { ...request, status: newStatus } : request));
     } catch (error) {

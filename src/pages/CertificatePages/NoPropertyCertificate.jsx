@@ -3,6 +3,8 @@ import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 import { FaFileAlt } from "react-icons/fa";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function NoPropertyCertificate() {
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,7 +15,7 @@ function NoPropertyCertificate() {
     const fetchRequests = async () => {
       try {
         // Replace with the correct certId for No Property Certificate
-        const response = await axios.get('http://localhost:5000/api/certificates?certId=7'); // Use certId for No Property Certificate
+        const response = await axios.get(`${API_BASE_URL}/api/certificates?certId=7`); // Use certId for No Property Certificate
         setRequests(response.data);
       } catch (error) {
         console.error('Error fetching requests:', error);

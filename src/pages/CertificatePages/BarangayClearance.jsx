@@ -12,7 +12,7 @@ function BarangayClearance() {
     // Fetch data from the backend when the component mounts
     const fetchRequests = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/certificates?certId=1'); // Update with your backend URL
+        const response = await axios.get(`${API_BASE_URL}/api/certificates?certId=1`); // Update with your backend URL
         setRequests(response.data);
       } catch (error) {
         console.error('Error fetching requests:', error);
@@ -96,7 +96,7 @@ function BarangayClearance() {
                   <td className="px-6 py-3">{request.selectType}</td>
                   <td className="px-6 py-3">{request.trackingCode}</td>
                   <td>
-                    <NavLink to={`/barangay-clearance-certificate/`}>
+                    <NavLink to={`/barangay-clearance-certificate/${request._id}`}>
                       <button title='Generate Certificate'>
                         <FaFileAlt className='text-Blue' />
                       </button>

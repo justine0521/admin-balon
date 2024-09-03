@@ -5,6 +5,8 @@ import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import Quill's CSS
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 // AWS S3 setup
 const bucketName = import.meta.env.VITE_AWS_BUCKET_NAME;
 const s3Client = new S3Client({
@@ -76,7 +78,7 @@ function EditAnnouncementModal({ announcement, isOpen, onClose, onSave }) {
         console.log('Submitting updated announcement:', updatedAnnouncement);
 
         try {
-            await axios.put(`http://localhost:5000/api/announcements/${announcement._id}`, updatedAnnouncement);
+            await axios.put(`${API_BASE_URL}/api/announcements/${announcement._id}`, updatedAnnouncement);
             alert('Announcement updated successfully!');
             onSave(updatedAnnouncement);
             onClose();

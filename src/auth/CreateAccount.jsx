@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function CreateAccount() {
   const [formData, setFormData] = useState({
     fullName: '',
@@ -19,14 +21,14 @@ function CreateAccount() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match");
       return;
     }
-  
+
     try {
-      const response = await axios.post('http://localhost:5000/api/accounts', formData);
+      const response = await axios.post(`${API_BASE_URL}/api/accounts`, formData);
       if (response.status === 200) {
         alert("Account created successfully!");
         // Clear the form fields
@@ -42,7 +44,7 @@ function CreateAccount() {
       alert("Error creating account: " + error.message);
     }
   };
-  
+
   return (
     <section className="w-4/5 h-screen mt-14 left-56 p-7 absolute">
       <div className='flex justify-center p-10 h-fit bg-gray-100'>

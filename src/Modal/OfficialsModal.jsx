@@ -4,6 +4,8 @@ import { IoClose } from "react-icons/io5";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 // AWS S3 setup
 const bucketName = import.meta.env.VITE_AWS_BUCKET_NAME;
 const s3Client = new S3Client({
@@ -64,7 +66,7 @@ function OfficialsModal({ isOpen, onClose }) {
         };
 
         try {
-            await axios.post('http://localhost:5000/api/officials', officialData);
+            await axios.post(`${API_BASE_URL}/api/officials`, officialData);
             onClose();
         } catch (error) {
             console.error('Error saving official data:', error);

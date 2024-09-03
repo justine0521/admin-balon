@@ -98,7 +98,7 @@ function App() {
               <Route path='/certificate-of-registration-for-new-residents' element={<NewResidentCertificate />} />
               <Route path='/certificate-for-solo-parent' element={<CertificateSoloParent />} />
               {/* Barangay Certificates */}
-              <Route path='/barangay-clearance-certificate' element={<BrgyClearance />} />
+              <Route path='/barangay-clearance-certificate/:id' element={<BrgyClearance />} />
               <Route path='/barangay-certificate-of-residency' element={<CertificateOfRecidency />} />
               <Route path='/barangay-certificate-of-indigency' element={<CertificateOfIndigency />} />
               <Route path='/barangay-certificate-of-good-moral' element={<CertificateOfGoodMoral />} />

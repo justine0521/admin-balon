@@ -8,6 +8,8 @@ import { MdDelete } from "react-icons/md";
 import { IoWarningOutline } from "react-icons/io5";
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function Officials() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State for edit modal
@@ -42,7 +44,7 @@ function Officials() {
   useEffect(() => {
     const fetchOfficials = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/officials");
+        const response = await axios.get(`${API_BASE_URL}/api/officials`);
         console.log(response.data);
         setOfficials(response.data);
       } catch (err) {
@@ -70,7 +72,7 @@ function Officials() {
   const handleDelete = async () => {
     if (selectedOfficial && selectedOfficial._id) {
       try {
-        await axios.delete(`http://localhost:5000/api/officials/${selectedOfficial._id}`);
+        await axios.delete(`${API_BASE_URL}/api/officials/${selectedOfficial._id}`);
         setOfficials(officials.filter((official) => official._id !== selectedOfficial._id));
       } catch (err) {
         setError(err.message);
@@ -85,7 +87,7 @@ function Officials() {
   const handleEditSave = async (updatedOfficial) => {
     if (updatedOfficial && updatedOfficial._id) {
       try {
-        await axios.put(`http://localhost:5000/api/officials/${updatedOfficial._id}`, updatedOfficial);
+        await axios.put(`${API_BASE_URL}/api/officials/${updatedOfficial._id}`, updatedOfficial);
         setOfficials(
           officials.map((official) =>
             official._id === updatedOfficial._id ? updatedOfficial : official

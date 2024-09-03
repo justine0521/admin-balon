@@ -6,6 +6,8 @@ import { FaPlus, FaFileExport, FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { IoWarningOutline } from "react-icons/io5";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function Announcements() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -40,7 +42,7 @@ function Announcements() {
     useEffect(() => {
         const fetchAnnouncements = async () => {
             try {
-                const response = await axios.get("http://localhost:5000/api/announcements");
+                const response = await axios.get(`${API_BASE_URL}/api/announcements`);
                 setAnnouncements(response.data);
             } catch (err) {
                 setError(err.message);
@@ -67,7 +69,7 @@ function Announcements() {
     const handleDelete = async () => {
         if (selectedAnnouncement && selectedAnnouncement._id) {
             try {
-                await axios.delete(`http://localhost:5000/api/announcements/${selectedAnnouncement._id}`);
+                await axios.delete(`${API_BASE_URL}/api/announcements/${selectedAnnouncement._id}`);
                 setAnnouncements(announcements.filter((announcement) => announcement._id !== selectedAnnouncement._id));
             } catch (err) {
                 setError(err.message);
@@ -82,7 +84,7 @@ function Announcements() {
     const handleEditSave = async (updatedAnnouncement) => {
         if (updatedAnnouncement && updatedAnnouncement._id) {
             try {
-                await axios.put(`http://localhost:5000/api/announcements/${updatedAnnouncement._id}`, updatedAnnouncement);
+                await axios.put(`${API_BASE_URL}/api/announcements/${updatedAnnouncement._id}`, updatedAnnouncement);
                 setAnnouncements(
                     announcements.map((announcement) =>
                         announcement._id === updatedAnnouncement._id ? updatedAnnouncement : announcement
