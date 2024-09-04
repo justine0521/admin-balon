@@ -26,7 +26,7 @@ function Settings() {
   }
 
   return (
-    <section className=" width-95 h-full absolute hide-scrollbar">
+    <section className="w-11/12 h-full absolute hide-scrollbar">
       <div className="bg-White pb-10">
         <div className="flex justify-between items-center h-16 px-5 w-full border-b-2 border-gray-400">
           <p className="text-2xl">Barangay Information</p>

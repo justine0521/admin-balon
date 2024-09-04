@@ -5,15 +5,13 @@ import { useNavigate, NavLink } from "react-router-dom"; // Import navigate hook
 
 import Logo from '../images/Logo.png';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
 function Login({ onLogin }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         const isLoggedIn = localStorage.getItem('isLoggedIn');
@@ -25,15 +23,26 @@ function Login({ onLogin }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         setLoading(true);
         setError('');
-
+    
         try {
-            const response = await axios.post(`${API_BASE_URL}/api/login`, { email, password });
-
+            const response = await axios.post('http://localhost:5000/api/login', { email, password });
+    
             if (response.status === 200) {
+                const { token } = response.data;
                 localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('token', token); 
+    
+                // Fetch user profile data
+                const profileResponse = await axios.get('http://localhost:5000/api/profile', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+    
+                // Store profile data in localStorage
+                localStorage.setItem('profile', JSON.stringify(profileResponse.data));
+    
                 onLogin();
                 navigate('/');
             }
