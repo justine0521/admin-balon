@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import Profile from '../images/defaultProfile.png';
@@ -16,13 +17,14 @@ const s3Client = new S3Client({
 });
 
 function CreateAccount() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
     position: '',
     email: '',
     password: '',
     confirmPassword: '',
-    imageUrl: Profile,  // Initialize with default profile image
+    imageUrl: Profile,
   });
 
   const handleChange = (e) => {
@@ -74,7 +76,7 @@ function CreateAccount() {
       const response = await axios.post(`${API_BASE_URL}/api/accounts`, formData);
       if (response.status === 200) {
         alert("Account created successfully!");
-        // Clear the form fields
+
         setFormData({
           fullName: '',
           position: '',
@@ -83,6 +85,8 @@ function CreateAccount() {
           confirmPassword: '',
           imageUrl: Profile,
         });
+
+        navigate('/settings');
       }
     } catch (error) {
       alert("Error creating account: " + error.message);
@@ -144,10 +148,6 @@ function CreateAccount() {
               Sign Up
             </button>
           </form>
-
-          <p className="mt-4 text-center text-gray-600 text-sm">
-            <a href="#" className="text-blue-500 hover:underline">Log In</a>
-          </p>
         </div>
       </div>
     </section>

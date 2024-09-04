@@ -162,3 +162,17 @@ body {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: rgba(0, 0, 0, 0.5); /* Darker thumb on hover */
 }
+
+@keyframes shrink {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+
+
+
+

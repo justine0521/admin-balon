@@ -33,7 +33,18 @@ function Login({ onLogin }) {
             const response = await axios.post(`${API_BASE_URL}/api/login`, { email, password });
 
             if (response.status === 200) {
+                const { token } = response.data;
                 localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('token', token); // Store the token
+    
+                // Fetch user profile data
+                const profileResponse = await axios.get('http://localhost:5000/api/profile', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+    
+                // Store profile data in localStorage
+                localStorage.setItem('profile', JSON.stringify(profileResponse.data));
+                
                 onLogin();
                 navigate('/');
             }

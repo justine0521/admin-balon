@@ -4,7 +4,7 @@ import { FaPlus, FaEdit, FaFileExport, FaEye } from 'react-icons/fa';
 import { IoMdArrowDropdown } from "react-icons/io";
 import { MdDelete } from 'react-icons/md';
 import { BsPersonFillSlash } from 'react-icons/bs';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -51,7 +51,6 @@ function Accounts() {
 
             setAccounts(accounts.filter(account => account._id !== accountId));
 
-            // Close the dropdown after account deletion
             setOpenDropdown(null);
         } catch (error) {
             console.error("Error deleting account: ", error);
@@ -62,35 +61,34 @@ function Accounts() {
         <section>
             <div className='flex justify-end items-center h-16 px-5 w-full'>
                 <NavLink to={"/signup"}>
-                    <button className='px-2 py-1 bg-green-500 flex items-center gap-1 rounded-md text-white hover:bg-green-400'>
+                    <button className='px-2 py-1 bg-green-500 flex items-center gap-1 rounded-md text-white hover:bg-green-600'>
                         <FaPlus /> Add
                     </button>
                 </NavLink>
             </div>
 
-            <div className='border p-3'>
                 <table className='w-full'>
                     <thead>
-                        <tr>
-                            <th className='text-left text-gray-500'>Profile</th>
-                            <th className='text-left text-gray-500'>Name</th>
-                            <th className='text-left text-gray-500'>Position</th>
-                            <th className='text-left text-gray-500'>Email</th>
-                            <th className='text-left text-gray-500'>Status</th>
-                            <th className='text-center text-gray-500'>Action</th>
+                        <tr className='bg-green-500'>
+                            <th className='text-white font-semibold p-2'>Profile</th>
+                            <th className='text-white font-semibold p-2'>Name</th>
+                            <th className='text-white font-semibold p-2'>Position</th>
+                            <th className='text-white font-semibold p-2'>Email</th>
+                            <th className='text-white font-semibold p-2'>Status</th>
+                            <th className='text-white font-semibold p-2'>Action</th>
                         </tr>
                     </thead>
 
-                    <tbody className='m-5'>
+                    <tbody className='m-5 text-center font-thin'>
                         {accounts.map((account) =>
-                            <tr key={account._id}>
-                                <td className='text-left py-3'>
+                            <tr key={account._id} className='border'>
+                                <td className='py-3 flex justify-center'>
                                     <img src={account.imageUrl} alt="" className='h-12 w-12 rounded-full' />
                                 </td>
-                                <td className='text-left py-3'>{account.fullName}</td>
-                                <td className='text-left py-3'>{account.position}</td>
-                                <td className='text-left py-3'>{account.email}</td>
-                                <td className='text-left py-3'>
+                                <td className='py-3'>{account.fullName}</td>
+                                <td className='py-3'>{account.position}</td>
+                                <td className='py-3'>{account.email}</td>
+                                <td className='py-3'>
                                     <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium ${account.status === 'Active' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
                                         {account.status}
                                     </span>
@@ -118,7 +116,6 @@ function Accounts() {
                         )}
                     </tbody>
                 </table>
-            </div>
         </section>
     );
 }
