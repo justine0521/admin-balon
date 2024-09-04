@@ -36,15 +36,15 @@ function Login({ onLogin }) {
                 const { token } = response.data;
                 localStorage.setItem('isLoggedIn', 'true');
                 localStorage.setItem('token', token); // Store the token
-    
+
                 // Fetch user profile data
-                const profileResponse = await axios.get('http://localhost:5000/api/profile', {
+                const profileResponse = await axios.get(`${API_BASE_URL}/api/profile`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-    
+
                 // Store profile data in localStorage
                 localStorage.setItem('profile', JSON.stringify(profileResponse.data));
-                
+
                 onLogin();
                 navigate('/');
             }
