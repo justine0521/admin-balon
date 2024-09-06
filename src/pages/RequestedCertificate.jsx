@@ -37,6 +37,21 @@ function RequestedCertificate() {
     }
   };
 
+  const handleMarkAsComplete = async (request) => {
+    try {
+      // Send the request data to the completed database
+      await axios.post(`${API_BASE_URL}/api/completed-certificates`, request);
+
+      // Delete the request from the current database
+      await axios.delete(`${API_BASE_URL}/api/certificates/${request._id}`);
+
+      // Update the state to remove the marked request
+      setData(data.filter(item => item._id !== request._id));
+    } catch (error) {
+      console.error("Error marking the certificate as complete:", error);
+    }
+  };
+
   const handleStatusChange = async (id, newStatus) => {
     try {
       await axios.patch(`${API_BASE_URL}/api/certificates/${id}/status`, { status: newStatus });
@@ -95,6 +110,11 @@ function RequestedCertificate() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
           {paginatedData.map((request) => (
             <div key={request._id} className="bg-white shadow-md rounded-lg h-fit p-6 flex flex-col justify-between">
+              <div className="flex justify-end">
+                <button onClick={() => handleDelete(request._id)} className="text-2xl text-red-500">
+                  <MdDelete />
+                </button>
+              </div>
               <div className="flex flex-col mb-4">
                 <h2 className="text-xl font-semibold mb-2">{request.fullName}</h2>
                 <p className="text-gray-600 mb-1"><strong>Tracking Code:</strong> {request.trackingCode}</p>
@@ -109,7 +129,7 @@ function RequestedCertificate() {
               </div>
               <div className="flex justify-between items-center mt-4">
                 <select
-                  className="w-40 h-8 rounded-md outline-none border border-green-500"
+                  className="w-40 h-10 rounded-md outline-none border border-green-500"
                   value={request.status}  // Set the current value
                   onChange={(e) => handleStatusChange(request._id, e.target.value)}  // Handle the change
                 >
@@ -118,10 +138,15 @@ function RequestedCertificate() {
                   <option value="Out for Delivery">Out for Delivery</option>
                   <option value="Ready for Pickup">Out for Pickup</option>
                 </select>
-                <button onClick={() => handleDelete(request._id)} className="text-2xl text-red-500">
-                  <MdDelete />
+                <button
+                  onClick={() => handleMarkAsComplete(request)}
+                  className="bg-green-500 text-white px-2 py-2 rounded-md"
+                >
+                  Mark as Complete
                 </button>
               </div>
+
+
             </div>
           ))}
         </div>
