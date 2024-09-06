@@ -99,15 +99,15 @@ function App() {
               <Route path='/certificate-for-solo-parent' element={<CertificateSoloParent />} />
               {/* Barangay Certificates */}
               <Route path='/barangay-clearance-certificate/:id' element={<BrgyClearance />} />
-              <Route path='/barangay-certificate-of-residency' element={<CertificateOfRecidency />} />
-              <Route path='/barangay-certificate-of-indigency' element={<CertificateOfIndigency />} />
-              <Route path='/barangay-certificate-of-good-moral' element={<CertificateOfGoodMoral />} />
-              <Route path='/barangay-certificate-of-business-clearance' element={<CertificateOfBusinessClearance />} />
-              <Route path='/barangay-certificate-of-death' element={<CertificateOfDeath />} />
-              <Route path='/barangay-certificate-of-no-property' element={<CertificateOfNoProperty />} />
-              <Route path='/barangay-certificate-of-low-income' element={<CertificateOfLowIncome />} />
-              <Route path='/barangay-certificate-of-new-resident' element={<CertificateOfNewResident />} />
-              <Route path='/barangay-certificate-for-solo-parent' element={<CertificateForSoloParent />} />
+              <Route path='/barangay-certificate-of-residency/:id' element={<CertificateOfRecidency />} />
+              <Route path='/barangay-certificate-of-indigency/:id' element={<CertificateOfIndigency />} />
+              <Route path='/barangay-certificate-of-good-moral/:id' element={<CertificateOfGoodMoral />} />
+              <Route path='/barangay-certificate-of-business-clearance/:id' element={<CertificateOfBusinessClearance />} />
+              <Route path='/barangay-certificate-of-death/:id' element={<CertificateOfDeath />} />
+              <Route path='/barangay-certificate-of-no-property/:id' element={<CertificateOfNoProperty />} />
+              <Route path='/barangay-certificate-of-low-income/:id' element={<CertificateOfLowIncome />} />
+              <Route path='/barangay-certificate-of-new-resident/:id' element={<CertificateOfNewResident />} />
+              <Route path='/barangay-certificate-for-solo-parent/:id' element={<CertificateForSoloParent />} />
 
               {/* Settings */}
               <Route path='/barangayInfo' element={<BarangayInfo />} />

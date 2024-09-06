@@ -64,7 +64,7 @@ function NoPropertyCertificate() {
               )}
             </NavLink>
             /
-            <NavLink to={'/no-property-certificate'}>
+            <NavLink to={'/certificate-of-no-property'}>
               {({ isActive }) => (
                 <p className={`${isActive ? 'text-gray-300' : 'text-Green'}`}>No Property Certificate</p>
               )}
@@ -115,7 +115,7 @@ function NoPropertyCertificate() {
                   <td className="px-6 py-3">{request.selectType}</td>
                   <td className="px-6 py-3">{request.trackingCode}</td>
                   <td>
-                    <NavLink to={`/generate-no-property-certificate/${request._id}`}>
+                    <NavLink to={`/barangay-certificate-of-no-property/${request._id}`}>
                       <button title='Generate Certificate'>
                         <FaFileAlt className='text-Blue' />
                       </button>
