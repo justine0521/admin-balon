@@ -14,6 +14,9 @@ export default {
         Grey: '#eee',
         Darkgrey: '#AAAAAA'
       },
+      fontFamily: {
+        'dancing': ['Dancing Script', 'cursive'],
+      },
     },
   },
   plugins: [],

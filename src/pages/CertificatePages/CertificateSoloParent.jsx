@@ -64,7 +64,7 @@ function CertificateSoloParent() {
               )}
             </NavLink>
             /
-            <NavLink to={'/certificate-solo-parent'}>
+            <NavLink to={'/certificate-for-solo-parent'}>
               {({ isActive }) => (
                 <p className={`${isActive ? 'text-gray-300' : 'text-Green'}`}>Solo Parent Certificate</p>
               )}
@@ -115,7 +115,7 @@ function CertificateSoloParent() {
                   <td className="px-6 py-3">{request.selectType}</td>
                   <td className="px-6 py-3">{request.trackingCode}</td>
                   <td>
-                    <NavLink to={`/generate-solo-parent-certificate/${request._id}`}>
+                    <NavLink to={`/barangay-certificate-for-solo-parent/${request._id}`}>
                       <button title='Generate Certificate'>
                         <FaFileAlt className='text-Blue' />
                       </button>

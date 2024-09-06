@@ -64,7 +64,7 @@ function GoodMoralCertificate() {
               )}
             </NavLink>
             /
-            <NavLink to={'/good-moral-certificate'}>
+            <NavLink to={'/certificate-of-good-moral-character'}>
               {({ isActive }) => (
                 <p className={`${isActive ? 'text-gray-300' : 'text-Green'}`}>Good Moral Certificate</p>
               )}
@@ -115,7 +115,7 @@ function GoodMoralCertificate() {
                   <td className="px-6 py-3">{request.selectType}</td>
                   <td className="px-6 py-3">{request.trackingCode}</td>
                   <td>
-                    <NavLink to={`/generate-good-moral-certificate/${request._id}`}>
+                    <NavLink to={`/barangay-certificate-of-good-moral/${request._id}`}>
                       <button title='Generate Certificate'>
                         <FaFileAlt className='text-Blue' />
                       </button>
