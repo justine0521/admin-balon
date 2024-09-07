@@ -182,5 +182,4 @@ function RequestedCertificate() {
     </section>
   );
 }
-
 export default RequestedCertificate;
