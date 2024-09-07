@@ -170,9 +170,9 @@ function BrgyClearance() {
                     <div contenteditable="true" className='px-7 mt-20'>
                         <p className='mb-5'>TO WHOM IT MAY CONCERN:</p>
 
-                        <p className='mb-5'>&nbsp; &nbsp; &nbsp; &nbsp; This is to certify that <span className='font-bold'>{requestDetails?.fullName || '_________________'}</span>, of Legal age, Married, Filifino and a Bonifide resident of <span>{requestDetails?.address || '_______________'}</span>, Barangay Balon-Anito, Mariveles, Bataan belongs to no permanent income and indigent families of this barangay.</p>
+                        <p className='mb-5'>&nbsp; &nbsp; &nbsp; &nbsp; This is to certify that <span className='font-bold'>{requestDetails?.fullName || '_________________'}</span>, of Legal age, Married, Filifino and a Bonifide resident of <span>{requestDetails?.address || '_______________'}</span>, Barangay Balon-Anito, Mariveles, Bataan. To Certify further, that he/she has no derogatory and/or criminal records filed in this barangay.</p>
 
-                        <p>&nbsp; &nbsp; &nbsp; &nbsp; This certification is hereby issued upon the request of above- <br /> mentioned name individual for <span className='font-bold'>DSWD.</span></p>
+                        <p>&nbsp; &nbsp; &nbsp; &nbsp; This certification is hereby issued upon the request of above- <br /> mentioned name individual for <span className='font-bold'>{requestDetails?.purpose || '______'}.</span></p>
                     </div>
 
                     <div className='text-center absolute bottom-0'>
