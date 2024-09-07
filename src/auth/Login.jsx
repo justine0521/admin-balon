@@ -61,7 +61,7 @@ function Login({ onLogin }) {
     return (
         <div className="h-screen flex items-center justify-center bg-gray-100">
             <form className="w-full max-w-md p-8 flex flex-col justify-center items-center bg-white rounded-lg shadow-lg relative" onSubmit={handleSubmit}>
-                <img src={Logo} alt="Logo" className="w-56 -m-28" />
+                <img src={Logo} alt="Logo" className="w-44 h-44 -m-28" />
                 <h1 className="mt-28 mb-6 text-4xl font-bold text-gray-800">Login</h1>
 
                 <div className="w-full flex flex-col mb-4">

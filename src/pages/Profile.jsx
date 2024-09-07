@@ -133,7 +133,7 @@ function Profile() {
 
         if (!currentPassword) {
             errors.currentPassword = 'Current password is required';
-            styles.currentPassword = 'border-red-500'; // Red border
+            styles.currentPassword = 'border-red-500'; 
         }
 
         if (newPassword !== confirmPassword) {
