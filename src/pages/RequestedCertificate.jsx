@@ -148,7 +148,7 @@ function RequestedCertificate() {
                   <option value="Pending">Pending</option>
                   <option value="Processing">Processing</option>
                   <option value="Out for Delivery">Out for Delivery</option>
-                  <option value="Ready for Pickup">Out for Pickup</option>
+                  <option value="Ready for Pickup">Ready for Pickup</option>
                 </select>
                 <button
                   onClick={() => handleMarkAsComplete(request)}
