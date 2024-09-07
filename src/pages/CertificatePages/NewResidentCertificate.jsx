@@ -64,7 +64,7 @@ function NewResidentCertificate() {
               )}
             </NavLink>
             /
-            <NavLink to={'/new-resident-certificate'}>
+            <NavLink to={'/certificate-of-registration-for-new-residents'}>
               {({ isActive }) => (
                 <p className={`${isActive ? 'text-gray-300' : 'text-Green'}`}>New Resident Certificate</p>
               )}
@@ -115,7 +115,7 @@ function NewResidentCertificate() {
                   <td className="px-6 py-3">{request.selectType}</td>
                   <td className="px-6 py-3">{request.trackingCode}</td>
                   <td>
-                    <NavLink to={`/generate-new-resident-certificate/${request._id}`}>
+                    <NavLink to={`/barangay-certificate-of-new-resident/${request._id}`}>
                       <button title='Generate Certificate'>
                         <FaFileAlt className='text-Blue' />
                       </button>

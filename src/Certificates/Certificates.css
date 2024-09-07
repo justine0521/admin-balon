@@ -1,9 +1,32 @@
-@media print {
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
+/* General Styles */
 
-    .header-container{
+.text-xsm {
+    font-size: 8px;
+}
+
+/* Print Styles */
+@media print {
+  @page {
+    margin-top: 0mm;
+    margin-bottom: 0mm; 
+    margin-left: 10mm;
+    margin-right: 10mm;
+}
+    .no-scrollbar::-webkit-scrollbar {
         display: none;
     }
+
+    .header-container {
+        display: none;
+    }
+
+    .icons {
+      font-family: 'Font Awesome 5 Free', sans-serif !important;
+      font-weight: 900;
+      color: #355ba7 !important;
+      padding: 1.5rem ;
+      background-color: #1a96c0 !important;
+      border-radius: 100%;
   }
+
+}

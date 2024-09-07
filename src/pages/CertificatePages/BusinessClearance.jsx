@@ -98,7 +98,7 @@ function BusinessClearance() {
                   <td className="px-6 py-3">{request.selectType}</td>
                   <td className="px-6 py-3">{request.trackingCode}</td>
                   <td>
-                    <NavLink to={`/barangay-certificate-of-business-clearance`}>
+                    <NavLink to={`/barangay-certificate-of-business-clearance/${request._id}`}>
                       <button title='Generate Certificate'>
                         <FaFileAlt className='text-Blue' />
                       </button>

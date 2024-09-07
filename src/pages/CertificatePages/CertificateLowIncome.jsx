@@ -98,7 +98,7 @@ function CertificateLowIncome() {
                   <td className="px-6 py-3">{request.selectType}</td>
                   <td className="px-6 py-3">{request.trackingCode}</td>
                   <td>
-                    <NavLink to={`/generate-low-income-certificate/${request._id}`}>
+                    <NavLink to={`/barangay-certificate-of-low-income/${request._id}`}>
                       <button title='Generate Certificate'>
                         <FaFileAlt className='text-Blue' />
                       </button>
