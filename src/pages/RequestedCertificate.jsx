@@ -12,6 +12,7 @@ function RequestedCertificate() {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [entriesPerPage, setEntriesPerPage] = useState(10);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,6 +29,10 @@ function RequestedCertificate() {
     fetchData();
   }, []);
 
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
   const handleDelete = async (id) => {
     try {
       await axios.delete(`${API_BASE_URL}/api/certificates/${id}`);
@@ -39,13 +44,8 @@ function RequestedCertificate() {
 
   const handleMarkAsComplete = async (request) => {
     try {
-      // Send the request data to the completed database
       await axios.post(`${API_BASE_URL}/api/completed-certificates`, request);
-
-      // Delete the request from the current database
       await axios.delete(`${API_BASE_URL}/api/certificates/${request._id}`);
-
-      // Update the state to remove the marked request
       setData(data.filter(item => item._id !== request._id));
     } catch (error) {
       console.error("Error marking the certificate as complete:", error);
@@ -55,7 +55,6 @@ function RequestedCertificate() {
   const handleStatusChange = async (id, newStatus) => {
     try {
       await axios.patch(`${API_BASE_URL}/api/certificates/${id}/status`, { status: newStatus });
-
       setData(data.map(request => request._id === id ? { ...request, status: newStatus } : request));
     } catch (error) {
       console.error("Error updating status:", error);
@@ -64,7 +63,7 @@ function RequestedCertificate() {
 
   const handleEntriesChange = (event) => {
     setEntriesPerPage(Number(event.target.value));
-    setCurrentPage(1); // Reset to the first page
+    setCurrentPage(1);
   };
 
   const handlePreviousPage = () => {
@@ -75,11 +74,17 @@ function RequestedCertificate() {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
+  const filteredData = data.filter(request =>
+    request.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    request.trackingCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    request.certificateType.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const startIndex = (currentPage - 1) * entriesPerPage;
   const endIndex = startIndex + entriesPerPage;
-  const paginatedData = data.slice(startIndex, endIndex);
+  const paginatedData = filteredData.slice(startIndex, endIndex);
 
-  const totalPages = Math.ceil(data.length / entriesPerPage);
+  const totalPages = Math.ceil(filteredData.length / entriesPerPage);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -101,9 +106,16 @@ function RequestedCertificate() {
               <option value="100">100</option>
             </select>
           </div>
-          <form action="">
+          <form>
             <label>Search: </label>
-            <input type="text" name='search' id='search' className="border border-gray-300 rounded-md px-3 py-1 focus:outline-none focus:border-Green" />
+            <input
+              type="text"
+              name='search'
+              id='search'
+              className="border border-gray-300 rounded-md px-3 py-1 focus:outline-none focus:border-Green"
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
           </form>
         </div>
 
@@ -130,8 +142,8 @@ function RequestedCertificate() {
               <div className="flex justify-between items-center mt-4">
                 <select
                   className="w-40 h-10 rounded-md outline-none border border-green-500"
-                  value={request.status}  // Set the current value
-                  onChange={(e) => handleStatusChange(request._id, e.target.value)}  // Handle the change
+                  value={request.status}
+                  onChange={(e) => handleStatusChange(request._id, e.target.value)}
                 >
                   <option value="Pending">Pending</option>
                   <option value="Processing">Processing</option>
@@ -145,8 +157,6 @@ function RequestedCertificate() {
                   Mark as Complete
                 </button>
               </div>
-
-
             </div>
           ))}
         </div>
