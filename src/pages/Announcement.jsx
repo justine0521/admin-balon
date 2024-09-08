@@ -218,31 +218,32 @@ function Announcements() {
                         </tbody>
                     </table>
                 </div>
-
-                <div className="flex justify-between items-center p-4">
-                    <button
-                        onClick={handlePreviousPage}
-                        disabled={currentPage === 1}
-                        className={`px-3 py-1 rounded-md ${currentPage === 1 ? 'bg-gray-300' : 'bg-green-500 hover:bg-green-600'} text-white`}
-                    >
-                        Previous
-                    </button>
-                    <span>
-                        Page {currentPage} of {totalPages}
-                    </span>
-                    <button
-                        onClick={handleNextPage}
-                        disabled={currentPage === totalPages}
-                        className={`px-3 py-1 rounded-md ${currentPage === totalPages ? 'bg-gray-300' : 'bg-green-500 hover:bg-green-600'} text-white`}
-                    >
-                        Next
-                    </button>
-                </div>
             </div>
 
 
-            <AnnouncementModal isOpen={isModalOpen} onClose={closeModal} />
+            <div className="flex justify-between items-center p-5">
+                <button
+                    onClick={handlePreviousPage}
+                    className={`p-2 border border-Green rounded-md ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
+                    disabled={currentPage === 1}
+                >
+                    Previous
+                </button>
+                <span>
+                    Page {currentPage} of {totalPages}
+                </span>
+                <button
+                    onClick={handleNextPage}
+                    className={`p-2 border border-Green rounded-md ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
+                    disabled={currentPage === totalPages}
+                >
+                    Next
+                </button>
+            </div>
 
+            <AnnouncementModal isOpen={isModalOpen} onClose={closeModal} />
             {isEditModalOpen && selectedAnnouncement &&
                 (
                     <EditAnnouncementModal
