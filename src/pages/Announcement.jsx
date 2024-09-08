@@ -15,6 +15,7 @@ function Announcements() {
     const [entriesToShow, setEntriesToShow] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [announcements, setAnnouncements] = useState([]);
+    const [searchInput, setSearchInput] = useState(""); // New state for search input
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
@@ -39,6 +40,11 @@ function Announcements() {
         setCurrentPage(1);
     };
 
+    const handleSearchChange = (event) => {
+        setSearchInput(event.target.value); // Update search input state
+        setCurrentPage(1); // Reset to the first page on search
+    };
+
     useEffect(() => {
         const fetchAnnouncements = async () => {
             try {
@@ -54,7 +60,12 @@ function Announcements() {
         fetchAnnouncements();
     }, []);
 
-    const totalPages = Math.ceil(announcements.length / entriesToShow);
+    const filteredAnnouncements = announcements.filter((announcement) =>
+        announcement.title.toLowerCase().includes(searchInput.toLowerCase()) ||
+        stripHtmlTags(announcement.description).toLowerCase().includes(searchInput.toLowerCase())
+    );
+
+    const totalPages = Math.ceil(filteredAnnouncements.length / entriesToShow);
     const startIndex = (currentPage - 1) * entriesToShow;
     const endIndex = startIndex + entriesToShow;
 
@@ -144,6 +155,8 @@ function Announcements() {
                         <input
                             type="text"
                             id="search"
+                            value={searchInput} // Set input value from state
+                            onChange={handleSearchChange} // Handle input changes
                             className="border border-gray-300 rounded-md px-3 py-1 focus:outline-none focus:border-green-500"
                         />
                     </form>
@@ -164,8 +177,8 @@ function Announcements() {
                             </tr>
                         </thead>
                         <tbody className="text-center bg-white divide-y divide-gray-300">
-                            {Array.isArray(announcements) &&
-                                announcements.slice(startIndex, endIndex).map((announcement, index) => (
+                            {Array.isArray(filteredAnnouncements) &&
+                                filteredAnnouncements.slice(startIndex, endIndex).map((announcement, index) => (
                                     <tr key={index} className="hover:bg-gray-100">
                                         <td className="px-4 py-2 flex justify-center items-center">
                                             <img
@@ -205,11 +218,12 @@ function Announcements() {
                         </tbody>
                     </table>
                 </div>
-                <div className="flex justify-between items-center p-5">
+
+                <div className="flex justify-between items-center p-4">
                     <button
                         onClick={handlePreviousPage}
-                        className={`p-2 border border-green-500 rounded-md ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""}`}
                         disabled={currentPage === 1}
+                        className={`px-3 py-1 rounded-md ${currentPage === 1 ? 'bg-gray-300' : 'bg-green-500 hover:bg-green-600'} text-white`}
                     >
                         Previous
                     </button>
@@ -218,60 +232,38 @@ function Announcements() {
                     </span>
                     <button
                         onClick={handleNextPage}
-                        className={`p-2 border border-green-500 rounded-md ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""}`}
                         disabled={currentPage === totalPages}
+                        className={`px-3 py-1 rounded-md ${currentPage === totalPages ? 'bg-gray-300' : 'bg-green-500 hover:bg-green-600'} text-white`}
                     >
                         Next
                     </button>
                 </div>
             </div>
 
-            <AnnouncementModal isOpen={isModalOpen} onClose={closeModal} />
-
-            {isEditModalOpen && selectedAnnouncement &&
-                (
-                    <EditAnnouncementModal
-                        isOpen={isEditModalOpen}
-                        onClose={closeEditModal}
-                        announcement={selectedAnnouncement}
-                        onSave={handleEditSave} />
-                )}
+            {isModalOpen && <AnnouncementModal onClose={closeModal} />}
+            {isEditModalOpen && (
+                <EditAnnouncementModal announcement={selectedAnnouncement} onClose={closeEditModal} onSave={handleEditSave} />
+            )}
             {deleteModal && (
-                <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-50">
-                    <div className="bg-white p-5 rounded-md shadow-md w-full max-w-lg">
-                        <button
-                            onClick={closeDeleteModal}
-                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-6 w-6"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <path d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg">
                         <div className="flex items-center gap-2 mb-4">
-                            <IoWarningOutline className="text-2xl text-red-500" />
-                            <p className="text-lg font-semibold">Are you sure you want to delete this announcement?</p>
+                            <IoWarningOutline size={24} className="text-red-500" />
+                            <h2 className="text-xl font-semibold">Delete Announcement</h2>
                         </div>
-                        <div className="flex justify-end gap-3">
+                        <p>Are you sure you want to delete this announcement?</p>
+                        <div className="flex justify-end mt-4">
                             <button
-                                onClick={handleDelete}
-                                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-                            >
-                                Delete
-                            </button>
-                            <button
+                                className="px-4 py-2 mr-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
                                 onClick={closeDeleteModal}
-                                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400"
                             >
                                 Cancel
+                            </button>
+                            <button
+                                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                                onClick={handleDelete}
+                            >
+                                Delete
                             </button>
                         </div>
                     </div>
