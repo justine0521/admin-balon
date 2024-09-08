@@ -3,6 +3,8 @@ import Logo from '../images/Logo.png'
 import '../App.css';
 import { MdModeEdit } from "react-icons/md";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function BarangayInfo() {
   const fileInputRef = useRef(null);
   const [barangayName, setBarangayName] = useState('');
@@ -14,12 +16,12 @@ function BarangayInfo() {
   const [isEditable, setIsEditable] = useState(false);
   const [updateBarangayInfo, setUpdateBarangayInfo] = useState(false);
   const progressBarRef = useRef(null);
-    const [timer, setTimer] = useState(3);
+  const [timer, setTimer] = useState(3);
 
   useEffect(() => {
     const fetchBarangayInfo = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/barangay-info');
+        const response = await fetch(`${API_BASE_URL}/api/barangay-info`);
         if (response.ok) {
           const data = await response.json();
           setBarangayName(data.name || '');
@@ -44,7 +46,7 @@ function BarangayInfo() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/api/update-barangay-info', {
+      const response = await fetch(`${API_BASE_URL}/api/update-barangay-info`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -69,11 +71,11 @@ function BarangayInfo() {
 
   useEffect(() => {
     if (updateBarangayInfo) {
-        progressBarRef.current.style.animation = `shrink ${timer}s linear forwards`;
+      progressBarRef.current.style.animation = `shrink ${timer}s linear forwards`;
 
-        setTimeout(() => {
-            setUpdateBarangayInfo(false);
-        }, timer * 1000);
+      setTimeout(() => {
+        setUpdateBarangayInfo(false);
+      }, timer * 1000);
     }
   }, [updateBarangayInfo, timer]);
 
@@ -120,7 +122,7 @@ function BarangayInfo() {
 
       <div className="flex flex-col items-center mb-6">
         <label className="text-lg font-medium text-gray-700 mb-2">Barangay Logo</label>
-        
+
         <img src={Logo} alt="Barangay Logo" className="rounded-full w-36 h-36 object-cover shadow-lg" />
 
         {isEditable && (
