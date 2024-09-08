@@ -240,10 +240,18 @@ function Announcements() {
                 </div>
             </div>
 
-            {isModalOpen && <AnnouncementModal onClose={closeModal} />}
-            {isEditModalOpen && (
-                <EditAnnouncementModal announcement={selectedAnnouncement} onClose={closeEditModal} onSave={handleEditSave} />
-            )}
+
+            <AnnouncementModal isOpen={isModalOpen} onClose={closeModal} />
+
+            {isEditModalOpen && selectedAnnouncement &&
+                (
+                    <EditAnnouncementModal
+                        isOpen={isEditModalOpen}
+                        onClose={closeEditModal}
+                        announcement={selectedAnnouncement}
+                        onSave={handleEditSave} />
+                )
+            }
             {deleteModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg">
