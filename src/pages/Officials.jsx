@@ -20,6 +20,7 @@ function Officials() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedOfficial, setSelectedOfficial] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -102,6 +103,11 @@ function Officials() {
     }
   };
 
+  // Search functionality
+  const filteredOfficials = officials.filter((official) =>
+    official.fullname.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <section className="w-4/5 h-full mt-14 left-56 p-7 absolute hide-scrollbar">
       <div className="bg-White">
@@ -144,6 +150,8 @@ function Officials() {
               type="text"
               name="search"
               id="search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="border border-gray-300 rounded-md px-3 py-1 focus:outline-none focus:border-Green"
             />
           </form>
@@ -177,8 +185,8 @@ function Officials() {
               </tr>
             </thead>
             <tbody className="text-center bg-white divide-y divide-gray-300">
-              {Array.isArray(officials) &&
-                officials.slice(startIndex, endIndex).map((official, index) => (
+              {Array.isArray(filteredOfficials) &&
+                filteredOfficials.slice(startIndex, endIndex).map((official, index) => (
                   <tr key={index} className="hover:bg-Grey">
                     <td className="px-6 py-4 flex justify-center items-center">
                       <img
