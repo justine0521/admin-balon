@@ -43,14 +43,15 @@ function Announcements() {
         const fetchAnnouncements = async () => {
             try {
                 const response = await axios.get(`${API_BASE_URL}/api/announcements`);
-                setAnnouncements(response.data);
+                const sortedAnnouncements = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                setAnnouncements(sortedAnnouncements);
             } catch (err) {
                 setError(err.message);
             } finally {
                 setLoading(false);
             }
         };
-
+    
         fetchAnnouncements();
     }, []);
 
@@ -149,8 +150,23 @@ function Announcements() {
                     </form>
                 </div>
 
-                {loading && <p>Loading...</p>}
-                {error && <p className="text-red-500">Error: {error}</p>}
+                {loading && (
+                    <div className="flex justify-center items-center h-40">
+                        <div className="loading">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                    )}
+
+                    {error && (
+                    <p className="bg-red-100 text-red-600 border border-red-500 px-4 py-2 rounded-md">
+                        Error: {error}
+                    </p>
+                )}
 
                 <div className="overflow-x-auto">
                     <table className="w-full border-collapse">
