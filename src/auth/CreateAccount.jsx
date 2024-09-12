@@ -27,7 +27,13 @@ function CreateAccount() {
     imageUrl: Profile,
   });
 
-  const [error, setError] = useState(''); // State for error messages
+  const [errors, setErrors] = useState({
+    fullName: '',
+    position: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
 
   const handleChange = (e) => {
     setFormData({
@@ -66,19 +72,65 @@ function CreateAccount() {
     }
   };
 
+  const handleFocus = (e) => {
+    const fieldId = e.target.id;
+    setErrors(prevErrors => ({
+      ...prevErrors,
+      [fieldId]: ''
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
-      return;
+    setErrors({
+      fullName: '',
+      position: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    });
+
+    let hasError = false;
+
+    if (!formData.fullName) {
+      setErrors(prev => ({ ...prev, fullName: 'Full name is required' }));
+      hasError = true;
     }
 
+    if (!formData.position) {
+      setErrors(prev => ({ ...prev, position: 'Position is required' }));
+      hasError = true;
+    }
+
+    if (!formData.email) {
+      setErrors(prev => ({ ...prev, email: 'Email is required' }));
+      hasError = true;
+    }
+
+    if (!formData.password) {
+      setErrors(prev => ({ ...prev, password: 'Password is required' }));
+      hasError = true;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setErrors(prev => ({ ...prev, confirmPassword: 'Passwords do not match' }));
+      hasError = true;
+    }
+
+    if (hasError) return;
+
     try {
+      const existingAdmins = await axios.get(`${API_BASE_URL}/api/accounts?position=Admin`);
+
+      if (existingAdmins.data.length > 0 && formData.position === 'Admin') {
+        setErrors(prev => ({ ...prev, position: 'An admin already exists. Only one admin is allowed.' }));
+        return;
+      }
+
       const response = await axios.post(`${API_BASE_URL}/api/accounts`, formData);
       if (response.status === 200) {
         alert("Account created successfully!");
-
         setFormData({
           fullName: '',
           position: '',
@@ -87,14 +139,13 @@ function CreateAccount() {
           confirmPassword: '',
           imageUrl: Profile,
         });
-        setError('');
         navigate('/settings');
       }
     } catch (error) {
-      if (error.response && error.response.status === 409) {
-        setError("An account with this email already exists.");
+      if (error.response && error.response.status === 400) {
+        setErrors(prev => ({ ...prev, email: 'An account with this email already exists.' }));
       } else {
-        setError("Error creating account: " + error.message);
+        setErrors(prev => ({ ...prev, general: 'Error creating account: ' + error.message }));
       }
     }
   };
@@ -119,39 +170,79 @@ function CreateAccount() {
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="fullName">
                 Full Name
               </label>
-              <input type="text" id="fullName" value={formData.fullName} onChange={handleChange} className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" />
+              <input
+                type="text"
+                id="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
+                onFocus={handleFocus}
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.fullName ? 'border-red-500' : 'border-gray-300'} focus:ring-green-500`}
+              />
+              {errors.fullName && <p className="text-red-500 text-sm">{errors.fullName}</p>}
             </div>
 
             <div>
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="position">
                 Position
               </label>
-              <input type="text" id="position" value={formData.position} onChange={handleChange} className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" />
+              <input
+                type="text"
+                id="position"
+                value={formData.position}
+                onChange={handleChange}
+                onFocus={handleFocus}
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.position ? 'border-red-500' : 'border-gray-300'} focus:ring-green-500`}
+              />
+              {errors.position && <p className="text-red-500 text-sm">{errors.position}</p>}
             </div>
 
             <div>
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
                 Email Address
               </label>
-              <input type="email" id="email" value={formData.email} onChange={handleChange} className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" />
+              <input
+                type="email"
+                id="email"
+                value={formData.email}
+                onChange={handleChange}
+                onFocus={handleFocus}
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:ring-green-500`}
+              />
+              {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
             </div>
 
             <div>
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
                 Password
               </label>
-              <input type="password" id="password" value={formData.password} onChange={handleChange} className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" />
+              <input
+                type="password"
+                id="password"
+                value={formData.password}
+                onChange={handleChange}
+                onFocus={handleFocus}
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:ring-green-500`}
+              />
+              {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
             </div>
 
             <div>
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirmPassword">
                 Confirm Password
               </label>
-              <input type="password" id="confirmPassword" value={formData.confirmPassword} onChange={handleChange} className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" />
+              <input
+                type="password"
+                id="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                onFocus={handleFocus}
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} focus:ring-green-500`}
+              />
+              {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
             </div>
 
-            {error && (
-              <p className="text-red-500 text-center">{error}</p>
+            {errors.general && (
+              <p className="text-red-500 text-center">{errors.general}</p>
             )}
 
             <button type="submit" className="w-full py-2 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">

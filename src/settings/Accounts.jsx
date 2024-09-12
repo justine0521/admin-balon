@@ -11,21 +11,24 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function Accounts() {
     const [openDropdown, setOpenDropdown] = useState(null);
     const [accounts, setAccounts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchAccounts = async () => {
             try {
                 const response = await axios.get(`${API_BASE_URL}/api/accounts`);
                 setAccounts(response.data);
+                setLoading(false);
             } catch (error) {
                 console.error("Error fetching accounts: ", error);
+                setLoading(false);
             }
         };
         fetchAccounts();
     }, []);
 
     const toggleDropdown = (accountId) => {
-        // Close the dropdown if it's already open, otherwise open it
         setOpenDropdown(prevId => prevId === accountId ? null : accountId);
     };
 
@@ -56,6 +59,28 @@ function Accounts() {
             console.error("Error deleting account: ", error);
         }
     };
+
+    if (loading) {
+        return (
+          <div className="flex justify-center items-center h-screen">
+            <div className="loading">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        );
+      }
+    
+      if (error) {
+        return (
+          <p className="bg-red-100 text-red-600 border border-red-500 px-4 py-2 rounded-md">
+            Error: {error.message}
+          </p>
+        );
+      }
 
     return (
         <section>

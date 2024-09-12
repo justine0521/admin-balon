@@ -1,7 +1,8 @@
+// Login.jsx
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { FaUser, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { useNavigate, NavLink } from "react-router-dom"; // Import navigate hook
+import { useNavigate } from "react-router-dom";
 
 import Logo from '../images/Logo.png';
 
@@ -25,24 +26,20 @@ function Login({ onLogin }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         setLoading(true);
         setError('');
 
         try {
             const response = await axios.post(`${API_BASE_URL}/api/login`, { email, password });
-
             if (response.status === 200) {
                 const { token } = response.data;
                 localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('token', token); // Store the token
+                localStorage.setItem('token', token);
 
-                // Fetch user profile data
                 const profileResponse = await axios.get(`${API_BASE_URL}/api/profile`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
-                // Store profile data in localStorage
                 localStorage.setItem('profile', JSON.stringify(profileResponse.data));
 
                 onLogin();
