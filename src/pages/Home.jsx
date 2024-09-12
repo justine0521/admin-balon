@@ -61,8 +61,27 @@ function Home() {
         fetchData();
     }, []);
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error.message}</div>;
+    if (loading) {
+        return (
+          <div className="flex justify-center items-center h-screen">
+            <div className="loading">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+          </div>
+        );
+      }
+    
+      if (error) {
+        return (
+          <p className="bg-red-100 text-red-600 border border-red-500 px-4 py-2 rounded-md">
+            Error: {error.message}
+          </p>
+        );
+      }
 
     return (
         <section className="w-4/5 h-full mt-14 left-56 p-3 absolute">

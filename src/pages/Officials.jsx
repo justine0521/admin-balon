@@ -157,8 +157,24 @@ function Officials() {
           </form>
         </div>
 
-        {loading && <p>Loading...</p>}
-        {error && <p>Error: {error}</p>}
+        {loading && (
+          <div className="flex justify-center items-center h-40">
+            <div className="loading">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        )}
+
+        {error && (
+          <p className="bg-red-100 text-red-600 border border-red-500 px-4 py-2 rounded-md">
+            Error: {error}
+          </p>
+        )}
+
 
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">

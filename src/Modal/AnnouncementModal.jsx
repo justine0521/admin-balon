@@ -4,6 +4,7 @@ import axios from 'axios';
 import { FaCheck, FaSpinner } from 'react-icons/fa'; // Import icons
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import styles for React Quill
+import Logo from '../images/Logo.png'; // Import the logo
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -56,15 +57,13 @@ function AnnouncementModal({ isOpen, onClose }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!imageUrl) {
-            alert('Please upload an image before submitting.');
-            return;
-        }
+        // If no image is uploaded, set default logo image
+        const finalImageUrl = imageUrl || Logo;
 
         const announcementData = {
             title,
             description, // This will now contain HTML formatted text
-            imageUrl,
+            imageUrl: finalImageUrl, // Use the final image URL (either uploaded or default logo)
         };
 
         try {
@@ -119,7 +118,6 @@ function AnnouncementModal({ isOpen, onClose }) {
                                     onChange={handleImageChange}
                                     ref={fileInputRef}
                                     className="mr-2"
-                                    required
                                 />
                                 <span>
                                     {isUploading ? (
