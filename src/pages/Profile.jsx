@@ -213,7 +213,7 @@ function Profile() {
 
                             <label className='block mt-4'>
                                 <p>Position:</p>
-                                <input type='text' name='position' value={profile.position} onChange={handleInputChange} disabled={!isEditable} className='border p-2 w-full mt-1 outline-green-500'/>
+                                <input type='text' name='position' value={profile.position} onChange={handleInputChange} disabled className='border p-2 w-full mt-1 outline-green-500'/>
                             </label>
 
                             <label className='block mt-4'>
