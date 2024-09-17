@@ -13,7 +13,7 @@ import { MdDashboard } from "react-icons/md";
 import { MdAnnouncement } from "react-icons/md";
 import { TbCurrencyPeso } from "react-icons/tb";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { BsPersonFillSlash } from "react-icons/bs";
+import { BsClockHistory, BsPersonFillSlash } from "react-icons/bs";
 
 function Sidebar() {
     const [isAsideOpen, setIsAsideOpen] = useState(true);
@@ -106,6 +106,17 @@ function Sidebar() {
                                     <div className='flex items-center'>
                                         <BsPersonFillSlash className='mr-3' />
                                         Block Listed
+                                    </div>
+                                </li>
+                            )}
+                        </NavLink>
+
+                        <NavLink to={"transactions"}>
+                            {({ isActive }) => (
+                                <li className={`${isActive ? 'bg-Green text-white' : 'hover:text-Green'} px-4 py-2 mx-2 text-black rounded-lg transition duration-500`}>
+                                    <div className='flex items-center'>
+                                        <BsClockHistory className='mr-3' />
+                                        Transaction History
                                     </div>
                                 </li>
                             )}

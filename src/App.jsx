@@ -14,6 +14,7 @@ import Footer from './components/Footer';
 import ViewResidentProfile from './view/ViewResidentProfile';
 import Announcement from './pages/Announcement';
 import Blocked from './pages/Blocked';
+import Transactions from './pages/Transactions';
 import Logout from './pages/Logout';
 import Login from './auth/Login';
 import RequestedCertificate from './pages/RequestedCertificate';
@@ -79,6 +80,7 @@ function App() {
               <Route path='/requested-certificate' element={<RequestedCertificate />} />
               <Route path='/announcement' element={<Announcement />} />
               <Route path='/blocklisted' element={<Blocked />} />
+              <Route path='/transactions' element={<Transactions />} />
               <Route path='/settings' element={<Settings />} />
               <Route path='/logout' element={<Logout onLogout={handleLogout} />} />
               <Route path='profile' element={<Profile />} />
