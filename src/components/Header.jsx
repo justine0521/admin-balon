@@ -22,7 +22,7 @@ function Header() {
   const [notificationCount, setNotificationCount] = useState(0);
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
-  const { imageUrl } = useContext(ProfileContext);
+  const [profileData, setProfileData] = useState({}); // Add state for profile data
 
   useEffect(() => {
     // Fetch notification count and notifications when the component mounts
@@ -37,7 +37,23 @@ function Header() {
       }
     };
 
+    // Fetch profile data
+    const fetchProfile = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/api/profile`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming token is stored in localStorage
+          },
+        });
+        setProfileData(response.data); // Set profile data including imageUrl
+      } catch (error) {
+        console.error("Failed to fetch profile data", error);
+      }
+    };
+
+
     fetchNotifications();
+    fetchProfile(); // Fetch profile when the component mounts
   }, []);
 
   const getCertificateRoute = (certId) => {
@@ -163,7 +179,12 @@ function Header() {
         </button>
 
         <button onClick={() => toggleDropdown(1)} className="flex justify-center items-center gap-x-2">
-          <img src={imageUrl} alt="Profile" title="Account" className="w-11 h-11 border border-gray-400 rounded-full object-cover" />
+          <img
+            src={profileData.imageUrl || 'https://via.placeholder.com/150'}
+            alt="Profile"
+            title="Account"
+            className="w-11 h-11 border border-gray-400 rounded-full object-cover"
+          />
         </button>
 
         {dropdownIndex === 1 && (
