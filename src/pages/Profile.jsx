@@ -3,18 +3,32 @@ import ProfileContext from './ProfileContext';
 import Icon from '../images/defaultProfile.png';
 import axios from 'axios';
 import '../App.css';
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { MdEdit } from "react-icons/md";
+import { set } from 'mongoose';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+// AWS S3 setup
+const bucketName = import.meta.env.VITE_AWS_BUCKET_NAME;
+const s3Client = new S3Client({
+    region: import.meta.env.VITE_AWS_REGION,
+    credentials: {
+        accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID,
+        secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY,
+    },
+});
 
 function Profile() {
     const fileInputRef = useRef(null);
-    const { imageUrl, setImageUrl } = useContext(ProfileContext);
+    const [imageUrl, setImageUrl] = useState(Icon); // Default image
     const [activeTab, setActiveTab] = useState('profileInfo');
     const [isEditable, setIsEditable] = useState(false);
     const [profile, setProfile] = useState({
         fullName: '',
         email: '',
         position: '',
-        createdAt: new Date(), 
+        createdAt: new Date(),
     });
     const [originalProfile, setOriginalProfile] = useState(profile);
     const [currentPassword, setCurrentPassword] = useState('');
@@ -22,6 +36,7 @@ function Profile() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [updateInfoModal, setUpdateInfoModal] = useState(false);
     const [updatePasswordModal, setUpdatePasswordModal] = useState(false);
+    const [updateImageModal, setUpdateImageModal] = useState(false);
     const progressBarRef = useRef(null);
     const [timer, setTimer] = useState(3);
 
@@ -38,41 +53,81 @@ function Profile() {
     });
 
     useEffect(() => {
-        const storedProfile = localStorage.getItem('profile');
-        if (storedProfile) {
-            const parsedProfile = JSON.parse(storedProfile);
-            const profileData = {
-                ...parsedProfile,
-                createdAt: new Date(parsedProfile.createdAt) 
-            };
-            setProfile(profileData);
-            setOriginalProfile(profileData);
-        }
+        const fetchProfile = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await axios.get(`${API_BASE_URL}/api/profile`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                const profileData = {
+                    ...response.data,
+                    createdAt: new Date(response.data.createdAt)
+                };
+                setProfile(profileData);
+                setOriginalProfile(profileData);
+                setImageUrl(response.data.imageUrl || Icon); // Set image URL from the API response
+            } catch (error) {
+                console.error('Error fetching profile:', error);
+            }
+        };
+
+        fetchProfile();
     }, []);
 
     useEffect(() => {
-        if (updateInfoModal || updatePasswordModal) {
+        if (updateInfoModal || updatePasswordModal || updateImageModal) {
             progressBarRef.current.style.animation = `shrink ${timer}s linear forwards`;
-    
+
             setTimeout(() => {
                 setUpdateInfoModal(false);
                 setUpdatePasswordModal(false);
+                setUpdateImageModal(false);
             }, timer * 1000);
         }
-    }, [updateInfoModal, updatePasswordModal, timer]);
+    }, [updateInfoModal, updatePasswordModal, updateImageModal, timer]);
 
-    function handleImageChange(event) {
+    // Handle image upload
+    const handleImageChange = async (event) => {
         const file = event.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                setImageUrl(event.target.result);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            setImageUrl(Icon);
+            await uploadImage(file);
         }
-    }
+    };
+
+    const uploadImage = async (file) => {
+        const params = {
+            Bucket: bucketName,
+            Key: `profiles/${file.name}`,
+            Body: file,
+            ContentType: file.type,
+            ACL: 'public-read',
+        };
+
+        try {
+            const command = new PutObjectCommand(params);
+            await s3Client.send(command);
+            const url = `https://${bucketName}.s3.amazonaws.com/profiles/${file.name}`;
+            setImageUrl(url); // Update image URL state
+
+            // Save the new image URL to the user's profile
+            const token = localStorage.getItem('token');
+            await axios.patch(`${API_BASE_URL}/api/profile`, { imageUrl: url }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            // Optionally, update the profile state locally
+            setProfile(prevProfile => ({
+                ...prevProfile,
+                imageUrl: url
+            }));
+            setUpdateImageModal(true);
+
+        } catch (err) {
+            console.error("Error uploading image: ", err);
+        }
+    };
+
 
     function handleButtonClick() {
         fileInputRef.current.click();
@@ -90,7 +145,7 @@ function Profile() {
     const handleUpdateClick = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.patch('http://localhost:5000/api/profile', profile, {
+            const response = await axios.patch(`${API_BASE_URL}/api/profile`, profile, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
@@ -133,7 +188,7 @@ function Profile() {
 
         if (!currentPassword) {
             errors.currentPassword = 'Current password is required';
-            styles.currentPassword = 'border-red-500'; 
+            styles.currentPassword = 'border-red-500';
         }
 
         if (newPassword !== confirmPassword) {
@@ -151,7 +206,7 @@ function Profile() {
 
         try {
             const token = localStorage.getItem('token');
-            await axios.patch('http://localhost:5000/api/change-password', {
+            await axios.patch(`${API_BASE_URL}/api/change-password`, {
                 currentPassword,
                 newPassword
             }, {
@@ -181,7 +236,7 @@ function Profile() {
                     <p className='text-2xl'>{profile.fullName}</p>
                     <p className='text-sm mt-2'>{profile.email}</p>
 
-                    <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }}/>
+                    <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
 
                     <button onClick={handleButtonClick} className='bg-Green w-full text-White p-2 py-1 mt-5 rounded-md'>
                         Change Profile
@@ -203,34 +258,34 @@ function Profile() {
                         <div className='p-4'>
                             <label className='block'>
                                 <p>Full Name:</p>
-                                <input type='text' name='fullName' value={profile.fullName} onChange={handleInputChange} disabled={!isEditable} className='border p-2 w-full mt-1 outline-green-500'/>
+                                <input type='text' name='fullName' value={profile.fullName} onChange={handleInputChange} disabled={!isEditable} className='border p-2 w-full mt-1 outline-green-500' />
                             </label>
 
                             <label className='block mt-4'>
                                 <p>Email:</p>
-                                <input type='email' name='email' value={profile.email} onChange={handleInputChange} disabled={!isEditable} className='border p-2 w-full mt-1 outline-green-500'/>
+                                <input type='email' name='email' value={profile.email} onChange={handleInputChange} disabled={!isEditable} className='border p-2 w-full mt-1 outline-green-500' />
                             </label>
 
                             <label className='block mt-4'>
                                 <p>Position:</p>
-                                <input type='text' name='position' value={profile.position} onChange={handleInputChange} disabled className='border p-2 w-full mt-1 outline-green-500'/>
+                                <input type='text' name='position' value={profile.position} onChange={handleInputChange} disabled className='border p-2 w-full mt-1 outline-green-500' />
                             </label>
 
                             <label className='block mt-4'>
                                 <p>Account Created:</p>
-                                <input type='text' value={formatDate(profile.createdAt)} disabled className='border p-2 w-full mt-1'/>
+                                <input type='text' value={formatDate(profile.createdAt)} disabled className='border p-2 w-full mt-1' />
                             </label>
 
                             {!isEditable ? (
                                 <div className='flex justify-end'>
-                                  <button onClick={handleEditClick} className='bg-Green text-White p-2 mt-4 flex items-center gap-1 rounded-md'>
-                                    <MdEdit /> <p>Edit</p>
-                                  </button>
+                                    <button onClick={handleEditClick} className='bg-Green text-White p-2 mt-4 flex items-center gap-1 rounded-md'>
+                                        <MdEdit /> <p>Edit</p>
+                                    </button>
                                 </div>
                             ) : (
                                 <div className='flex justify-end space-x-3'>
-                                  <button onClick={handleUpdateClick} className='bg-Green text-White p-2 mt-4 rounded-md'>Save</button>
-                                  <button onClick={handleCancelClick} className='bg-red-500 text-White p-2 mt-4 rounded-md'>Cancel</button>
+                                    <button onClick={handleUpdateClick} className='bg-Green text-White p-2 mt-4 rounded-md'>Save</button>
+                                    <button onClick={handleCancelClick} className='bg-red-500 text-White p-2 mt-4 rounded-md'>Cancel</button>
                                 </div>
                             )}
                         </div>
@@ -241,7 +296,7 @@ function Profile() {
                             <label className='block'>
                                 <p>Current Password:</p>
 
-                                <input type="password" id="currentPassword" name="currentPassword" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} required className={`mt-1 block w-full px-3 py-2 border ${passwordErrors.currentPassword ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:border-green-500 sm:text-sm`}/>
+                                <input type="password" id="currentPassword" name="currentPassword" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} required className={`mt-1 block w-full px-3 py-2 border ${passwordErrors.currentPassword ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:border-green-500 sm:text-sm`} />
                                 {passwordErrors.currentPassword && <p className="text-red-500 text-xs mt-1">{passwordErrors.currentPassword}</p>}
                             </label>
 
@@ -250,7 +305,7 @@ function Profile() {
                                 <p>New Password:</p>
 
                                 <input type='password' value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className={`mt-1 block w-full px-3 py-2 border ${passwordErrors.newPassword ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:border-green-500 sm:text-sm`} />
-                                
+
                                 {passwordErrors.newPassword && <p className="text-red-500">{passwordErrors.newPassword}</p>}
                             </label>
 
@@ -269,22 +324,31 @@ function Profile() {
                 </div>
             </div>
 
-            {updateInfoModal && (
-              <div className="fixed right-5 top-5 flex items-center justify-center z-50">
-                <div className="bg-green-100 p-5 rounded shadow-lg w-56">
-                  <p className="text-center text-gray-600 mb-4">Account Updated</p>
-                  <div ref={progressBarRef} className="h-1 bg-green-500"></div>
+            {updateImageModal && (
+                <div className="fixed right-5 top-5 flex items-center justify-center z-50">
+                    <div className="bg-green-100 p-5 rounded shadow-lg w-56">
+                        <p className="text-center text-gray-600 mb-4">Image Updated</p>
+                        <div ref={progressBarRef} className="h-1 bg-green-500"></div>
+                    </div>
                 </div>
-              </div>
+            )}
+
+            {updateInfoModal && (
+                <div className="fixed right-5 top-5 flex items-center justify-center z-50">
+                    <div className="bg-green-100 p-5 rounded shadow-lg w-56">
+                        <p className="text-center text-gray-600 mb-4">Account Updated</p>
+                        <div ref={progressBarRef} className="h-1 bg-green-500"></div>
+                    </div>
+                </div>
             )}
 
             {updatePasswordModal && (
-              <div className="fixed right-5 top-5 flex items-center justify-center z-50">
-                <div className="bg-green-100 p-5 rounded shadow-lg w-56">
-                  <p className="text-center text-gray-600 mb-4">Password Updated</p>
-                  <div ref={progressBarRef} className="h-1 bg-green-500"></div>
+                <div className="fixed right-5 top-5 flex items-center justify-center z-50">
+                    <div className="bg-green-100 p-5 rounded shadow-lg w-56">
+                        <p className="text-center text-gray-600 mb-4">Password Updated</p>
+                        <div ref={progressBarRef} className="h-1 bg-green-500"></div>
+                    </div>
                 </div>
-              </div>
             )}
         </section>
     );
