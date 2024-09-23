@@ -62,25 +62,25 @@ function Accounts() {
 
     if (loading) {
         return (
-          <div className="flex justify-center items-center h-screen">
-            <div className="loading">
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
+            <div className="flex justify-center items-center h-screen">
+                <div className="loading">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
-          </div>
         );
-      }
-    
-      if (error) {
+    }
+
+    if (error) {
         return (
-          <p className="bg-red-100 text-red-600 border border-red-500 px-4 py-2 rounded-md">
-            Error: {error.message}
-          </p>
+            <p className="bg-red-100 text-red-600 border border-red-500 px-4 py-2 rounded-md">
+                Error: {error.message}
+            </p>
         );
-      }
+    }
 
     return (
         <section>
@@ -92,55 +92,55 @@ function Accounts() {
                 </NavLink>
             </div>
 
-                <table className='w-full'>
-                    <thead>
-                        <tr className='bg-green-500'>
-                            <th className='text-white font-semibold p-2'>Profile</th>
-                            <th className='text-white font-semibold p-2'>Name</th>
-                            <th className='text-white font-semibold p-2'>Position</th>
-                            <th className='text-white font-semibold p-2'>Email</th>
-                            <th className='text-white font-semibold p-2'>Status</th>
-                            <th className='text-white font-semibold p-2'>Action</th>
-                        </tr>
-                    </thead>
+            <table className='w-full'>
+                <thead>
+                    <tr className='bg-green-500'>
+                        <th className='text-white font-semibold p-2'>Profile</th>
+                        <th className='text-white font-semibold p-2'>Name</th>
+                        <th className='text-white font-semibold p-2'>Position</th>
+                        <th className='text-white font-semibold p-2'>Email</th>
+                        <th className='text-white font-semibold p-2'>Status</th>
+                        <th className='text-white font-semibold p-2'>Action</th>
+                    </tr>
+                </thead>
 
-                    <tbody className='m-5 text-center font-thin'>
-                        {accounts.map((account) =>
-                            <tr key={account._id} className='border'>
-                                <td className='py-3 flex justify-center'>
-                                    <img src={account.imageUrl} alt="" className='h-12 w-12 rounded-full' />
-                                </td>
-                                <td className='py-3'>{account.fullName}</td>
-                                <td className='py-3'>{account.position}</td>
-                                <td className='py-3'>{account.email}</td>
-                                <td className='py-3'>
-                                    <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium ${account.status === 'Active' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
-                                        {account.status}
-                                    </span>
-                                </td>
-                                <td>
-                                    <div className='flex justify-center'>
-                                        <button onClick={() => toggleDropdown(account._id)} className='bg-green-500 text-white px-2 py-1 flex justify-center rounded'>
-                                            <span className='flex items-center'>Action <IoMdArrowDropdown /></span>
+                <tbody className='m-5 text-center font-thin'>
+                    {accounts.map((account) =>
+                        <tr key={account._id} className='border'>
+                            <td className='py-3 flex justify-center'>
+                                <img src={account.imageUrl} alt="" className='h-12 w-12 rounded-full object-cover' />
+                            </td>
+                            <td className='py-3'>{account.fullName}</td>
+                            <td className='py-3'>{account.position}</td>
+                            <td className='py-3'>{account.email}</td>
+                            <td className='py-3'>
+                                <span className={`inline-block rounded-full px-2 py-1 text-xs font-medium ${account.status === 'Active' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
+                                    {account.status}
+                                </span>
+                            </td>
+                            <td>
+                                <div className='flex justify-center'>
+                                    <button onClick={() => toggleDropdown(account._id)} className='bg-green-500 text-white px-2 py-1 flex justify-center rounded'>
+                                        <span className='flex items-center'>Action <IoMdArrowDropdown /></span>
+                                    </button>
+                                </div>
+
+                                {openDropdown === account._id && (
+                                    <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-md shadow-lg z-10">
+                                        <button className="flex items-center px-4 py-2 text-md text-yellow-500 hover:bg-gray-100 w-full" onClick={() => toggleStatus(account._id, account.status)}>
+                                            <BsPersonFillSlash className="mr-2" /> {account.status === 'Active' ? 'Deactivate' : 'Activate'}
+                                        </button>
+
+                                        <button className="flex items-center px-4 py-2 text-md text-red-500 hover:bg-gray-100 w-full" onClick={() => deleteAccount(account._id)}>
+                                            <MdDelete className="mr-2" /> Delete
                                         </button>
                                     </div>
-
-                                    {openDropdown === account._id && (
-                                        <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-md shadow-lg z-10">
-                                            <button className="flex items-center px-4 py-2 text-md text-yellow-500 hover:bg-gray-100 w-full" onClick={() => toggleStatus(account._id, account.status)}>
-                                                <BsPersonFillSlash className="mr-2" /> {account.status === 'Active' ? 'Deactivate' : 'Activate'}
-                                            </button>
-
-                                            <button className="flex items-center px-4 py-2 text-md text-red-500 hover:bg-gray-100 w-full" onClick={() => deleteAccount(account._id)}>
-                                                <MdDelete className="mr-2" /> Delete
-                                            </button>
-                                        </div>
-                                    )}
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+                                )}
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
         </section>
     );
 }
