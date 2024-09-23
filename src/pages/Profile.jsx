@@ -231,7 +231,7 @@ function Profile() {
             <p className='text-3xl'>Profile</p>
 
             <div className='flex flex-w justify-between gap-5 mt-5'>
-                <div className='bg-white h-64 w-56 px-5 flex flex-col justify-center items-center border border-gray-300 rounded'>
+                <div className='bg-white h-72 w-56 px-5 flex flex-col justify-center items-center border text-center border-gray-300 rounded-2xl'>
                     <img src={imageUrl} alt="Profile Preview" style={{ width: '100px', height: '100px', marginTop: '10px', border: '1px solid #ccc', borderRadius: '100px', objectFit: 'cover', }} />
                     <p className='text-2xl'>{profile.fullName}</p>
                     <p className='text-sm mt-2'>{profile.email}</p>
