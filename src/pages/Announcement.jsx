@@ -57,7 +57,7 @@ function Announcements() {
                 setLoading(false);
             }
         };
-    
+
         fetchAnnouncements();
     }, []);
 
@@ -120,8 +120,8 @@ function Announcements() {
     return (
         <section className="w-4/5 h-full mt-14 left-56 p-7 absolute hide-scrollbar">
             <div className="bg-white rounded-xl shadow-md">
-                <div className="flex justify-between items-center h-16 bg-gray-100 px-5 w-full border-b-2 border-gray-300 rounded-t-xl">
-                    <p className="text-2xl font-semibold">Announcements</p>
+                <div className="flex justify-between items-center h-16 bg-gray-100 px-5 w-full border-b-2 border-black rounded-t-xl">
+                    <p className="text-2xl">Announcements</p>
                     <div className="flex items-center gap-5">
                         <button
                             onClick={openModal}
@@ -173,9 +173,9 @@ function Announcements() {
                             <span></span>
                         </div>
                     </div>
-                    )}
+                )}
 
-                    {error && (
+                {error && (
                     <p className="bg-red-100 text-red-600 border border-red-500 px-4 py-2 rounded-md">
                         Error: {error}
                     </p>
