@@ -110,7 +110,7 @@ function Officials() {
 
   return (
     <section className="w-4/5 h-full mt-14 left-56 p-7 absolute hide-scrollbar">
-      <div className="bg-White">
+      <div>
         <div className="flex justify-between items-center h-16 bg-gray-100 px-5 w-full border-b-2 border-black rounded-t-xl">
           <p className="text-2xl">Barangay Officials</p>
 
@@ -177,9 +177,9 @@ function Officials() {
 
 
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
+          <table className="w-full border border-gray-100 border-collapse">
             <thead className="bg-Green">
-              <tr>
+              <tr >
                 <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">
                   Picture
                 </th>
@@ -200,7 +200,7 @@ function Officials() {
                 </th>
               </tr>
             </thead>
-            <tbody className="text-center bg-white divide-y divide-gray-300">
+            <tbody className="text-center bg-White divide-y divide-gray-300">
               {Array.isArray(filteredOfficials) &&
                 filteredOfficials.slice(startIndex, endIndex).map((official, index) => (
                   <tr key={index} className="hover:bg-Grey">
