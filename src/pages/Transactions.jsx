@@ -54,18 +54,18 @@ const TransactionHistory = () => {
     }
 
     return (
-        <section className='w-4/5 h-screen mt-14 p-7 ml-56 bg-gray-100'>
-            <div className='bg-white shadow-md rounded-lg border border-gray-300'>
-                <div className='flex justify-between items-center py-4 px-6 border-b-2'>
-                    <h1 className="text-2xl font-bold text-green-700">Transaction History</h1>
+        <section className='w-4/5 h-screen mt-14 p-7 ml-56'>
+            <div className='shadow-md rounded-lg border border-gray-100'>
+                <div className='flex justify-between bg-gray-100 items-center py-4 px-5 border-b-2 border-black'>
+                    <h1 className="text-2xl">Transaction History</h1>
                 </div>
                 {completedCertificates.length === 0 ? (
                     <div className="p-6 text-center text-lg text-gray-600">
                         No completed certificates found
                     </div>
                 ) : (
-                    <div className="p-6 overflow-x-auto">
-                        <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full bg-white shadow-md">
                             <thead className="bg-green-500 text-white">
                                 <tr>
                                     <th className="py-3 px-4 text-left">Certificate Type</th>
