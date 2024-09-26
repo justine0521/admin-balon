@@ -92,11 +92,11 @@ function RequestedCertificate() {
     return (
       <div className="flex justify-center items-center h-screen">
         <div className="loading">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
       </div>
     );
@@ -112,12 +112,12 @@ function RequestedCertificate() {
 
   return (
     <section className='w-4/5 h-screen mt-14 left-56 p-7 absolute hide-scrollbar'>
-      <div className='bg-White'>
-        <div className='flex justify-between items-center py-4 px-3 border-b-2'>
+      <div className='bg-White border border-gray-100 rounded-xl shadow-lg'>
+        <div className='flex justify-between items-center bg-gray-100 py-4 px-5 border-b-2 rounded-t-xl border-black '>
           <p className="text-2xl">Requested Certificates</p>
         </div>
 
-        <div className="flex justify-between items-center p-4">
+        <div className="flex justify-between items-center p-5">
           <div className="flex items-center gap-x-2">
             <label htmlFor="entries">Show Entries:</label>
             <select name="entries" id="entries" className="border border-gray-300 p-1 px-3 rounded-md" onChange={handleEntriesChange}>
