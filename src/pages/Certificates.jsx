@@ -9,9 +9,9 @@ function Certificates() {
   return (
     <section className="w-4/5 h-screen mt-14 left-56 p-7 absolute hide-scrollbar">
 
-      <div className="bg-White">
-        <div className="flex justify-between items-center h-16 bg-White px-5 w-full border border-b-gray-300">
-          <p className='text-xl'>Residence Certificate Issuance</p>
+      <div>
+        <div className="flex justify-between items-center h-16 bg-gray-100 px-5 w-full border-b-2 border-black rounded-t-xl ">
+          <p className='text-2xl'>Residence Certificate Issuance</p>
 
           {/* <form action="" className="flex justify-end items-center gap-x-2 my-5">
             <label htmlFor="search">Search:</label>
