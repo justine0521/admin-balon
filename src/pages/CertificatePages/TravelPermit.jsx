@@ -9,19 +9,19 @@ import { MdDeleteOutline } from "react-icons/md";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-function CertificateIndigency() {
+function TravelPermit() {
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [requests, setRequests] = useState([]);
-  const [dropdown, setDropdown] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [dropdown, setDropdown] = useState(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/indigency`);
+        const response = await axios.get(`${API_BASE_URL}/api/travelPermit`); 
         setRequests(response.data);
       } catch (error) {
         console.error('Error fetching requests:', error);
@@ -31,13 +31,22 @@ function CertificateIndigency() {
     fetchRequests();
   }, []);
 
-  const startIndex = (currentPage - 1) * entriesToShow;
-  const endIndex = startIndex + entriesToShow;
-
   const handleEntriesChange = (event) => {
     setEntriesToShow(Number(event.target.value));
     setCurrentPage(1);
   };
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+    setCurrentPage(1);
+  };
+
+  // const filteredRequests = requests.filter(request =>
+  //   request.fullName.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
+
+  const startIndex = (currentPage - 1) * entriesToShow;
+  const endIndex = startIndex + entriesToShow;
 
   const totalPages = Math.ceil(requests.length / entriesToShow);
 
@@ -52,10 +61,10 @@ function CertificateIndigency() {
   const handleDropdown = async (action, requestId) => {
     switch (action) {
       case 'generate-Certificate':
-        navigate(`/barangay-certificate-of-indigency/${requestId}`);
+        navigate(`/barangay-certificate-of-no-property/${requestId}`);
         break;
       case 'View-Details':
-        navigate(`/view-details-indigency/${requestId}`);
+        navigate(`/view-details-travel-permit/${requestId}`);
         break;
       case 'Completed':
           try {
@@ -66,11 +75,11 @@ function CertificateIndigency() {
 
               const requestData = {
                   ...completedRequest,
-                  type: 'indigency',
+                  type: 'travelPermit',
               };
 
               await axios.post(`${API_BASE_URL}/api/completed-certificates`, requestData);
-              await axios.delete(`${API_BASE_URL}/api/indigency/${requestId}`);
+              await axios.delete(`${API_BASE_URL}/api/travelPermit/${requestId}`);
 
               setRequests(prevRequests => prevRequests.filter(request => request._id !== requestId));
 
@@ -94,7 +103,7 @@ function CertificateIndigency() {
           break;
       case 'Delete':
         try {
-          await axios.delete(`${API_BASE_URL}/api/indigency/${requestId}`);
+          await axios.delete(`${API_BASE_URL}/api/travelPermit/${requestId}`);
           setRequests(requests.filter(request => request._id !== requestId));
 
           Swal.fire({
@@ -125,9 +134,8 @@ function CertificateIndigency() {
     setDropdown(dropdown === index ? null : index); 
   };
 
-  // Search filter function
   const filteredRequests = requests.filter((request) =>
-    request.fullName.toLowerCase().includes(searchTerm.toLowerCase()) // Filter by fullName
+    request.owner.toLowerCase().includes(searchTerm.toLowerCase()) // Filter by fullName
   );
 
   const totalFilteredPages = Math.ceil(filteredRequests.length / entriesToShow);
@@ -137,7 +145,7 @@ function CertificateIndigency() {
     <div className="w-4/5 h-screen mt-14 left-56 p-7 absolute">
       <div className="bg-White">
         <div className="flex justify-between items-center h-16 bg-White px-5 w-full border border-b-gray-300">
-          <p className='text-xl'>Certificate of Indigency Issuance</p>
+          <p className='text-xl'>Travel Permit Issuance</p>
           <div className='flex justify-center items-center gap-x-2'>
             <NavLink to={'/certificates'}>
               {({ isActive }) => (
@@ -145,9 +153,9 @@ function CertificateIndigency() {
               )}
             </NavLink>
             /
-            <NavLink to={'/certificate-of-indigency'}>
+            <NavLink to={'/travel-permit'}>
               {({ isActive }) => (
-                <p className={`${isActive ? 'text-gray-300' : 'text-Green'}`}>Certificate of Indigency</p>
+                <p className={`${isActive ? 'text-gray-300' : 'text-Green'}`}>Travel Permit</p>
               )}
             </NavLink>
           </div>
@@ -175,10 +183,10 @@ function CertificateIndigency() {
             <thead className="bg-Green">
               <tr>
               <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300"></th>
-                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Name</th>
-                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Address</th>
-                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Civil Status</th>
-
+                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">May Ari</th>
+                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Uri ng Sasakyan</th>
+                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Plate Number</th>
+                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Driver</th>
                 <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Action</th>
               </tr>
             </thead>
@@ -186,10 +194,11 @@ function CertificateIndigency() {
               {currentFilteredRequests.map((request, index) => (
                 <tr key={request._id} className="hover:bg-gray-100">
                   <td className="px-6 py-4 text-sm text-gray-700">{startIndex + index + 1}</td>
-                  <td className="px-6 py-4 text-sm">{request.fullName}</td>
-                  <td className="px-6 py-3 text-sm">{request.address}</td>
-                  <td className="px-6 py-3 text-sm">{request.civilStatus}</td>
-                  <td className="relative">
+                  <td className="px-6 py-4 text-sm">{request.owner}</td>
+                  <td className="px-6 py-3 text-sm">{request.typeOfCar}</td>
+                  <td className="px-6 py-3 text-sm">{request.plateNumber}</td>
+                  <td className="px-6 py-3 text-sm">{request.driver}</td>
+                  <td className='relative'>
                     <button onClick={() => toggleDropdown(index)} className='text-2xl bg-green-500 text-white rounded-full'>
                       <IoIosArrowDropdown />
                     </button>
@@ -217,26 +226,26 @@ function CertificateIndigency() {
           </table>
         </div>
 
-          <div className="flex justify-between items-center p-5">
-            <button
-              onClick={handlePreviousPage}
-              className={`p-2 border border-Green rounded-md ${currentPage === 1 && 'opacity-50 cursor-not-allowed'}`}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-            <span>Page {currentPage} of {totalPages}</span>
-            <button
-              onClick={handleNextPage}
-              className={`p-2 border border-Green rounded-md ${currentPage === totalPages && 'opacity-50 cursor-not-allowed'}`}
-              disabled={currentPage === totalFilteredPages}
-            >
-              Next
-            </button>
-          </div>
+        <div className="flex justify-between items-center p-5">
+          <button
+            onClick={handlePreviousPage}
+            className={`p-2 border border-Green rounded-md ${currentPage === 1 && 'opacity-50 cursor-not-allowed'}`}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          <span>Page {currentPage} of {totalPages}</span>
+          <button
+            onClick={handleNextPage}
+            className={`p-2 border border-Green rounded-md ${currentPage === totalPages && 'opacity-50 cursor-not-allowed'}`}
+            disabled={currentPage === totalFilteredPages}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
-export default CertificateIndigency;
+export default TravelPermit;
