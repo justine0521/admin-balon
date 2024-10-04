@@ -1,19 +1,29 @@
-import { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import ProfileContext from '../pages/ProfileContext';
+// src/components/Header.jsx
+
+import { useState, useEffect } from "react";
+import { useNavigate, NavLink } from "react-router-dom";
 import '../App.css';
-import { NavLink } from 'react-router-dom';
+import axios from 'axios';
+import { formatDistanceToNow } from 'date-fns';
+
+// Import Icons
+import { FaBell, FaUserAlt, FaMoon, FaSun } from "react-icons/fa";
+import { IoMdSettings } from "react-icons/io";
+import { BiLogOut } from "react-icons/bi";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-// IMPORT ICONS
-import { GiHamburgerMenu } from "react-icons/gi";
-import { MdSupervisorAccount } from "react-icons/md";
-import { FaBell, FaUserAlt } from "react-icons/fa";
-import { IoMdSettings } from "react-icons/io";
-import { BiLogOut } from "react-icons/bi";
-import { FaMoon, FaSun } from "react-icons/fa";
-import axios from 'axios'; // Import axios if you are using it for API calls
+const CERTIFICATE_TYPES = [
+  'Barangay Clearance',
+  'Certificate of Residency',
+  'Certificate of Indigency',
+  'Common Law',
+  'Business Clearance',
+  'Guardianship',
+  'First Time Job Seeker',
+  'Travel Permit',
+  'Certificate For Solo Parent'
+];
 
 function Header() {
   const navigate = useNavigate();
@@ -22,64 +32,76 @@ function Header() {
   const [notificationCount, setNotificationCount] = useState(0);
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [profileData, setProfileData] = useState({}); // Add state for profile data
+  const [profileData, setProfileData] = useState({}); // State for profile data
 
   useEffect(() => {
-    // Fetch notification count and notifications when the component mounts
-    const fetchNotifications = async () => {
+    const fetchAllNotifications = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/certificates`); // Fetch the certificates
-        const fetchedNotifications = response.data; // Get the notifications data
-        setNotifications(fetchedNotifications); // Set notifications
-        setNotificationCount(fetchedNotifications.length); // Set notification count
+        const response = await axios.get(`${API_BASE_URL}/api/all-certificates`);
+        const allCertificates = response.data;
+
+        const validNotifications = allCertificates.filter(notif => {
+          if (!notif.createdAt) {
+            console.warn('Notification missing createdAt:', notif);
+            return false;
+          }
+          const date = new Date(notif.createdAt);
+          if (isNaN(date)) {
+            console.warn('Invalid createdAt date:', notif.createdAt, 'in notification:', notif);
+            return false;
+          }
+          return true;
+        });
+
+        validNotifications.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        setNotifications(validNotifications);
+        setNotificationCount(validNotifications.length);
       } catch (error) {
-        console.error("Failed to fetch notifications", error);
+        console.error("Error fetching notifications:", error);
       }
     };
 
-    // Fetch profile data
+    fetchAllNotifications();
+
     const fetchProfile = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/api/profile`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming token is stored in localStorage
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
-        setProfileData(response.data); // Set profile data including imageUrl
+        setProfileData(response.data);
       } catch (error) {
         console.error("Failed to fetch profile data", error);
       }
     };
 
-
-    fetchNotifications();
-    fetchProfile(); // Fetch profile when the component mounts
+    fetchProfile();
   }, []);
 
-  const getCertificateRoute = (certId) => {
-    switch (certId) {
-      case 1:
+  const getCertificateRoute = (certType) => {
+    switch (certType) {
+      case 'Barangay Clearance':
         return '/barangay-clearance';
-      case 2:
+      case 'Certificate of Residency':
         return '/certificate-of-residency';
-      case 3:
+      case 'Certificate of Indigency':
         return '/certificate-of-indigency';
-      case 4:
-        return '/certificate-of-low-income';
-      case 5:
+      case 'Common Law':
+        return '/common-law';
+      case 'Business Clearance':
         return '/business-clearance';
-      case 6:
-        return '/certificate-of-death';
-      case 7:
-        return '/certificate-of-no-property';
-      case 8:
-        return '/certificate-of-good-moral-character';
-      case 9:
-        return '/certificate-of-registration-for-new-residents';
-      case 10:
+      case 'Guardianship':
+        return '/guardiansh';
+      case 'First Time Job Seeker':
+        return '/job-seeker';
+      case 'Travel Permit':
+        return '/travel-permit';
+      case 'Certificate For Solo Parent':
         return '/certificate-for-solo-parent';
       default:
-        return '/'; // Default route if the certificate ID doesn't match
+        return '/';
     }
   };
 
@@ -109,7 +131,7 @@ function Header() {
     setDropdownIndex(null);
   };
 
-  const toggleDropdown = (index) => {
+  const toggleDropdownMenu = (index) => {
     setDropdownIndex(dropdownIndex === index ? null : index);
   };
 
@@ -121,31 +143,32 @@ function Header() {
     setShowNotifications(!showNotifications);
   };
 
-  // Function to format time
   const timeAgo = (date) => {
-    const now = new Date();
-    const diff = now - new Date(date);
-    const seconds = Math.floor(diff / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-    const weeks = Math.floor(days / 7);
+    if (!date) {
+      console.warn('No date provided for notification');
+      return 'Unknown time';
+    }
 
-    if (weeks > 0) return `${weeks} week${weeks > 1 ? 's' : ''} ago`;
-    if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
-    if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-    if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-    return 'Just now';
+    const createdDate = new Date(date);
+
+    if (isNaN(createdDate)) {
+      console.error('Invalid date:', date);
+      return 'Invalid date';
+    }
+
+    return formatDistanceToNow(createdDate, { addSuffix: true });
   };
 
   return (
-    <header className="bg-White w-full h-14 z-10 fixed top-0 flex justify-end items-center pr-8 ring-2 ring-slate-900/10">
+    <header className="bg-white w-full h-14 z-10 fixed top-0 flex justify-end items-center pr-8 shadow-md">
       <div className="flex justify-center items-center gap-x-5">
-        <button onClick={toggleDarkMode} className="text-lg">
-          {isDarkMode ? <FaSun className="text-green-500" /> : <FaMoon />}
+        {/* Dark Mode Toggle */}
+        <button onClick={toggleDarkMode} className="text-lg focus:outline-none">
+          {isDarkMode ? <FaSun className="text-yellow-400" /> : <FaMoon className="text-gray-700" />}
         </button>
 
-        <button onClick={toggleNotifications} className="relative">
+        {/* Notifications */}
+        <button onClick={toggleNotifications} className="relative focus:outline-none">
           <FaBell className="p-1 h-7 w-6 text-gray-700" />
           {notificationCount > 0 && (
             <div className="absolute -top-2 -right-2 flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white text-xs font-bold">
@@ -161,8 +184,10 @@ function Header() {
                 {notifications.length > 0 ? (
                   notifications.map((notification) => (
                     <NavLink
-                      to={getCertificateRoute(notification.certId)}
+                      to={getCertificateRoute(notification.certificateType)}
                       key={notification._id}
+                      className="block"
+                      onClick={() => setShowNotifications(false)} 
                     >
                       <div className="px-4 py-2 border-b border-gray-200 hover:bg-gray-100">
                         <p className="text-sm font-medium text-green-500 text-left">{notification.certificateType}</p>
@@ -178,7 +203,8 @@ function Header() {
           )}
         </button>
 
-        <button onClick={() => toggleDropdown(1)} className="flex justify-center items-center gap-x-2">
+        {/* User Profile */}
+        <button onClick={() => toggleDropdownMenu(1)} className="flex justify-center items-center gap-x-2 focus:outline-none">
           <img
             src={profileData.imageUrl || 'https://via.placeholder.com/150'}
             alt="Profile"
@@ -187,15 +213,25 @@ function Header() {
           />
         </button>
 
+        {/* Profile Dropdown */}
         {dropdownIndex === 1 && (
-          <div className="absolute top-0 mt-14 w-40 bg-white border border-gray-300 rounded-md shadow-lg z-10">
-            <button onClick={() => handleDropdown('profile')} className="flex items-center px-4 py-2 text-md text-Green hover:bg-gray-100 w-full">
+          <div className="absolute top-14 right-8 w-40 bg-white border border-gray-300 rounded-md shadow-lg z-10">
+            <button
+              onClick={() => handleDropdown('profile')}
+              className="flex items-center px-4 py-2 text-md text-green-500 hover:bg-gray-100 w-full"
+            >
               <FaUserAlt className="mr-2" /> Profile
             </button>
-            <button onClick={() => handleDropdown('settings')} className="flex items-center px-4 py-2 text-md text-Blue hover:bg-gray-100 w-full">
+            <button
+              onClick={() => handleDropdown('settings')}
+              className="flex items-center px-4 py-2 text-md text-blue-500 hover:bg-gray-100 w-full"
+            >
               <IoMdSettings className="mr-2" /> Settings
             </button>
-            <button onClick={() => handleDropdown('logout')} className="flex items-center px-4 py-2 text-md text-Red hover:bg-gray-100 w-full">
+            <button
+              onClick={() => handleDropdown('logout')}
+              className="flex items-center px-4 py-2 text-md text-red-500 hover:bg-gray-100 w-full"
+            >
               <BiLogOut className="mr-2" /> Logout
             </button>
           </div>
