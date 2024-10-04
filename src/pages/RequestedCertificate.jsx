@@ -19,7 +19,7 @@ function RequestedCertificate() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/certificates`);
+        const response = await axios.get(`${API_BASE_URL}/api/indigency`);
         setData(response.data);
         setLoading(false);
       } catch (error) {
@@ -158,7 +158,7 @@ function RequestedCertificate() {
                 <p className="text-gray-600 mb-1"><strong>Reference No:</strong> {request.referenceNo ? request.referenceNo : 'N/A'}</p>
                 <p className="text-gray-600 mb-1"><strong>Requested at:</strong> {request.createdAt ? format(new Date(request.createdAt), 'Pp') : 'N/A'}</p>
                 <p className="text-gray-600 mb-1"><strong>Pick up Date:</strong> {request.pickUpDate ? format(new Date(request.pickUpDate), 'P') : 'N/A'}</p>
-                <p className="text-gray-600 mb-1"><strong>Purpose:</strong> {request.selectedPurpose}</p>
+                <p className="text-gray-600 mb-1"><strong>Purpose:</strong> {request.purpose}</p>
               </div>
               <div className="flex justify-between items-center mt-4">
                 <select
