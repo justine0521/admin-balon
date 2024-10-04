@@ -82,19 +82,19 @@ function Certificates() {
             </div>
           </div>
 
-          {/* This is for Certificate of Low Income */}
+          {/* This is for Certificate of Common Law */}
           <div class="relative flex w-80 flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
             <div class="p-5">
               <h5 class="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal text-Green antialiased">
-                Certificate of Low Income
+                Common Law
               </h5>
               <p class="block font-sans text-base font-light leading-relaxed text-inherit antialiased">
-                This certifies that the person or family has a low income.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, velit?
               </p>
             </div>
 
             <div class="p-5 pt-0">
-              <NavLink to={'/certificate-of-low-income'}>
+              <NavLink to={'/common-law'}>
                 <button data-ripple-light="true" type="button" class="select-none rounded-lg bg-Green py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
                   Issue
                 </button>
@@ -122,39 +122,19 @@ function Certificates() {
             </div>
           </div>
 
-          {/* This is for Certificate of Death */}
+          {/* This is for Travel Permit */}
           <div class="relative flex w-80 flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
             <div class="p-5">
               <h5 class="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal text-Green antialiased">
-                Certificate of Death
+                Travel Permit
               </h5>
               <p class="block font-sans text-base font-light leading-relaxed text-inherit antialiased">
-                This certifies the death of a resident within the barangay.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, eveniet?
               </p>
             </div>
 
             <div class="p-5 pt-0">
-              <NavLink to={'/certificate-of-death'}>
-                <button data-ripple-light="true" type="button" class="select-none rounded-lg bg-Green py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
-                  Issue
-                </button>
-              </NavLink>
-            </div>
-          </div>
-
-          {/* This is for Certificate of No Property */}
-          <div class="relative flex w-80 flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
-            <div class="p-5">
-              <h5 class="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal text-Green antialiased">
-                Certificate of No Property
-              </h5>
-              <p class="block font-sans text-base font-light leading-relaxed text-inherit antialiased">
-                This certifies that the person does not own any real property within the barangay.
-              </p>
-            </div>
-
-            <div class="p-5 pt-0">
-              <NavLink to={'/certificate-of-no-property'}>
+              <NavLink to={'/travel-permit'}>
                 <button data-ripple-light="true" type="button" class="select-none rounded-lg bg-Green py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
                   Issue
                 </button>
@@ -166,15 +146,15 @@ function Certificates() {
           <div class="relative flex w-80 flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
             <div class="p-5">
               <h5 class="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal text-Green antialiased">
-                Certificate of Good Moral Character
+                Guardianship
               </h5>
               <p class="block font-sans text-base font-light leading-relaxed text-inherit antialiased">
-                This certifies that the person is of good moral character and has no derogatory records in the barangay.
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cum similique asperiores reprehenderit quis quisquam quidem laborum nobis
               </p>
             </div>
 
             <div class="p-5 pt-0">
-              <NavLink to={'/certificate-of-good-moral-character'}>
+              <NavLink to={'/guardianship'}>
                 <button data-ripple-light="true" type="button" class="select-none rounded-lg bg-Green py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
                   Issue
                 </button>
@@ -182,19 +162,19 @@ function Certificates() {
             </div>
           </div>
 
-          {/* This is for Certificate of Registration for New Residents */}
+          {/* This is for First Time Job Seeker */}
           <div class="relative flex w-80 flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
             <div class="p-5">
               <h5 class="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal text-Green antialiased">
-                Certificate of Registration for New Residents
+                First Time Job Seeker
               </h5>
               <p class="block font-sans text-base font-light leading-relaxed text-inherit antialiased">
-                This certifies that a person has recently moved to the barangay and is now a registered resident.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Non, eos!
               </p>
             </div>
 
             <div class="p-5 pt-0">
-              <NavLink to={'/certificate-of-registration-for-new-residents'}>
+              <NavLink to={'/job-seeker'}>
                 <button data-ripple-light="true" type="button" class="select-none rounded-lg bg-Green py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
                   Issue
                 </button>
@@ -221,19 +201,8 @@ function Certificates() {
               </NavLink>
             </div>
           </div>
-
-
         </div>
-
-
       </div>
-
-
-
-
-
-
-
     </section>
   )
 }
