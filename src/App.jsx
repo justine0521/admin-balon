@@ -20,20 +20,18 @@ import Login from './auth/Login';
 import RequestedCertificate from './pages/RequestedCertificate';
 import BarangayClearance from './pages/CertificatePages/BarangayClearance';
 import BusinessClearance from './pages/CertificatePages/BusinessClearance';
-import DeathCertificate from './pages/CertificatePages/DeathCertificate';
 import CertificateIndigency from './pages/CertificatePages/CertificateIndigency';
-import CertificateLowIncome from './pages/CertificatePages/CertificateLowIncome';
+import CommonLaw from './pages/CertificatePages/CommonLaw';
 import CertificateResidency from './pages/CertificatePages/CertificateResidency';
 import CertificateSoloParent from './pages/CertificatePages/CertificateSoloParent';
-import GoodMoralCertificate from './pages/CertificatePages/GoodMoralCertificate';
-import NewResidentCertificate from './pages/CertificatePages/NewResidentCertificate';
-import NoPropertyCertificate from './pages/CertificatePages/NoPropertyCertificate';
+import Guardianship from './pages/CertificatePages/Guardianship';
+import JobSeeker from './pages/CertificatePages/JobSeeker';
+import TravelPermit from './pages/CertificatePages/TravelPermit';
 import BrgyClearance from './Certificates/BrgyClearance';
 import CertificateOfRecidency from './Certificates/CertificateOfRecidency';
 import CertificateOfIndigency from './Certificates/CertificateOfIndigency';
 import CertificateOfGoodMoral from './Certificates/CertificateOfGoodMoral';
 import CertificateOfBusinessClearance from './Certificates/CertificateOfBusinessClearance';
-import CertificateOfDeath from './Certificates/CertificateOfDeath';
 import CertificateOfNoProperty from './Certificates/CertificateOfNoProperty';
 import CertificateOfLowIncome from './Certificates/CertificateOfLowIncome';
 import CertificateOfNewResident from './Certificates/CertificateOfNewResident';
@@ -44,6 +42,17 @@ import BarangayInfo from './settings/BarangayInfo';
 import Profile from './pages/Profile';
 import Accounts from './settings/Accounts';
 import CreateAccount from './auth/CreateAccount';
+
+//VIEW DETAILS IMPORT 
+import BarangayClearanceViewDetails from './view/BarangayClearanceViewDetails';
+import ResidencyViewDetails from './view/ResidencyViewDetails';
+import IndigencyViewDetails from './view/IndigencyViewDetails';
+import CommonLawViewDetails from './view/CommonLawViewDetails';
+import BusinessClearanceViewDetails from './view/BusinessClearanceViewDetails';
+import TravelPermitViewDetails from './view/TravelPermitViewDetails';
+import GuardianshipViewDetails from './view/GuardianshipViewDetails';
+import JobSeekerViewDetails from './view/JobSeekerViewDetails';
+import SoloParentViewDetails from './view/SoloParentViewDetails';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') === 'true');
@@ -92,12 +101,11 @@ function App() {
               <Route path='/barangay-clearance' element={<BarangayClearance />} />
               <Route path='/certificate-of-residency' element={<CertificateResidency />} />
               <Route path='/certificate-of-indigency' element={<CertificateIndigency />} />
-              <Route path='/certificate-of-good-moral-character' element={<GoodMoralCertificate />} />
+              <Route path='/guardianship' element={<Guardianship />} />
               <Route path='/business-clearance' element={<BusinessClearance />} />
-              <Route path='/certificate-of-death' element={<DeathCertificate />} />
-              <Route path='/certificate-of-no-property' element={<NoPropertyCertificate />} />
-              <Route path='/certificate-of-low-income' element={<CertificateLowIncome />} />
-              <Route path='/certificate-of-registration-for-new-residents' element={<NewResidentCertificate />} />
+              <Route path='/travel-permit' element={<TravelPermit />} />
+              <Route path='/common-law' element={<CommonLaw />} />
+              <Route path='/job-seeker' element={<JobSeeker />} />
               <Route path='/certificate-for-solo-parent' element={<CertificateSoloParent />} />
               {/* Barangay Certificates */}
               <Route path='/barangay-clearance-certificate/:id' element={<BrgyClearance />} />
@@ -105,11 +113,21 @@ function App() {
               <Route path='/barangay-certificate-of-indigency/:id' element={<CertificateOfIndigency />} />
               <Route path='/barangay-certificate-of-good-moral/:id' element={<CertificateOfGoodMoral />} />
               <Route path='/barangay-certificate-of-business-clearance/:id' element={<CertificateOfBusinessClearance />} />
-              <Route path='/barangay-certificate-of-death/:id' element={<CertificateOfDeath />} />
               <Route path='/barangay-certificate-of-no-property/:id' element={<CertificateOfNoProperty />} />
               <Route path='/barangay-certificate-of-low-income/:id' element={<CertificateOfLowIncome />} />
               <Route path='/barangay-certificate-of-new-resident/:id' element={<CertificateOfNewResident />} />
               <Route path='/barangay-certificate-for-solo-parent/:id' element={<CertificateForSoloParent />} />
+
+              //VIEW DETAILS PATH
+              <Route path="/view-details-barangay-clearance/:id" element={<BarangayClearanceViewDetails />} />
+              <Route path='/view-details-residency/:id' element={<ResidencyViewDetails />}/>
+              <Route path='/view-details-indigency/:id' element={<IndigencyViewDetails />}/>
+              <Route path='/view-details-common-law/:id'element={<CommonLawViewDetails />}/>
+              <Route path='/view-details-business-clearance/:id' element={<BusinessClearanceViewDetails />}  />
+              <Route path='/view-details-travel-permit/:id' element={<TravelPermitViewDetails />}/>
+              <Route path='/view-details-guardianship/:id' element={<GuardianshipViewDetails />}/>
+              <Route path='/view-details-job-seeker/:id' element={<JobSeekerViewDetails />}/>
+              <Route path='/view-details-solo-parent/:id' element={<SoloParentViewDetails />}/>
 
               {/* Settings */}
               <Route path='/barangayInfo' element={<BarangayInfo />} />
