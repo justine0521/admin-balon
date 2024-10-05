@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FaFileAlt } from "react-icons/fa";
+import Swal from 'sweetalert2';
+
+import { FaFileAlt, FaRegEye } from "react-icons/fa";
+import { IoMdDoneAll, IoIosArrowDropdown } from "react-icons/io";
+import { MdDeleteOutline } from "react-icons/md";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -9,18 +13,22 @@ function BusinessClearance() {
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [requests, setRequests] = useState([]);
+  const [dropdown, setDropdown] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch data from the backend when the component mounts
     const fetchRequests = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/certificates?certId=5`); // Use certId for Business Clearance
+        const response = await axios.get(`${API_BASE_URL}/api/businessClearance`);
+        console.log("Response data:", response.data);  // Log the fetched data
         setRequests(response.data);
       } catch (error) {
         console.error('Error fetching requests:', error);
       }
     };
-
+  
     fetchRequests();
   }, []);
 
@@ -41,6 +49,90 @@ function BusinessClearance() {
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
+
+  const handleDropdown = async (action, requestId) => {
+    switch (action) {
+      case 'generate-Certificate':
+        navigate(`/barangay-certificate-of-business-clearance/${requestId}`);
+        break;
+      case 'View-Details':
+        navigate(`/view-details-business-clearance/${requestId}`);
+        break;
+      case 'Completed':
+          try {
+              const completedRequest = requests.find(request => request._id === requestId);
+              if (!completedRequest) {
+                  throw new Error("Request not found.");
+              }
+
+              const requestData = {
+                  ...completedRequest,
+                  type: 'businessClearance',
+              };
+
+              await axios.post(`${API_BASE_URL}/api/completed-certificates`, requestData);
+              await axios.delete(`${API_BASE_URL}/api/businessClearance/${requestId}`);
+
+              setRequests(prevRequests => prevRequests.filter(request => request._id !== requestId));
+
+              Swal.fire({
+                  position: "center",
+                  icon: "success",
+                  title: "Request marked as completed!",
+                  showConfirmButton: false,
+                  timer: 1500
+              });
+          } catch (error) {
+              console.error('Error completing request:', error.response ? error.response.data : error.message);
+              Swal.fire({
+                  position: "center",
+                  icon: "error",
+                  title: "Failed to mark as completed",
+                  showConfirmButton: false,
+                  timer: 1500
+              });
+          }
+          break;
+      case 'Delete':
+        try {
+          await axios.delete(`${API_BASE_URL}/api/businessClearance/${requestId}`);
+          setRequests(requests.filter(request => request._id !== requestId));
+
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Deleted Successfully",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        } catch (error) {
+          console.error('Error deleting request:', error);
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Failed to Delete",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
+        break;
+      default:
+        break;
+    }
+    setDropdown(null);
+  };
+  
+  const toggleDropdown = (index) => {
+    setDropdown(dropdown === index ? null : index); 
+  };
+
+  // Search filter function
+  const filteredRequests = requests.filter((request) =>
+    request.owner.toLowerCase().includes(searchTerm.toLowerCase()) // Filter by fullName
+  );
+
+  const totalFilteredPages = Math.ceil(filteredRequests.length / entriesToShow);
+  const currentFilteredRequests = filteredRequests.slice(startIndex, endIndex); // Slice filtered requests for pagination
 
   return (
     <div className="w-4/5 h-screen mt-14 left-56 p-7 absolute">
@@ -73,9 +165,9 @@ function BusinessClearance() {
             </select>
           </div>
 
-          <form action="">
+          <form>
             <label htmlFor="search">Search: </label>
-            <input type="text" name="search" id="search" className="border border-gray-300 rounded-md px-3 py-1 focus:outline-none focus:border-Green" />
+            <input type="text" name="search" id="search" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="border border-gray-300 rounded-md px-3 py-1 focus:outline-none focus:border-green" />
           </form>
         </div>
 
@@ -83,26 +175,41 @@ function BusinessClearance() {
           <table className="w-full border-collapse">
             <thead className="bg-Green">
               <tr>
-                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Full Name</th>
-                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Contact Number</th>
-                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Type</th>
-                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Tracking Code</th>
+              <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300"></th>
+                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Owner</th>
+                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Business</th>
+                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Nature of Business</th>
                 <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Action</th>
               </tr>
             </thead>
             <tbody className="text-center bg-white divide-y divide-gray-300">
-              {requests.slice(startIndex, endIndex).map((request) => (
+              {currentFilteredRequests.map((request, index) => (
                 <tr key={request._id} className="hover:bg-gray-100">
-                  <td className="px-6 py-4">{request.fullName}</td>
-                  <td className="px-6 py-3">{request.contactNumber}</td>
-                  <td className="px-6 py-3">{request.selectType}</td>
-                  <td className="px-6 py-3">{request.trackingCode}</td>
-                  <td>
-                    <NavLink to={`/barangay-certificate-of-business-clearance/${request._id}`}>
-                      <button title='Generate Certificate'>
-                        <FaFileAlt className='text-Blue' />
-                      </button>
-                    </NavLink>
+                  <td className="px-6 py-4 text-sm text-gray-700">{startIndex + index + 1}</td>
+                  <td className="px-6 py-4 text-sm">{request.owner}</td>
+                  <td className="px-6 py-3 text-sm">{request.business}</td>
+                  <td className="px-6 py-3 text-sm">{request.natureOfBusiness}</td>
+                  <td className='relative'>
+                    <button onClick={() => toggleDropdown(index)} className='text-2xl bg-green-500 text-white rounded-full'>
+                      <IoIosArrowDropdown />
+                    </button>
+
+                    {dropdown === index && (
+                      <div className="absolute -top-4 right-10 mt-14 w-52 bg-white border border-gray-300 rounded-md shadow-lg z-10">
+                        <button onClick={() => handleDropdown('generate-Certificate', request._id)} className="flex items-center gap-3 px-4 py-2 text-md text-Blue hover:bg-gray-100 w-full">
+                          <FaFileAlt /> Generate Certificate
+                        </button>
+                        <button onClick={() => handleDropdown('View-Details', request._id)} className="flex items-center gap-3 px-4 py-2 text-md text-yellow-500 hover:bg-gray-100 w-full">
+                          <FaRegEye /> View Details
+                        </button>
+                        <button onClick={() => handleDropdown('Completed', request._id)} className="flex items-center gap-3 px-4 py-2 text-md text-Green hover:bg-gray-100 w-full">
+                          <IoMdDoneAll /> Completed
+                        </button>
+                        <button onClick={() => handleDropdown('Delete', request._id)} className="flex items-center gap-3 px-4 py-2 text-md text-Red hover:bg-gray-100 w-full">
+                          <MdDeleteOutline /> Delete
+                        </button>
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -122,7 +229,7 @@ function BusinessClearance() {
           <button
             onClick={handleNextPage}
             className={`p-2 border border-Green rounded-md ${currentPage === totalPages && 'opacity-50 cursor-not-allowed'}`}
-            disabled={currentPage === totalPages}
+            disabled={currentPage === totalFilteredPages}
           >
             Next
           </button>
