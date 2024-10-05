@@ -52,7 +52,7 @@ function CommonLaw() {
   const handleDropdown = async (action, requestId) => {
     switch (action) {
       case 'generate-Certificate':
-        navigate(`/barangay-certificate-of-low-income/${requestId}`);
+        navigate(`/barangay-common-law-certificate/${requestId}`);
         break;
       case 'View-Details':
         navigate(`/view-details-common-law/${requestId}`);

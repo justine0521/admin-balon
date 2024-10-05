@@ -16,24 +16,36 @@ import { IoArrowBackOutline } from "react-icons/io5";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-function CertificateOfGoodMoral() {
+function CommonLawCertificate() {
 
     const { id } = useParams(); // Get the ID from the URL
     const [requestDetails, setRequestDetails] = useState(null);
+    const [punongBarangay, setPunongBarangay] = useState(null);
 
     useEffect(() => {
         const fetchRequestDetails = async () => {
             try {
-                const response = await axios.get(`${API_BASE_URL}/api/certificates/${id}`); // Replace with your backend URL
+                const response = await axios.get(`${API_BASE_URL}/api/generate-commonLaw/${id}`);
                 setRequestDetails(response.data);
             } catch (error) {
                 console.error('Error fetching request details:', error);
             }
         };
 
+        const fetchPunongBarangay = async () => {
+            try {
+                const response = await axios.get(`${API_BASE_URL}/api/officials`);
+                const punong = response.data.find(official => official.position === 'Punong Barangay');
+                setPunongBarangay(punong);
+            } catch (error) {
+                console.error('Error fetching Punong Barangay details:', error);
+            }
+        };
+
         if (id) {
             fetchRequestDetails();
         }
+        fetchPunongBarangay(); 
     }, [id]);
 
     const handlePrint = () => {
@@ -56,7 +68,7 @@ function CertificateOfGoodMoral() {
                     <button onClick={handlePrint} className='flex items-center gap-x-2 border border-Blue text-Blue rounded-full py-1 px-3 transition-all ease-in duration-400 hover:bg-Blue hover:text-White'>
                         <FaPrint /> Print Certificate
                     </button>
-                    <NavLink to={'/certificate-of-good-moral-character'}>
+                    <NavLink to={'/common-law'}>
                         <button className='flex items-center border border-red-400 p-1 px-2 transition-all ease-in duration-400 rounded-full text-Red hover:bg-red-500 hover:text-White'>
                             <IoArrowBackOutline /> Back
                         </button>
@@ -165,15 +177,18 @@ function CertificateOfGoodMoral() {
                 </aside>
 
                 <main className='w-[800px] flex flex-col items-center relative'>
-                    <h1 className='text-4xl mt-16 w-full text-center font-serif'>CERTIFICATE OF GOOD MORAL</h1>
+                    <h1 className='text-4xl mt-16 w-full text-center font-serif'>CERTIFICATE OF COMMON LAW</h1>
 
                     <div contenteditable="true" className='px-7 mt-20'>
                         <p className='mb-5'>TO WHOM IT MAY CONCERN:</p>
 
-                        <p className='mb-5'>&nbsp; &nbsp; &nbsp; &nbsp; This is to certify that <span className='font-bold'>{requestDetails?.fullName || '_________________'}</span>, of Legal age, Married, Filifino and a Bonifide resident of <span>{requestDetails?.address || '_______________'}</span>, Barangay Balon-Anito, Mariveles, Bataan, is known to be a person of good moral character, law abiding citizen of the community and as far as record of this office is concerned, he/she has never been charged nor convicted of any crime and whatsoever.</p>
+                        <p className='mb-5'>&nbsp; &nbsp; &nbsp; &nbsp; This is to certify that <span className='font-bold'>{requestDetails?.male}</span> and <span className='font-bold'>{requestDetails?.female || '_________________'}</span>, both of legal age, Filipino, and bonafide residents of <span>{requestDetails?.tirahan || '_______________'}</span>, Barangay Balon-Anito, Mariveles, Bataan.</p>
 
-                        <p>&nbsp; &nbsp; &nbsp; &nbsp; This certification is hereby issued upon the request of above- <br /> mentioned name individual for <span className='font-bold'>{requestDetails?.purpose || '______'}.</span></p>
+                        <p className='mb-5'>It is further certified that they have been living together for <span className='font-bold'>{requestDetails?.yearTogether}</span>.</p>
+
+                        <p>&nbsp; &nbsp; &nbsp; &nbsp; This certification is hereby issued upon the request of the above-mentioned individuals.</p>
                     </div>
+
 
                     <div className='text-center absolute bottom-0'>
                         <p className='font-sans'>
@@ -183,7 +198,7 @@ function CertificateOfGoodMoral() {
                         <p className='text-sm'>at the Office of the Punong Barangay,</p>
                         <p className='text-sm'>Brgy.Balon Anito, Mariveles, Bataan</p>
 
-                        <h1 className='underline font-semibold text-xl mt-7'>CELSO M. SOLANO</h1>
+                        <h1 className='underline font-semibold text-xl mt-7'>{punongBarangay?.fullname}</h1>
                         <p className='font-'>Punong Barangay</p>
 
                         <p className='text-xsm'>NOTE VALID WITHIN 90 DAYS UPON ISSUANCE. NOT VALID WITHOUT BARANGAY DRY SEAL</p>
@@ -207,4 +222,4 @@ function CertificateOfGoodMoral() {
   )
 }
 
-export default CertificateOfGoodMoral
+export default CommonLawCertificate

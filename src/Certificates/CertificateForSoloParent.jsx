@@ -20,24 +20,45 @@ function CertificateForSoloParent() {
 
     const { id } = useParams(); // Get the ID from the URL
     const [requestDetails, setRequestDetails] = useState(null);
+    const [punongBarangay, setPunongBarangay] = useState(null);
 
     useEffect(() => {
         const fetchRequestDetails = async () => {
             try {
-                const response = await axios.get(`${API_BASE_URL}/api/certificates/${id}`); // Replace with your backend URL
+                const response = await axios.get(`${API_BASE_URL}/api/generate-soloParent/${id}`);
                 setRequestDetails(response.data);
             } catch (error) {
                 console.error('Error fetching request details:', error);
             }
         };
 
+        const fetchPunongBarangay = async () => {
+            try {
+                const response = await axios.get(`${API_BASE_URL}/api/officials`);
+                const punong = response.data.find(official => official.position === 'Punong Barangay');
+                setPunongBarangay(punong);
+            } catch (error) {
+                console.error('Error fetching Punong Barangay details:', error);
+            }
+        };
+
         if (id) {
             fetchRequestDetails();
         }
+        fetchPunongBarangay(); 
     }, [id]);
 
     const handlePrint = () => {
         window.print();
+    };
+
+    const formatDate = (isoDate) => {
+        const date = new Date(isoDate);
+        return date.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        });
     };
 
     const currentDate = new Date();
@@ -170,9 +191,11 @@ function CertificateForSoloParent() {
                     <div contenteditable="true" className='px-7 mt-20'>
                         <p className='mb-5'>TO WHOM IT MAY CONCERN:</p>
 
-                        <p className='mb-5'>&nbsp; &nbsp; &nbsp; &nbsp; This is to certify that <span className='font-bold'>{requestDetails?.fullName || '_________________'}</span>, of Legal age, Married, Filifino is a Solo Parent residing at Barangay Balon Anito, Mariveles, Bataan.</p>
+                        <p className='mb-5'>&nbsp; &nbsp; &nbsp; &nbsp; This is to certify that <span className='font-bold'>{requestDetails?.parent || '_________________'}</span>, is a solo parent residing at {requestDetails?.address} in Barangay Balon Anito, Mariveles, Bataan.</p>
 
-                        <p>&nbsp; &nbsp; &nbsp; &nbsp; This certification is hereby issued upon the request of above- <br /> mentioned name individual for <span className='font-bold'>{requestDetails?.purpose || '______'}.</span></p>
+                        <p className='mb-5'>&nbsp; &nbsp; &nbsp; &nbsp; The individual has a child named {requestDetails?.child}, born on {requestDetails?.dateOfBirth ? formatDate(requestDetails.dateOfBirth) : '_________________'}.</p>
+
+                        <p>&nbsp; &nbsp; &nbsp; &nbsp; This certification is hereby issued upon the request of above mentioned name.</p>
                     </div>
 
                     <div className='text-center absolute bottom-0'>
@@ -183,7 +206,7 @@ function CertificateForSoloParent() {
                         <p className='text-sm'>at the Office of the Punong Barangay,</p>
                         <p className='text-sm'>Brgy.Balon Anito, Mariveles, Bataan</p>
 
-                        <h1 className='underline font-semibold text-xl mt-7'>CELSO M. SOLANO</h1>
+                        <h1 className='underline font-semibold text-xl mt-7'>{punongBarangay?.fullname}</h1>
                         <p className='font-'>Punong Barangay</p>
 
                         <p className='text-xsm'>NOTE VALID WITHIN 90 DAYS UPON ISSUANCE. NOT VALID WITHOUT BARANGAY DRY SEAL</p>

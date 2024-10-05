@@ -64,7 +64,7 @@ function JobSeeker() {
   const handleDropdown = async (action, requestId) => {
     switch (action) {
       case 'generate-Certificate':
-        navigate(`/barangay-certificate-of-new-resident/${requestId}`);
+        navigate(`/barangay-job-seeker-certificate/${requestId}`);
         break;
       case 'View-Details':
         navigate(`/view-details-job-seeker/${requestId}`);
