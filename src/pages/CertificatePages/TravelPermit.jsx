@@ -61,7 +61,7 @@ function TravelPermit() {
   const handleDropdown = async (action, requestId) => {
     switch (action) {
       case 'generate-Certificate':
-        navigate(`/barangay-certificate-of-no-property/${requestId}`);
+        navigate(`/barangay-travel-permit-certificate/${requestId}`);
         break;
       case 'View-Details':
         navigate(`/view-details-travel-permit/${requestId}`);

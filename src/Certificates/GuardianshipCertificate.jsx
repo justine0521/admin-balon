@@ -16,25 +16,46 @@ import { IoArrowBackOutline } from "react-icons/io5";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-function CertificateOfDeath() {
+function GuardianshipCertificate() {
 
     const { id } = useParams(); // Get the ID from the URL
     const [requestDetails, setRequestDetails] = useState(null);
+    const [punongBarangay, setPunongBarangay] = useState(null);
 
     useEffect(() => {
         const fetchRequestDetails = async () => {
             try {
-                const response = await axios.get(`${API_BASE_URL}/api/certificates/${id}`); // Replace with your backend URL
+                const response = await axios.get(`${API_BASE_URL}/api/generate-guardianship/${id}`);
                 setRequestDetails(response.data);
             } catch (error) {
                 console.error('Error fetching request details:', error);
             }
         };
 
+        const fetchPunongBarangay = async () => {
+            try {
+                const response = await axios.get(`${API_BASE_URL}/api/officials`);
+                const punong = response.data.find(official => official.position === 'Punong Barangay');
+                setPunongBarangay(punong);
+            } catch (error) {
+                console.error('Error fetching Punong Barangay details:', error);
+            }
+        };
+
         if (id) {
             fetchRequestDetails();
         }
+        fetchPunongBarangay(); 
     }, [id]);
+
+    const formatDate = (isoDate) => {
+        const date = new Date(isoDate);
+        return date.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        });
+    };
 
     const handlePrint = () => {
         window.print();
@@ -56,7 +77,7 @@ function CertificateOfDeath() {
                     <button onClick={handlePrint} className='flex items-center gap-x-2 border border-Blue text-Blue rounded-full py-1 px-3 transition-all ease-in duration-400 hover:bg-Blue hover:text-White'>
                         <FaPrint /> Print Certificate
                     </button>
-                    <NavLink to={'/certificate-of-death'}>
+                    <NavLink to={'/guardianship'}>
                         <button className='flex items-center border border-red-400 p-1 px-2 transition-all ease-in duration-400 rounded-full text-Red hover:bg-red-500 hover:text-White'>
                             <IoArrowBackOutline /> Back
                         </button>
@@ -165,18 +186,14 @@ function CertificateOfDeath() {
                 </aside>
 
                 <main className='w-[800px] flex flex-col items-center relative'>
-                    <h1 className='text-4xl mt-16  font-serif'>CERTIFICATE OF DEATH</h1>
+                    <h1 className='text-4xl mt-16 w-full text-center font-serif'>CERTIFICATE OF GUARDIANSHIP</h1>
 
-                    <div contenteditable="true" className='px-7 mt-20'>
+                    <div contentEditable="true" className='px-7 mt-20'>
                         <p className='mb-5'>TO WHOM IT MAY CONCERN:</p>
 
-                        <p className='mb-5'>&nbsp; &nbsp; &nbsp; &nbsp; This is to certify that <span className='font-bold'>{requestDetails?.fullName || '_________________'}</span>, of Legal age, Married, Filifino and a Bonifide resident of <span>{requestDetails?.address || '_______________'}</span>, Barangay Balon-Anito, Mariveles, Bataan.</p>
+                        <p className='mb-5'>&nbsp; &nbsp; &nbsp; &nbsp; This is to certify that <span className='font-bold'>{requestDetails?.guardian || '_________________'}</span>, of Legal age, Married, Filipino and a Bonifide resident of {requestDetails?.address || '_______________'} Barangay Balon-Anito, Mariveles, Bataan, is recognized as the guardian of <span className='font-bold'>{requestDetails?.child || '_________________'}</span>, born on <span className='font-bold'>{requestDetails?.birthdayOfChild ? formatDate(requestDetails.birthdayOfChild) : '_________________'}</span>, at {requestDetails?.placeOfBirth || '_________________'}.</p>
 
-                        <p className='mb-3'>Further certify that the above-named person passed away on February 06, 2021 at Balon Anito, Mariveles, Bataan due to sickness.</p>
-
-                        <p className='mb-3'>This certification is issued upon the request of _______, wife, for whatever legal purpose it may serve.</p>
-                        
-                        <p>&nbsp; &nbsp; &nbsp; &nbsp; This certification is hereby issued upon the request of above- <br /> mentioned name individual for <span className='font-bold'>DSWD.</span></p>
+                        <p>&nbsp; &nbsp; &nbsp; &nbsp; This certification is hereby issued upon the request of the above-mentioned individual.</p>
                     </div>
 
                     <div className='text-center absolute bottom-0'>
@@ -187,7 +204,7 @@ function CertificateOfDeath() {
                         <p className='text-sm'>at the Office of the Punong Barangay,</p>
                         <p className='text-sm'>Brgy.Balon Anito, Mariveles, Bataan</p>
 
-                        <h1 className='underline font-semibold text-xl mt-7'>CELSO M. SOLANO</h1>
+                        <h1 className='underline font-semibold text-xl mt-7'>{punongBarangay?.fullname}</h1>
                         <p className='font-'>Punong Barangay</p>
 
                         <p className='text-xsm'>NOTE VALID WITHIN 90 DAYS UPON ISSUANCE. NOT VALID WITHOUT BARANGAY DRY SEAL</p>
@@ -211,4 +228,4 @@ function CertificateOfDeath() {
   )
 }
 
-export default CertificateOfDeath
+export default GuardianshipCertificate

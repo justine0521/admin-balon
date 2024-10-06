@@ -18,22 +18,34 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function BrgyClearance() {
 
-    const { id } = useParams(); // Get the ID from the URL
-    const [requestDetails, setRequestDetails] = useState(null);
+    const { id } = useParams(); // Extract request ID
+    const [requestDetails, setRequestDetails] = useState(null); // State to store request data
+    const [punongBarangay, setPunongBarangay] = useState(null);
 
     useEffect(() => {
         const fetchRequestDetails = async () => {
             try {
-                const response = await axios.get(`${API_BASE_URL}/api/certificates/${id}`); // Replace with your backend URL
+                const response = await axios.get(`${API_BASE_URL}/api/generate-barangayClearance/${id}`);
                 setRequestDetails(response.data);
             } catch (error) {
                 console.error('Error fetching request details:', error);
             }
         };
 
+        const fetchPunongBarangay = async () => {
+            try {
+                const response = await axios.get(`${API_BASE_URL}/api/officials`);
+                const punong = response.data.find(official => official.position === 'Punong Barangay');
+                setPunongBarangay(punong);
+            } catch (error) {
+                console.error('Error fetching Punong Barangay details:', error);
+            }
+        };
+
         if (id) {
             fetchRequestDetails();
         }
+        fetchPunongBarangay(); 
     }, [id]);
 
     const handlePrint = () => {
@@ -170,9 +182,9 @@ function BrgyClearance() {
                     <div contenteditable="true" className='px-7 mt-20'>
                         <p className='mb-5'>TO WHOM IT MAY CONCERN:</p>
 
-                        <p className='mb-5'>&nbsp; &nbsp; &nbsp; &nbsp; This is to certify that <span className='font-bold'>{requestDetails?.fullName || '_________________'}</span>, of Legal age, Married, Filifino and a Bonifide resident of <span>{requestDetails?.address || '_______________'}</span>, Barangay Balon-Anito, Mariveles, Bataan. To Certify further, that he/she has no derogatory and/or criminal records filed in this barangay.</p>
+                        <p className='mb-5'>&nbsp; &nbsp; &nbsp; &nbsp; This is to certify that <span className='font-bold'>{requestDetails?.fullName || '_________________'}</span>, of {requestDetails?.age > 18 ? 'Legal age' : '___'}, {requestDetails?.civilStatus}, Filifino and a Bonifide resident of <span>{requestDetails?.address || '_______________'}</span>, Barangay Balon-Anito, Mariveles, Bataan. To Certify further, that {requestDetails?.gender === 'Male' ? 'he' : 'she'} has no derogatory and/or criminal records filed in this barangay.</p>
 
-                        <p>&nbsp; &nbsp; &nbsp; &nbsp; This certification is hereby issued upon the request of above- <br /> mentioned name individual for <span className='font-bold'>{requestDetails?.purpose || '______'}.</span></p>
+                        <p>&nbsp; &nbsp; &nbsp; &nbsp; This certification is hereby issued upon the request of above mentioned name individual for <span className='font-bold'>{requestDetails?.purpose || '______'}.</span></p>
                     </div>
 
                     <div className='text-center absolute bottom-0'>
@@ -183,7 +195,7 @@ function BrgyClearance() {
                         <p className='text-sm'>at the Office of the Punong Barangay,</p>
                         <p className='text-sm'>Brgy.Balon Anito, Mariveles, Bataan</p>
 
-                        <h1 className='underline font-semibold text-xl mt-7'>CELSO M. SOLANO</h1>
+                        <h1 className='underline font-semibold text-xl mt-7'>{punongBarangay?.fullname}</h1>
                         <p className='font-'>Punong Barangay</p>
 
                         <p className='text-xsm'>NOTE VALID WITHIN 90 DAYS UPON ISSUANCE. NOT VALID WITHOUT BARANGAY DRY SEAL</p>
@@ -192,7 +204,7 @@ function BrgyClearance() {
             </div>
 
             <footer className='flex flex-col justify-center items-center p-5 font-serif'>
-                <p className='flex items-center gap-2'><span className='p-1 icons bg-blue-600 rounded-full text-white'><FaLocationDot /></span>National Road , Barangay hall, Balon Anito, Mariveles, Bataan</p>
+                <p className='flex items-center gap-2'><span className='p-1 icons bg-blue-600 rounded-full text-white'><FaLocationDot /></span>National Road, Barangay hall, Balon Anito, Mariveles, Bataan</p>
 
                 <div className='flex flex-wrap gap-10 mt-3'>
                     <p className='flex items-center gap-2'><span className='p-1 icons bg-blue-600 rounded-full text-white'><FaFacebookF /></span>Better Balon Anito</p>

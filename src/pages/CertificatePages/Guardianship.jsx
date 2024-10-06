@@ -57,7 +57,7 @@ function Guardianship() {
   const handleDropdown = async (action, requestId) => {
     switch (action) {
       case 'generate-Certificate':
-        navigate(`/barangay-certificate-of-good-moral/${requestId}`);
+        navigate(`/barangay-guardianship-certificate/${requestId}`);
         break;
       case 'View-Details':
         navigate(`/view-details-guardianship/${requestId}`);

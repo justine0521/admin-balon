@@ -17,7 +17,10 @@ import Blocked from './pages/Blocked';
 import Transactions from './pages/Transactions';
 import Logout from './pages/Logout';
 import Login from './auth/Login';
+
+//CERTIFICATE PAGES
 import RequestedCertificate from './pages/RequestedCertificate';
+
 import BarangayClearance from './pages/CertificatePages/BarangayClearance';
 import BusinessClearance from './pages/CertificatePages/BusinessClearance';
 import CertificateIndigency from './pages/CertificatePages/CertificateIndigency';
@@ -27,15 +30,18 @@ import CertificateSoloParent from './pages/CertificatePages/CertificateSoloParen
 import Guardianship from './pages/CertificatePages/Guardianship';
 import JobSeeker from './pages/CertificatePages/JobSeeker';
 import TravelPermit from './pages/CertificatePages/TravelPermit';
+
+//CERTIFICATES
 import BrgyClearance from './Certificates/BrgyClearance';
 import CertificateOfRecidency from './Certificates/CertificateOfRecidency';
 import CertificateOfIndigency from './Certificates/CertificateOfIndigency';
-import CertificateOfGoodMoral from './Certificates/CertificateOfGoodMoral';
+import GuardianshipCertificate from './Certificates/GuardianshipCertificate';
 import CertificateOfBusinessClearance from './Certificates/CertificateOfBusinessClearance';
-import CertificateOfNoProperty from './Certificates/CertificateOfNoProperty';
-import CertificateOfLowIncome from './Certificates/CertificateOfLowIncome';
-import CertificateOfNewResident from './Certificates/CertificateOfNewResident';
+import TravelpermitCertificate from './Certificates/TravelPermitCertificate';
+import CommonLawCertificate from './Certificates/CommonLawCertificate';
+import JobSeekerCertificate from './Certificates/JobSeekerCertificate';
 import CertificateForSoloParent from './Certificates/CertificateForSoloParent';
+
 import EditResidence from './Modal/EditResidenceModal';
 import Settings from './pages/Settings';
 import BarangayInfo from './settings/BarangayInfo';
@@ -111,11 +117,11 @@ function App() {
               <Route path='/barangay-clearance-certificate/:id' element={<BrgyClearance />} />
               <Route path='/barangay-certificate-of-residency/:id' element={<CertificateOfRecidency />} />
               <Route path='/barangay-certificate-of-indigency/:id' element={<CertificateOfIndigency />} />
-              <Route path='/barangay-certificate-of-good-moral/:id' element={<CertificateOfGoodMoral />} />
+              <Route path='/barangay-guardianship-certificate/:id' element={<GuardianshipCertificate />} />
               <Route path='/barangay-certificate-of-business-clearance/:id' element={<CertificateOfBusinessClearance />} />
-              <Route path='/barangay-certificate-of-no-property/:id' element={<CertificateOfNoProperty />} />
-              <Route path='/barangay-certificate-of-low-income/:id' element={<CertificateOfLowIncome />} />
-              <Route path='/barangay-certificate-of-new-resident/:id' element={<CertificateOfNewResident />} />
+              <Route path='/barangay-travel-permit-certificate/:id' element={<TravelpermitCertificate />} />
+              <Route path='/barangay-common-law-certificate/:id' element={<CommonLawCertificate />} />
+              <Route path='/barangay-job-seeker-certificate/:id' element={<JobSeekerCertificate />} />
               <Route path='/barangay-certificate-for-solo-parent/:id' element={<CertificateForSoloParent />} />
 
               //VIEW DETAILS PATH
