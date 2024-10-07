@@ -1,9 +1,20 @@
 import React, { useRef, useState, useEffect } from 'react';
-import Logo from '../images/Logo.png'
+import Logo from '../images/Logo.png';
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import '../App.css';
 import { MdModeEdit } from "react-icons/md";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+// AWS S3 setup
+const bucketName = import.meta.env.VITE_AWS_BUCKET_NAME;
+const s3Client = new S3Client({
+  region: import.meta.env.VITE_AWS_REGION,
+  credentials: {
+    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID,
+    secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY,
+  },
+});
 
 function BarangayInfo() {
   const fileInputRef = useRef(null);
@@ -11,7 +22,7 @@ function BarangayInfo() {
   const [contactNumber, setContactNumber] = useState('');
   const [facebook, setFacebook] = useState('');
   const [email, setEmail] = useState('');
-  const [logoUrl, setLogoUrl] = useState('');
+  const [logoUrl, setLogoUrl] = useState(Logo); // Default logo
   const [isLoading, setIsLoading] = useState(true);
   const [isEditable, setIsEditable] = useState(false);
   const [updateBarangayInfo, setUpdateBarangayInfo] = useState(false);
@@ -28,7 +39,7 @@ function BarangayInfo() {
           setContactNumber(data.contactNumber || '');
           setFacebook(data.facebook || '');
           setEmail(data.email || '');
-          setLogoUrl(data.logoUrl || defaultLogoUrl);
+          setLogoUrl(data.logoUrl || Logo);
         }
       } catch (error) {
         console.error('Error fetching barangay info:', error);
@@ -41,6 +52,47 @@ function BarangayInfo() {
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
+  };
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) {
+      console.error('No file selected');
+      return;
+    }
+
+    const params = {
+      Bucket: bucketName,
+      Key: `barangay-logos/${file.name}`,
+      Body: file,
+      ContentType: file.type,
+      ACL: 'public-read',
+    };
+
+    try {
+      const command = new PutObjectCommand(params);
+      await s3Client.send(command);
+      const uploadedLogoUrl = `https://${bucketName}.s3.amazonaws.com/barangay-logos/${file.name}`;
+      setLogoUrl(uploadedLogoUrl);
+
+      // Save the new logo URL to the server
+      await fetch(`${API_BASE_URL}/api/update-barangay-info`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: barangayName,
+          contactNumber,
+          facebook,
+          email,
+          logoUrl: uploadedLogoUrl, // Save the uploaded logo URL
+        }),
+      });
+      setUpdateBarangayInfo(true);
+      setIsEditable(false);
+
+    } catch (err) {
+      console.error("Error uploading logo: ", err);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -79,14 +131,6 @@ function BarangayInfo() {
     }
   }, [updateBarangayInfo, timer]);
 
-  const handleFileUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) {
-      console.error('No file selected');
-      return;
-    }
-  }
-
   const handleEditClick = () => {
     setIsEditable(true);
   };
@@ -99,11 +143,11 @@ function BarangayInfo() {
     return (
       <div className="flex justify-center items-center h-screen">
         <div className="loading">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
       </div>
     );
@@ -132,15 +176,13 @@ function BarangayInfo() {
 
       <div className="flex flex-col items-center mb-6">
         <label className="text-lg font-medium text-gray-700 mb-2">Barangay Logo</label>
-
-        <img src={Logo} alt="Barangay Logo" className="rounded-full w-36 h-36 object-cover shadow-lg" />
+        <img src={logoUrl} alt="Barangay Logo" className="rounded-full w-36 h-36 object-cover shadow-lg" />
 
         {isEditable && (
           <>
             <button onClick={handleButtonClick} className="mt-4 bg-gray-200 text-gray-600 py-2 px-4 rounded-md hover:bg-gray-300">
               Change Logo
             </button>
-
             <input
               type="file"
               ref={fileInputRef}
@@ -198,11 +240,9 @@ function BarangayInfo() {
       </div>
 
       {updateBarangayInfo && (
-        <div className="fixed right-5 top-5 flex items-center justify-center z-50">
-          <div className="bg-green-100 p-5 rounded shadow-lg w-56">
-            <p className="text-center text-gray-600 mb-4">Updated Successfully</p>
-            <div ref={progressBarRef} className="h-1 bg-green-500"></div>
-          </div>
+        <div className="mt-4 relative">
+          <p className="text-center font-medium text-gray-600">Updating Barangay Info...</p>
+          <div className="progress-bar mt-2 bg-green-500 h-1 w-full rounded-md" ref={progressBarRef}></div>
         </div>
       )}
     </section>
