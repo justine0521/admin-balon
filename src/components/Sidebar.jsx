@@ -44,7 +44,7 @@ function Sidebar() {
                             )}
                         </NavLink>
 
-                        <NavLink to={"/residence-Record"}>
+                        {/* <NavLink to={"/residence-Record"}>
                             {({ isActive }) => (
                                 <li className={`${isActive ? 'bg-Green text-white' : 'hover:text-Green'} px-4 py-2 mx-2 text-black rounded-lg transition duration-500`}>
                                     <div className='flex items-center'>
@@ -53,7 +53,7 @@ function Sidebar() {
                                     </div>
                                 </li>
                             )}
-                        </NavLink>
+                        </NavLink> */}
 
                         <NavLink to={"/certificates"}>
                             {({ isActive }) => (

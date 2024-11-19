@@ -34,8 +34,8 @@ function Settings() {
   }
 
   return (
-    <section className="w-4/5 h-full mt-14 left-56 p-7 absolute hide-scrollbar">
-      <div className="flex items-center gap-x-5 mb-5">
+    <section className="">
+      <div className="flex items-center gap-x-5 mb-3">
         <button
           className={`p-1 text-xl ${activeTab === 'barangayInfo' ? 'border-b-2 border-b-Green text-Green' : 'hover:text-green-500'}`}
           onClick={() => setActiveTab('barangayInfo')}

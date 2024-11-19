@@ -77,11 +77,9 @@ function Blocked() {
   };
 
   return (
-    <section className="w-4/5 h-screen mt-14 left-56 p-7 absolute hide-scrollbar">
-    
-      <div className="bg-White">
-
-        <div className="flex justify-between items-center h-16 bg-White px-5 w-full border-b-2 border-gray-400">
+    <section className="hide-scrollbar">
+      <div className="">
+        <div className="flex justify-between items-center h-16  px-3 w-full border-b-2 border-gray-400">
           <p className="text-2xl">Block Listed</p>
 
           <div>
@@ -121,10 +119,10 @@ function Blocked() {
               <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Action</th>
             </tr>
           </thead>
-          <tbody className="text-center bg-white divide-y divide-gray-200">
+          <tbody className="text-center divide-y divide-gray-200">
 
             {blocked.slice(startIndex, endIndex).map((block, index) => (
-              <tr key={index} className="hover:bg-gray-100">
+              <tr key={index} className="hover:bg-gray-200">
                 <td className="px-6 py-4 flex justify-center items-center">
                   <img src="https://via.placeholder.com/50" alt="Profile" className="w-10 h-10 rounded-full" />
                 </td>

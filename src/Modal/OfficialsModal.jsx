@@ -4,6 +4,8 @@ import { IoClose } from "react-icons/io5";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import axios from 'axios';
 
+import { TiCamera } from "react-icons/ti";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // AWS S3 setup
@@ -76,48 +78,74 @@ function OfficialsModal({ isOpen, onClose }) {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-gray-800 bg-opacity-70 flex justify-center items-center z-50 overflow-auto">
-            <div className="bg-white p-6 w-full max-w-lg mx-4 rounded-lg shadow-lg">
-                <header className="flex justify-between items-center text-lg border-b-2 border-green-500 pb-3 mb-4">
-                    <h2 className="text-xl font-semibold">New Official</h2>
-                    <button onClick={onClose} className="text-red-500 text-2xl hover:bg-gray-200 rounded-full p-1"><IoClose /></button>
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-70 flex justify-center items-center z-50">
+            <div className="bg-white p-5 w-full max-w-lg mx-4 rounded-2xl shadow-xl max-h-[calc(100%-4rem)] overflow-y-auto relative">
+                {/* Close Button */}
+                <button
+                    onClick={onClose}
+                    className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 hover:bg-gray-200 rounded-full p-2 transition-all"
+                >
+                    <IoClose size={24} />
+                </button>
+
+                {/* Header */}
+                <header className="flex flex-col items-center text-center mb-6">
+                    <h2 className="text-2xl font-semibold text-gray-800">Add New Official</h2>
+                    <p className="text-gray-500 mt-2">Fill in the details to add a new barangay official</p>
                 </header>
 
-                <form onSubmit={handleSubmit} className='flex flex-col gap-6'>
-                    <div className='flex flex-col items-center mb-4'>
-                        <img src={imageUrl || Profile} alt="Preview" className="w-32 h-32 border border-gray-300 rounded-full object-cover mb-4" />
-                        <input
-                            onChange={handleImageChange}
-                            type="file"
-                            accept="image/*"
-                            className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-green-500"
-                        />
+                {/* Form */}
+                <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                    {/* Image Upload */}
+                    <div className="flex flex-col items-center">
+                        <div className="relative w-32 h-32 mb-4">
+                            <img
+                                src={imageUrl || Profile}
+                                alt="Preview"
+                                className="w-full h-full border border-gray-300 rounded-full object-cover"
+                            />
+                            <label className="absolute bottom-0 right-0 bg-green-500 text-white rounded-full p-2 cursor-pointer hover:bg-green-600 transition-all">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    className="hidden"
+                                />
+                                <TiCamera  />
+                            </label>
+                        </div>
+                        <p className="text-sm text-gray-500">Upload a profile picture</p>
                     </div>
 
-                    <div className='flex flex-col gap-4'>
-                        <div className="flex flex-col">
-                            <label htmlFor="fullname" className="font-medium">Full Name</label>
+                    {/* Input Fields */}
+                    <div className="flex flex-col gap-4">
+                        <div>
+                            <label htmlFor="fullname" className="font-medium text-gray-700">
+                                Full Name
+                            </label>
                             <input
                                 type="text"
                                 name="fullname"
                                 id="fullname"
-                                placeholder="Full Name"
+                                placeholder="Enter full name"
                                 value={formData.fullname}
                                 onChange={handleInputChange}
-                                className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-green-500"
+                                className="w-full border border-gray-300 rounded-lg py-3 px-4 mt-1 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
                             />
                         </div>
 
-                        <div className="flex flex-col">
-                            <label htmlFor="position" className="font-medium">Position</label>
+                        <div>
+                            <label htmlFor="position" className="font-medium text-gray-700">
+                                Position
+                            </label>
                             <select
                                 name="position"
                                 id="position"
                                 value={formData.position}
                                 onChange={handleInputChange}
-                                className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-green-500"
+                                className="w-full border border-gray-300 rounded-lg py-3 px-4 mt-1 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
                             >
-                                <option value="">Select Official Position</option>
+                                <option value="">Select Position</option>
                                 <option value="Punong Barangay">Punong Barangay</option>
                                 <option value="Barangay Kagawad">Sangguniang Barangay Member</option>
                                 <option value="SK Chairperson">SK Chairperson</option>
@@ -127,26 +155,30 @@ function OfficialsModal({ isOpen, onClose }) {
                             </select>
                         </div>
 
-                        <div className="flex flex-col">
-                            <label htmlFor="dateAdded" className="font-medium">Date Added</label>
+                        <div>
+                            <label htmlFor="dateAdded" className="font-medium text-gray-700">
+                                Date Added
+                            </label>
                             <input
                                 type="date"
                                 name="dateAdded"
                                 id="dateAdded"
                                 value={formData.dateAdded}
                                 onChange={handleInputChange}
-                                className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-green-500"
+                                className="w-full border border-gray-300 rounded-lg py-3 px-4 mt-1 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
                             />
                         </div>
 
-                        <div className="flex flex-col">
-                            <label htmlFor="status" className="font-medium">Status</label>
+                        <div>
+                            <label htmlFor="status" className="font-medium text-gray-700">
+                                Status
+                            </label>
                             <select
                                 name="status"
                                 id="status"
                                 value={formData.status}
                                 onChange={handleInputChange}
-                                className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-green-500"
+                                className="w-full border border-gray-300 rounded-lg py-3 px-4 mt-1 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
                             >
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
@@ -154,8 +186,14 @@ function OfficialsModal({ isOpen, onClose }) {
                         </div>
                     </div>
 
-                    <div className='flex justify-end mt-6'>
-                        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Save</button>
+                    {/* Submit Button */}
+                    <div className="flex justify-end">
+                        <button
+                            type="submit"
+                            className="bg-green-500 text-white px-5 py-2 rounded-lg hover:bg-green-600 transition-all"
+                        >
+                            Save Official
+                        </button>
                     </div>
                 </form>
             </div>

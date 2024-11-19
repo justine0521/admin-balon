@@ -7,9 +7,10 @@ import axios from 'axios';
 import { formatDistanceToNow } from 'date-fns';
 
 // Import Icons
-import { FaBell, FaUserAlt, FaMoon, FaSun } from "react-icons/fa";
+import { FaBell, FaUserAlt, FaMoon, FaSun, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { BiLogOut } from "react-icons/bi";
+
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -163,9 +164,9 @@ function Header() {
     <header className="bg-white w-full h-14 z-10 fixed top-0 flex justify-end items-center pr-8 shadow-md">
       <div className="flex justify-center items-center gap-x-5">
         {/* Dark Mode Toggle */}
-        <button onClick={toggleDarkMode} className="text-lg focus:outline-none">
+        {/* <button onClick={toggleDarkMode} className="text-lg focus:outline-none">
           {isDarkMode ? <FaSun className="text-yellow-400" /> : <FaMoon className="text-gray-700" />}
-        </button>
+        </button> */}
 
         {/* Notifications */}
         <button onClick={toggleNotifications} className="relative focus:outline-none">
@@ -204,13 +205,10 @@ function Header() {
         </button>
 
         {/* User Profile */}
-        <button onClick={() => toggleDropdownMenu(1)} className="flex justify-center items-center gap-x-2 focus:outline-none">
-          <img
-            src={profileData.imageUrl || 'https://via.placeholder.com/150'}
-            alt="Profile"
-            title="Account"
-            className="w-11 h-11 border border-gray-400 rounded-full object-cover"
-          />
+        <button onClick={() => toggleDropdownMenu(1)} className="flex justify-center items-center gap-x-2  focus:outline-none">
+          <img src={profileData.imageUrl || 'https://via.placeholder.com/150'} alt="Profile" title="Account" className=" relative w-11 h-11 border border-gray-400 rounded-full object-cover"/>
+        
+          {/* <FaChevronDown className="absolute z-50 right-7 bottom-1 bg-white rounded-full text-sm"/> */}
         </button>
 
         {/* Profile Dropdown */}

@@ -5,6 +5,7 @@ import LogoContext from '../pages/LogoContext';
 import { IoMdSkipBackward } from "react-icons/io";
 import { FaPrint } from "react-icons/fa";
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 import MarivelesLogo from '../images/Mariveles-Logo.png'
 import BarangayLogo from '../images/Logo.png'
@@ -18,9 +19,10 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function CertificateOfIndigency() {
 
-    const { id } = useParams(); // Get the ID from the URL
+    const { id } = useParams();
     const [requestDetails, setRequestDetails] = useState(null);
     const [punongBarangay, setPunongBarangay] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchRequestDetails = async () => {
@@ -68,11 +70,10 @@ function CertificateOfIndigency() {
                     <button onClick={handlePrint} className='flex items-center gap-x-2 border border-Blue text-Blue rounded-full py-1 px-3 transition-all ease-in duration-400 hover:bg-Blue hover:text-White'>
                         <FaPrint /> Print Certificate
                     </button>
-                    <NavLink to={'/certificate-of-indigency'}>
-                        <button className='flex items-center border border-red-400 p-1 px-2 transition-all ease-in duration-400 rounded-full text-Red hover:bg-red-500 hover:text-White'>
-                            <IoArrowBackOutline /> Back
-                        </button>
-                    </NavLink>
+
+                    <button onClick={() => navigate(-1)} className='flex items-center border border-red-400 p-1 px-2 transition-all ease-in duration-400 rounded-full text-Red hover:bg-red-500 hover:text-White'>
+                        <IoArrowBackOutline /> Back
+                    </button>
                 </header>
             </div>
 

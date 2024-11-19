@@ -4,6 +4,7 @@ import axios from 'axios';
 import DefaultProfile from '../images/defaultProfile.png';
 import MarivelesLogo from '../images/Mariveles-Logo.png';
 import BarangayLogo from '../images/Logo.png';
+import { useNavigate } from 'react-router-dom';
 
 import { FaLocationDot } from "react-icons/fa6";
 import { FaFacebookF, FaPhoneAlt } from "react-icons/fa";
@@ -17,6 +18,7 @@ function BarangayClearanceDetails() {
   const [resident, setResident] = useState(null);
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchResidentDetails = async () => {
@@ -65,11 +67,9 @@ function BarangayClearanceDetails() {
               Print Report
             </button>
 
-            <NavLink to={'/barangay-clearance'}>
-              <button className='border border-red-500 text-red-500 rounded-full py-1 px-3 transition-all ease-in duration-400 hover:bg-red-500 hover:text-white'>
-                Back
-              </button>
-            </NavLink>
+            <button onClick={() => navigate(-1)} className='border border-red-500 text-red-500 rounded-full py-1 px-3 transition-all ease-in duration-400 hover:bg-red-500 hover:text-white'>
+              Back
+            </button>
           </div>
         </header>
       </div>

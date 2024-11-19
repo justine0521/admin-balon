@@ -45,8 +45,14 @@ const TransactionHistory = () => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-screen">
-                <span className="text-lg font-semibold">Loading...</span>
+            <div className="flex justify-center items-center h-screen">
+                <div className="loading">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
         );
     }
@@ -67,10 +73,10 @@ const TransactionHistory = () => {
     );
 
     return (
-        <section className='w-4/5 h-screen mt-14 p-7 ml-56'>
-            <div className='shadow-md rounded-lg border border-gray-100'>
-                <div className='flex justify-between items-center py-4 px-5'>
-                    <h1 className="text-lg">Transaction History</h1>
+        <section className=''>
+            <div className=''>
+                <div className='flex justify-between items-center py-3 '>
+                    <h1 className="text-lg font-semibold whitespace-nowrap">Transaction History</h1>
 
                     <form>
                         <label htmlFor="search">Search: </label>
@@ -90,22 +96,22 @@ const TransactionHistory = () => {
                     </div>
                 ) : (
                     <div className="overflow-x-auto">
-                        <table className="min-w-full bg-white shadow-md">
+                        <table className="min-w-full  shadow-md">
                             <thead className="bg-green-500 text-white">
                                 <tr>
-                                    <th className="py-3 text-center font-semibold">Certificate Type</th>
-                                    <th className="py-3 text-center font-semibold">Requested By</th>
-                                    <th className="py-3 text-center font-semibold">Email</th>
-                                    <th className="py-3 text-center font-semibold">Details</th>
+                                    <th className="py-3 px-4 text-left font-semibold whitespace-nowrap">Certificate Type</th>
+                                    <th className="py-3 px-4 text-left font-semibold whitespace-nowrap">Requested By</th>
+                                    <th className="py-3 px-4 text-left font-semibold">Email</th>
+                                    <th className="py-3 px-4 text-left font-semibold">Details</th>
                                 </tr>
                             </thead>
                             <tbody className="text-gray-700">
                                 {filteredCertificates.map((certificate) => (
-                                    <tr key={certificate._id} className="hover:bg-gray-50 transition-colors">
+                                    <tr key={certificate._id} className="hover:bg-white transition-colors">
                                         <td className="py-4 px-4 border-b text-sm">{certificate.certificateType}</td>
-                                        <td className="py-4 px-4 border-b text-sm">{certificate.fullName}</td>
-                                        <td className="py-4 px-4 border-b text-sm">{certificate.email}</td>
-                                        <td className="py-4 px-4 border-b text-sm">
+                                        <td className="py-4 border-b text-sm">{certificate.fullName}</td>
+                                        <td className="py-4 border-b text-sm">{certificate.email}</td>
+                                        <td className="py-4 border-b text-sm">
                                             <button
                                                 onClick={() => handleViewDetails(certificate)}
                                                 className="text-green-600 font-semibold flex items-center gap-1">
