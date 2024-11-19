@@ -4,12 +4,13 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 
 import { FaFileAlt, FaRegEye } from "react-icons/fa";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import { IoMdDoneAll, IoIosArrowDropdown } from "react-icons/io";
 import { MdDeleteOutline } from "react-icons/md";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-function CertificateIndigency() {
+function CertificateIndigency({ setActiveCertificate }) {
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [requests, setRequests] = useState([]);
@@ -58,40 +59,40 @@ function CertificateIndigency() {
         navigate(`/view-details-indigency/${requestId}`);
         break;
       case 'Completed':
-          try {
-              const completedRequest = requests.find(request => request._id === requestId);
-              if (!completedRequest) {
-                  throw new Error("Request not found.");
-              }
-
-              const requestData = {
-                  ...completedRequest,
-                  type: 'indigency',
-              };
-
-              await axios.post(`${API_BASE_URL}/api/completed-certificates`, requestData);
-              await axios.delete(`${API_BASE_URL}/api/indigency/${requestId}`);
-
-              setRequests(prevRequests => prevRequests.filter(request => request._id !== requestId));
-
-              Swal.fire({
-                  position: "center",
-                  icon: "success",
-                  title: "Request marked as completed!",
-                  showConfirmButton: false,
-                  timer: 1500
-              });
-          } catch (error) {
-              console.error('Error completing request:', error.response ? error.response.data : error.message);
-              Swal.fire({
-                  position: "center",
-                  icon: "error",
-                  title: "Failed to mark as completed",
-                  showConfirmButton: false,
-                  timer: 1500
-              });
+        try {
+          const completedRequest = requests.find(request => request._id === requestId);
+          if (!completedRequest) {
+            throw new Error("Request not found.");
           }
-          break;
+
+          const requestData = {
+            ...completedRequest,
+            type: 'indigency',
+          };
+
+          await axios.post(`${API_BASE_URL}/api/completed-certificates`, requestData);
+          await axios.delete(`${API_BASE_URL}/api/indigency/${requestId}`);
+
+          setRequests(prevRequests => prevRequests.filter(request => request._id !== requestId));
+
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Request marked as completed!",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        } catch (error) {
+          console.error('Error completing request:', error.response ? error.response.data : error.message);
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Failed to mark as completed",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
+        break;
       case 'Delete':
         try {
           await axios.delete(`${API_BASE_URL}/api/indigency/${requestId}`);
@@ -120,40 +121,34 @@ function CertificateIndigency() {
     }
     setDropdown(null);
   };
-  
+
   const toggleDropdown = (index) => {
     setDropdown(dropdown === index ? null : index); 
   };
 
-  // Search filter function
   const filteredRequests = requests.filter((request) =>
-    request.fullName.toLowerCase().includes(searchTerm.toLowerCase()) // Filter by fullName
+    request.fullName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const totalFilteredPages = Math.ceil(filteredRequests.length / entriesToShow);
-  const currentFilteredRequests = filteredRequests.slice(startIndex, endIndex); // Slice filtered requests for pagination
+  const currentFilteredRequests = filteredRequests.slice(startIndex, endIndex); 
 
   return (
-    <div className="w-4/5 h-screen mt-14 left-56 p-7 absolute">
-      <div className="bg-White">
-        <div className="flex justify-between items-center h-16 bg-White px-5 w-full border border-b-gray-300">
+    <div>
+      <div className="text-sm">
+        <div className="flex justify-between items-center h-16 w-full border-b-2 border-gray-400">
           <p className='text-xl'>Certificate of Indigency Issuance</p>
-          <div className='flex justify-center items-center gap-x-2'>
-            <NavLink to={'/certificates'}>
-              {({ isActive }) => (
-                <p className={`${isActive ? 'text-gray-300' : 'text-Green'}`}>Certificates</p>
-              )}
-            </NavLink>
+          
+          <div className='flex justify-center items-center gap-x-2 text-sm'>
+            <button onClick={() => setActiveCertificate(null)} className="text-green-600 hover:underline">
+              Certificates
+            </button>
             /
-            <NavLink to={'/certificate-of-indigency'}>
-              {({ isActive }) => (
-                <p className={`${isActive ? 'text-gray-300' : 'text-Green'}`}>Certificate of Indigency</p>
-              )}
-            </NavLink>
+            <p className='text-gray-400 cursor-pointer'>Certificate of Indigency</p>
           </div>
         </div>
 
-        <div className="flex justify-between items-center p-5">
+        <div className="flex justify-between items-center py-3">
           <div className="flex items-center gap-x-2">
             <label htmlFor="entries">Show Entries:</label>
             <select id="entries" value={entriesToShow} onChange={handleEntriesChange} className="border border-gray-300 rounded-md px-3 py-1">
@@ -166,74 +161,75 @@ function CertificateIndigency() {
 
           <form>
             <label htmlFor="search">Search: </label>
-            <input type="text" name="search" id="search" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="border border-gray-300 rounded-md px-3 py-1 focus:outline-none focus:border-green" />
+            <input type="text" name="search" id="search" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:border-green" />
           </form>
         </div>
 
-        <div className='overflow-x-auto'>
-          <table className="w-full border-collapse">
-            <thead className="bg-Green">
-              <tr>
-              <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300"></th>
-                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Name</th>
-                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Address</th>
-                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Civil Status</th>
+        {filteredRequests.length === 0 ? (
+          <div className="text-center py-5 text-gray-500">No one to issue Certificate of Indigency</div>
+        ) : (
+          <>
+            <div>
+              <table className="w-full border-collapse">
+                <thead className="bg-Green">
+                  <tr>
+                    <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300"></th>
+                    <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Name</th>
+                    <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Address</th>
+                    <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Civil Status</th>
+                    <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="text-center divide-y divide-gray-300">
+                  {currentFilteredRequests.map((request, index) => (
+                    <tr key={request._id} className="hover:bg-white">
+                      <td className="py-4 text-sm text-gray-700">{startIndex + index + 1}</td>
+                      <td className="py-4 text-sm">{request.fullName}</td>
+                      <td className="py-3 text-sm">{request.address}</td>
+                      <td className="py-3 text-sm">{request.civilStatus}</td>
+                      <td className="relative">
+                        <button onClick={() => toggleDropdown(index)} className='text-xl   rounded-full'>
+                          {dropdown === index ? <FaAngleUp /> : <FaAngleDown />}
+                        </button>
 
-                <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">Action</th>
-              </tr>
-            </thead>
-            <tbody className="text-center bg-white divide-y divide-gray-300">
-              {currentFilteredRequests.map((request, index) => (
-                <tr key={request._id} className="hover:bg-gray-100">
-                  <td className="px-6 py-4 text-sm text-gray-700">{startIndex + index + 1}</td>
-                  <td className="px-6 py-4 text-sm">{request.fullName}</td>
-                  <td className="px-6 py-3 text-sm">{request.address}</td>
-                  <td className="px-6 py-3 text-sm">{request.civilStatus}</td>
-                  <td className="relative">
-                    <button onClick={() => toggleDropdown(index)} className='text-2xl bg-green-500 text-white rounded-full'>
-                      <IoIosArrowDropdown />
-                    </button>
+                        {dropdown === index && (
+                          <div className="absolute right-0 mt-2 w-52 bg-white border border-gray-300 rounded-md shadow-lg z-10">
+                            <button onClick={() => handleDropdown('generate-Certificate', request._id)} className="flex items-center gap-3 px-4 py-2 text-md text-Blue hover:bg-gray-100 w-full">
+                              <FaFileAlt /> Generate Certificate
+                            </button>
+                            <button onClick={() => handleDropdown('View-Details', request._id)} className="flex items-center gap-3 px-4 py-2 text-md text-yellow-500 hover:bg-gray-100 w-full">
+                              <FaRegEye /> View Details
+                            </button>
+                            <button onClick={() => handleDropdown('Completed', request._id)} className="flex items-center gap-3 px-4 py-2 text-md text-Green hover:bg-gray-100 w-full">
+                              <IoMdDoneAll /> Completed
+                            </button>
+                            <button onClick={() => handleDropdown('Delete', request._id)} className="flex items-center gap-3 px-4 py-2 text-md text-Red hover:bg-gray-100 w-full">
+                              <MdDeleteOutline /> Delete
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-                    {dropdown === index && (
-                      <div className="absolute -top-4 right-10 mt-14 w-52 bg-white border border-gray-300 rounded-md shadow-lg z-10">
-                        <button onClick={() => handleDropdown('generate-Certificate', request._id)} className="flex items-center gap-3 px-4 py-2 text-md text-Blue hover:bg-gray-100 w-full">
-                          <FaFileAlt /> Generate Certificate
-                        </button>
-                        <button onClick={() => handleDropdown('View-Details', request._id)} className="flex items-center gap-3 px-4 py-2 text-md text-yellow-500 hover:bg-gray-100 w-full">
-                          <FaRegEye /> View Details
-                        </button>
-                        <button onClick={() => handleDropdown('Completed', request._id)} className="flex items-center gap-3 px-4 py-2 text-md text-Green hover:bg-gray-100 w-full">
-                          <IoMdDoneAll /> Completed
-                        </button>
-                        <button onClick={() => handleDropdown('Delete', request._id)} className="flex items-center gap-3 px-4 py-2 text-md text-Red hover:bg-gray-100 w-full">
-                          <MdDeleteOutline /> Delete
-                        </button>
-                      </div>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            {totalFilteredPages > 1 && (
+              <div className="flex justify-between items-center p-5">
+                <button onClick={handlePreviousPage} className={`p-2 border border-Green rounded-md ${currentPage === 1 && 'opacity-50 cursor-not-allowed'}`} disabled={currentPage === 1}>
+                  Previous
+                </button>
 
-          <div className="flex justify-between items-center p-5">
-            <button
-              onClick={handlePreviousPage}
-              className={`p-2 border border-Green rounded-md ${currentPage === 1 && 'opacity-50 cursor-not-allowed'}`}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-            <span>Page {currentPage} of {totalPages}</span>
-            <button
-              onClick={handleNextPage}
-              className={`p-2 border border-Green rounded-md ${currentPage === totalPages && 'opacity-50 cursor-not-allowed'}`}
-              disabled={currentPage === totalFilteredPages}
-            >
-              Next
-            </button>
-          </div>
+                <span className='text-sm'>Page {currentPage} of {totalPages}</span>
+
+                <button onClick={handleNextPage} className={`p-2 border border-Green rounded-md ${currentPage === totalPages && 'opacity-50 cursor-not-allowed'}`} disabled={currentPage === totalPages}>
+                  Next
+                </button>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

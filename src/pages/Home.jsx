@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import { FaCertificate } from "react-icons/fa6";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -10,6 +11,7 @@ function Home() {
     const [error, setError] = useState(null);
     const [currentCounts, setCurrentCounts] = useState({});
     const [totalCounts, setTotalCounts] = useState({});
+    const navigate = useNavigate();
 
     const CERTIFICATE_TYPES = [
         'Barangay Clearance',
@@ -24,26 +26,32 @@ function Home() {
     ];
 
     useEffect(() => {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const otpVerified = localStorage.getItem('otpVerified') === 'true';
+
+        if (!isLoggedIn) {
+            navigate('/login');
+        } 
+        else if (!otpVerified) {
+            navigate('/otp-verification');
+        }
+    }, [navigate]);
+
+    useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(`${API_BASE_URL}/api/all-certificates`);
                 const data = response.data;
 
-                console.log('All Certificates Data:', data);
-
                 const calculateCounts = (data) => {
                     return CERTIFICATE_TYPES.reduce((acc, type) => {
                         const count = data.filter(cert => cert.certificateType === type).length;
-                        console.log(`Count for ${type}:`, count);
                         acc[type] = count;
                         return acc;
                     }, {});
                 };
 
                 const currentCounts = calculateCounts(data); 
-
-                console.log('Current Counts:', currentCounts);
-                
                 const totalCounts = currentCounts; 
 
                 setCurrentCounts(currentCounts);

@@ -16,7 +16,7 @@
     "aws-sdk": "^2.1687.0",
     "axios": "^1.7.2",
     "body-parser": "^1.20.2",
-    "chart.js": "^4.4.3",
+    "chart.js": "^4.4.6",
     "cors": "^2.8.5",
     "date-fns": "^3.6.0",
     "dompurify": "^3.1.6",

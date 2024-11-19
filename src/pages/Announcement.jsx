@@ -118,20 +118,20 @@ function Announcements() {
     }
 
     return (
-        <section className="w-4/5 h-full mt-14 left-56 p-7 absolute hide-scrollbar">
-            <div className="bg-white rounded-xl shadow-md">
-                <div className="flex justify-between items-center h-16 bg-gray-100 px-5 w-full border-b-2 border-black rounded-t-xl">
+        <section className="hide-scrollbar">
+            <div className="">
+                <div className="flex justify-between items-center h-14 bg-gray-100 px-3 w-full border-b-2 border-gray-400 rounded-t-xl">
                     <p className="text-2xl">Announcements</p>
                     <div className="flex items-center gap-5">
                         <button
                             onClick={openModal}
-                            className="flex items-center gap-x-2 bg-green-500 text-white rounded-md px-3 py-1 hover:bg-green-600"
+                            className="flex items-center gap-x-2 bg-Green text-white rounded-md px-3 py-1 hover:bg-green-500"
                         >
-                            <FaPlus /> Add Announcement
+                            <FaPlus />Announcement
                         </button>
-                        <button className="flex items-center gap-x-2 bg-blue-500 text-white rounded-md px-3 py-1 hover:bg-blue-600">
+                        {/* <button className="flex items-center gap-x-2 bg-blue-500 text-white rounded-md px-3 py-1 hover:bg-blue-600">
                             <FaFileExport /> Export
-                        </button>
+                        </button> */}
                     </div>
                 </div>
 
@@ -181,83 +181,91 @@ function Announcements() {
                     </p>
                 )}
 
-                <div className="overflow-x-auto">
-                    <table className="w-full border-collapse">
-                        <thead className="bg-green-500 text-white">
-                            <tr>
-                                <th className="px-4 py-2 text-xs font-medium uppercase tracking-wider border border-gray-300">Image</th>
-                                <th className="px-4 py-2 text-xs font-medium uppercase tracking-wider border border-gray-300">Title</th>
-                                <th className="px-4 py-2 text-xs font-medium uppercase tracking-wider border border-gray-300">Description</th>
-                                <th className="px-4 py-2 text-xs font-medium uppercase tracking-wider border border-gray-300">Date Added</th>
-                                <th className="px-4 py-2 text-xs font-medium uppercase tracking-wider border border-gray-300">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody className="text-center bg-white divide-y divide-gray-300">
-                            {Array.isArray(filteredAnnouncements) &&
-                                filteredAnnouncements.slice(startIndex, endIndex).map((announcement, index) => (
-                                    <tr key={index} className="hover:bg-gray-100">
-                                        <td className="px-4 py-2 flex justify-center items-center">
-                                            <img
-                                                src={announcement.imageUrl || "https://via.placeholder.com/50"}
-                                                alt="Announcement"
-                                                className="w-12 h-12 rounded-full object-cover"
-                                            />
-                                        </td>
-                                        <td className="px-4 py-2">{announcement.title}</td>
-                                        <td className="px-4 py-2">
-                                            {stripHtmlTags(announcement.description).length > 100
-                                                ? `${stripHtmlTags(announcement.description).substring(0, 100)}...`
-                                                : stripHtmlTags(announcement.description)}
-                                        </td>
-                                        <td className="px-4 py-2">{new Date(announcement.createdAt).toLocaleDateString()}</td>
-                                        <td className="px-4 py-2 space-x-2">
-                                            <button
-                                                onClick={() => openEditModal(announcement)}
-                                                title="Edit"
-                                                className="text-xl text-blue-500 hover:text-blue-700"
-                                            >
-                                                <FaEdit />
-                                            </button>
-                                            <button
-                                                onClick={() => {
-                                                    setSelectedAnnouncement(announcement);
-                                                    setIsdeleteModal(true);
-                                                }}
-                                                title="Delete"
-                                                className="text-xl text-red-500 hover:text-red-700"
-                                            >
-                                                <MdDelete />
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                        </tbody>
-                    </table>
+{filteredAnnouncements.length === 0 ? (
+    <p className="text-center text-gray-500 py-10">No announcements available.</p>
+) : (
+    <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+            <thead className="bg-Green text-white">
+                <tr>
+                    <th className="px-4 py-3 text-xs font-medium uppercase tracking-wider border border-gray-300">Image</th>
+                    <th className="px-4 py-2 text-xs font-medium uppercase tracking-wider border border-gray-300">Title</th>
+                    <th className="px-4 py-2 text-xs font-medium uppercase tracking-wider border border-gray-300">Description</th>
+                    <th className="py-2 text-xs font-medium uppercase tracking-wider border border-gray-300">Date Added</th>
+                    <th className="px-4 py-2 text-xs font-medium uppercase tracking-wider border border-gray-300">Action</th>
+                </tr>
+            </thead>
+            <tbody className="text-center divide-y divide-gray-300">
+                {Array.isArray(filteredAnnouncements) &&
+                    filteredAnnouncements.slice(startIndex, endIndex).map((announcement, index) => (
+                        <tr key={index} className="hover:bg-white">
+                            <td className="px-4 py-2 flex justify-center items-center">
+                                <img
+                                    src={announcement.imageUrl || "https://via.placeholder.com/50"}
+                                    alt="Announcement"
+                                    className="w-14 h-12 rounded-full object-cover"
+                                />
+                            </td>
+                            <td className="px-4 py-2">{announcement.title}</td>
+                            <td className="px-4 py-2">
+                                {stripHtmlTags(announcement.description).length > 100
+                                    ? `${stripHtmlTags(announcement.description).substring(0, 100)}...`
+                                    : stripHtmlTags(announcement.description)}
+                            </td>
+                            <td className="px-4 py-2">{new Date(announcement.createdAt).toLocaleDateString()}</td>
+                            <td className="px-4 py-2 space-x-2">
+                                <button
+                                    onClick={() => openEditModal(announcement)}
+                                    title="Edit"
+                                    className="text-xl text-blue-500 hover:text-blue-700"
+                                >
+                                    <FaEdit />
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setSelectedAnnouncement(announcement);
+                                        setIsdeleteModal(true);
+                                    }}
+                                    title="Delete"
+                                    className="text-xl text-red-500 hover:text-red-700"
+                                >
+                                    <MdDelete />
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+            </tbody>
+        </table>
+    </div>
+)}
+            </div>
+
+
+            {filteredAnnouncements.length > 10 && (
+                <div className="flex justify-between items-center p-5">
+                    <button
+                        onClick={handlePreviousPage}
+                        className={`p-2 border border-green rounded-md ${
+                            currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
+                        disabled={currentPage === 1}
+                    >
+                        Previous
+                    </button>
+                    <span>
+                        Page {currentPage} of {totalPages}
+                    </span>
+                    <button
+                        onClick={handleNextPage}
+                        className={`p-2 border border-green rounded-md ${
+                            currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
+                        disabled={currentPage === totalPages}
+                    >
+                        Next
+                    </button>
                 </div>
-            </div>
-
-
-            <div className="flex justify-between items-center p-5">
-                <button
-                    onClick={handlePreviousPage}
-                    className={`p-2 border border-Green rounded-md ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
-                        }`}
-                    disabled={currentPage === 1}
-                >
-                    Previous
-                </button>
-                <span>
-                    Page {currentPage} of {totalPages}
-                </span>
-                <button
-                    onClick={handleNextPage}
-                    className={`p-2 border border-Green rounded-md ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
-                        }`}
-                    disabled={currentPage === totalPages}
-                >
-                    Next
-                </button>
-            </div>
+            )}
 
             <AnnouncementModal isOpen={isModalOpen} onClose={closeModal} />
             {isEditModalOpen && selectedAnnouncement &&

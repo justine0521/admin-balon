@@ -66,7 +66,7 @@ function Profile() {
                 };
                 setProfile(profileData);
                 setOriginalProfile(profileData);
-                setImageUrl(response.data.imageUrl || Icon); // Set image URL from the API response
+                setImageUrl(response.data.imageUrl || Icon); 
             } catch (error) {
                 console.error('Error fetching profile:', error);
             }
@@ -87,7 +87,6 @@ function Profile() {
         }
     }, [updateInfoModal, updatePasswordModal, updateImageModal, timer]);
 
-    // Handle image upload
     const handleImageChange = async (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -227,97 +226,98 @@ function Profile() {
     };
 
     return (
-        <section className="w-4/5 h-fit mt-14 left-56 p-7 absolute">
-            <p className='text-3xl'>Profile</p>
+        <section className="px-1 bg-gray-100 ">
+            <p className="text-3xl font-semibold text-gray-800">Profile</p>
 
-            <div className='flex flex-w justify-between gap-5 mt-5'>
-                <div className='bg-white h-72 w-56 px-5 flex flex-col justify-center items-center border text-center border-gray-300 rounded-2xl'>
-                    <img src={imageUrl} alt="Profile Preview" style={{ width: '100px', height: '100px', marginTop: '10px', border: '1px solid #ccc', borderRadius: '100px', objectFit: 'cover', }} />
-                    <p className='text-2xl'>{profile.fullName}</p>
-                    <p className='text-sm mt-2'>{profile.email}</p>
+            <div className="flex flex-wrap justify-between gap-5 mt-5">
+                <div className="bg-white shadow-md w-full sm:w-64 max-w-full h-fit p-6 flex flex-col items-center text-center border rounded-2xl">
+                    <img src={imageUrl} alt="Profile Preview" className="w-24 h-24 border-2 border-gray-300 rounded-full object-cover"/>
+                   
+                    <p className="text-xl font-semibold mt-4 text-gray-800">{profile.fullName}</p>
+                    <p className="text-sm text-gray-500 mt-1">{profile.email}</p>
 
-                    <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
+                    <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} className="hidden"/>
 
-                    <button onClick={handleButtonClick} className='bg-Green w-full text-White p-2 py-1 mt-5 rounded-md'>
+                    <button onClick={handleButtonClick} className="mt-5 bg-green-500 text-white py-1.5 px-4 rounded-md hover:bg-green-600 transition duration-200">
                         Change Profile
                     </button>
                 </div>
 
-                <div className='bg-white h-fit w-3/4 border border-gray-300 rounded'>
-                    <nav className='border-b text-xl space-x-5 p-3'>
-                        <button className={`p-1 ${activeTab === 'profileInfo' ? 'border-b-2 border-b-Green text-Green' : ''} text-lg`} onClick={() => setActiveTab('profileInfo')}>
+                <div className="bg-white shadow-md flex-grow p-6 border rounded-2xl">
+                    <nav className="border-b mb-4 flex gap-3 text-lg font-medium">
+                        <button className={`pb-2 ${activeTab === 'profileInfo' ? 'border-b-2 border-green-500 text-green-500' : 'text-gray-600 hover:text-green-500' }`} onClick={() => setActiveTab('profileInfo')}>
                             Profile Info
                         </button>
 
-                        <button className={`p-1 ${activeTab === 'accountSecurity' ? 'border-b-2 border-b-Green text-Green' : ''} text-lg`} onClick={() => setActiveTab('accountSecurity')}>
+                        <button className={`pb-2 ${activeTab === 'accountSecurity' ? 'border-b-2 border-green-500 text-green-500' : 'text-gray-600 hover:text-green-500' }`} onClick={() => setActiveTab('accountSecurity')}>
                             Account Security
                         </button>
                     </nav>
 
                     {activeTab === 'profileInfo' && (
-                        <div className='p-4'>
+                        <div>
                             <label className='block'>
-                                <p>Full Name:</p>
-                                <input type='text' name='fullName' value={profile.fullName} onChange={handleInputChange} disabled={!isEditable} className='border p-2 w-full mt-1 outline-green-500' />
+                                <p className='font-medium text-gray-800'>Full Name:</p>
+                                <input type='text' name='fullName' value={profile.fullName} onChange={handleInputChange} disabled={!isEditable} className='border p-2 w-full mt-1 outline-green-500 rounded-lg'/>
                             </label>
 
                             <label className='block mt-4'>
-                                <p>Email:</p>
-                                <input type='email' name='email' value={profile.email} onChange={handleInputChange} disabled={!isEditable} className='border p-2 w-full mt-1 outline-green-500' />
+                                <p className='font-medium text-gray-800'>Email:</p>
+                                <input type='email' name='email' value={profile.email} onChange={handleInputChange} disabled={!isEditable} className='border p-2 w-full mt-1 outline-green-500 rounded-lg'/>
                             </label>
 
                             <label className='block mt-4'>
-                                <p>Position:</p>
-                                <input type='text' name='position' value={profile.position} onChange={handleInputChange} disabled className='border p-2 w-full mt-1 outline-green-500' />
+                                <p className='font-medium text-gray-800'>Position:</p>
+                                <input type='text' name='position' value={profile.position} onChange={handleInputChange} disabled className='border p-2 w-full mt-1 outline-green-500 rounded-lg'/>
                             </label>
 
                             <label className='block mt-4'>
-                                <p>Account Created:</p>
-                                <input type='text' value={formatDate(profile.createdAt)} disabled className='border p-2 w-full mt-1' />
+                                <p className='font-medium text-gray-800'>Account Created:</p>
+                                <input type='text' value={formatDate(profile.createdAt)} disabled className='border p-2 w-full mt-1 rounded-lg'/>
                             </label>
 
                             {!isEditable ? (
                                 <div className='flex justify-end'>
-                                    <button onClick={handleEditClick} className='bg-Green text-White p-2 mt-4 flex items-center gap-1 rounded-md'>
-                                        <MdEdit /> <p>Edit</p>
-                                    </button>
+                                  <button onClick={handleEditClick} className='bg-green-500 hover:bg-green-600 transition duration-200 text-White p-1.5 px-3 mt-4 flex items-center gap-1 rounded-md'>
+                                    <MdEdit /> <p>Edit</p>
+                                  </button>
                                 </div>
                             ) : (
                                 <div className='flex justify-end space-x-3'>
-                                    <button onClick={handleUpdateClick} className='bg-Green text-White p-2 mt-4 rounded-md'>Save</button>
-                                    <button onClick={handleCancelClick} className='bg-red-500 text-White p-2 mt-4 rounded-md'>Cancel</button>
+                                  <button onClick={handleUpdateClick} className='bg-green-500 hover:bg-green-600 transition duration-200 text-White p-1.5 px-5 mt-4 rounded-md'>Save</button>
+                                  <button onClick={handleCancelClick} className='bg-red-500 hover:bg-red-600 transition duration-200 text-White p-1.5 px-5 mt-4 rounded-md'>Cancel</button>
                                 </div>
                             )}
                         </div>
                     )}
 
                     {activeTab === 'accountSecurity' && (
-                        <div className='p-4'>
+                        <div>
                             <label className='block'>
-                                <p>Current Password:</p>
+                                <p className='font-medium text-gray-800'>Current Password:</p>
 
-                                <input type="password" id="currentPassword" name="currentPassword" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} required className={`mt-1 block w-full px-3 py-2 border ${passwordErrors.currentPassword ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:border-green-500 sm:text-sm`} />
+                                <input type="password" id="currentPassword" name="currentPassword" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} required className={`mt-1 block w-full px-3 py-2 border rounded-lg ${passwordErrors.currentPassword ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:border-green-500 sm:text-sm`}/>
                                 {passwordErrors.currentPassword && <p className="text-red-500 text-xs mt-1">{passwordErrors.currentPassword}</p>}
                             </label>
 
 
                             <label className='block mt-4'>
-                                <p>New Password:</p>
+                                <p className='font-medium text-gray-800'>New Password:</p>
 
-                                <input type='password' value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className={`mt-1 block w-full px-3 py-2 border ${passwordErrors.newPassword ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:border-green-500 sm:text-sm`} />
-
+                                <input type='password' value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className={`mt-1 block w-full px-3 py-2 border ${passwordErrors.newPassword ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:border-green-500 sm:text-sm`} />
+                                
                                 {passwordErrors.newPassword && <p className="text-red-500">{passwordErrors.newPassword}</p>}
                             </label>
 
                             <label className='block mt-4'>
-                                <p>Confirm New Password:</p>
+                                <p className='font-medium text-gray-800'>Confirm New Password:</p>
 
-                                <input type='password' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className={`mt-1 block w-full px-3 py-2 border ${passwordErrors.confirmPassword ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:border-green-500 sm:text-sm`} />
+                                <input type='password' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className={`mt-1 block w-full px-3 py-2 border ${passwordErrors.confirmPassword ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:border-green-500 sm:text-sm`} />
                                 {passwordErrors.confirmPassword && <p className="text-red-500">{passwordErrors.confirmPassword}</p>}
                             </label>
 
                             <div className='flex justify-end space-x-3'>
-                                <button onClick={handlePasswordChange} className='bg-Green text-White p-2 mt-4 rounded-md'>Update Password</button>
+                                <button onClick={handlePasswordChange} className='bg-green-500 hover:bg-green-600 transition duration-200 text-White p-1.5 px-3 mt-4 rounded-md'>Update Password</button>
                             </div>
                         </div>
                     )}
@@ -325,29 +325,21 @@ function Profile() {
             </div>
 
             {updateImageModal && (
-                <div className="fixed right-5 top-5 flex items-center justify-center z-50">
-                    <div className="bg-green-100 p-5 rounded shadow-lg w-56">
-                        <p className="text-center text-gray-600 mb-4">Image Updated</p>
-                        <div ref={progressBarRef} className="h-1 bg-green-500"></div>
-                    </div>
+                <div className="fixed top-5 right-5 bg-green-100 text-green-800 p-4 rounded-md shadow-lg z-20">
+                    <p>Profile Picture Updated</p>
+                    <div ref={progressBarRef} className="h-1 bg-green-500 mt-2"></div>
                 </div>
             )}
-
             {updateInfoModal && (
-                <div className="fixed right-5 top-5 flex items-center justify-center z-50">
-                    <div className="bg-green-100 p-5 rounded shadow-lg w-56">
-                        <p className="text-center text-gray-600 mb-4">Account Updated</p>
-                        <div ref={progressBarRef} className="h-1 bg-green-500"></div>
-                    </div>
+                <div className="fixed top-5 right-5 bg-green-100 text-green-800 p-4 rounded-md shadow-lg z-20">
+                    <p>Account Updated</p>
+                    <div ref={progressBarRef} className="h-1 bg-green-500 mt-2"></div>
                 </div>
             )}
-
             {updatePasswordModal && (
-                <div className="fixed right-5 top-5 flex items-center justify-center z-50">
-                    <div className="bg-green-100 p-5 rounded shadow-lg w-56">
-                        <p className="text-center text-gray-600 mb-4">Password Updated</p>
-                        <div ref={progressBarRef} className="h-1 bg-green-500"></div>
-                    </div>
+                <div className="fixed top-5 right-5 bg-green-100 text-green-800 p-4 rounded-md shadow-lg z-20">
+                    <p>Password Updated</p>
+                    <div ref={progressBarRef} className="h-1 bg-green-500 mt-2"></div>
                 </div>
             )}
         </section>
