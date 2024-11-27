@@ -26,7 +26,13 @@ import "../App.css";
 
 function NewHome() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [activeSection, setActiveSection] = useState("Dashboard");
+  const [activeSection, setActiveSection] = useState(() => {
+    return localStorage.getItem("activeSection") || "Dashboard";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("activeSection", activeSection);
+  }, [activeSection]);
 
   useEffect(() => {
     const handleResize = () => {

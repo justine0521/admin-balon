@@ -10,7 +10,7 @@ import { MdDeleteOutline } from "react-icons/md";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-function CertificateSoloParent({ setActiveCertificate }) {
+function CertificateSoloParent() {
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [requests, setRequests] = useState([]);
@@ -137,11 +137,16 @@ function CertificateSoloParent({ setActiveCertificate }) {
 
   // Search filter function
   const filteredRequests = requests.filter((request) =>
-    request.parent.toLowerCase().includes(searchTerm.toLowerCase()) // Filter by fullName
+    request.parent.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const totalFilteredPages = Math.ceil(filteredRequests.length / entriesToShow);
   const currentFilteredRequests = filteredRequests.slice(startIndex, endIndex); 
+
+  const handleBack = () => {
+    localStorage.setItem("activeSection", "Certificates");
+    navigate('/Certificates');
+  };
 
   return (
     <div className="">
@@ -150,7 +155,7 @@ function CertificateSoloParent({ setActiveCertificate }) {
           <p className='text-xl'>Certificate for Solo Parent Issuance</p>
           
           <div className='flex justify-center items-center gap-x-2 text-sm'>
-            <button onClick={() => setActiveCertificate(null)} className="text-green-600 hover:underline">
+            <button onClick={handleBack} className="text-green-600 hover:underline">
               Certificates
             </button>
             /

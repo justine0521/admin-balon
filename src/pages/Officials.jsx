@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import OfficialsModal from "../Modal/OfficialsModal";
 import EditOfficialModal from "../Modal/EditOfficialModal";
 import "../App.css";
+import axios from "axios";
 
 import { FaPlus, FaEdit, FaFileExport } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { IoWarningOutline } from "react-icons/io5";
-import axios from "axios";
+import { IoIosStar } from "react-icons/io";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -186,7 +187,7 @@ function Officials() {
                     Picture
                   </th>
                   <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">
-                    Full Name
+                    Name
                   </th>
                   <th className="px-6 py-3 text-xs font-medium text-White uppercase tracking-wider border-l border-r border-gray-300">
                     Position
@@ -269,7 +270,7 @@ function Officials() {
       )}
 
       {deleteModal && (
-        <div className="fixed z-10 inset-0 overflow-y-auto">
+        <div className="fixed z-50 inset-0 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen">
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
             <div className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">

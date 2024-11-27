@@ -35,7 +35,7 @@ function Settings() {
 
   return (
     <section className="">
-      <div className="flex items-center gap-x-5 mb-3">
+      <div className="flex items-center gap-x-5">
         <button
           className={`p-1 text-xl ${activeTab === 'barangayInfo' ? 'border-b-2 border-b-Green text-Green' : 'hover:text-green-500'}`}
           onClick={() => setActiveTab('barangayInfo')}

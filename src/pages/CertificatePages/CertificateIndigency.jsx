@@ -10,7 +10,7 @@ import { MdDeleteOutline } from "react-icons/md";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-function CertificateIndigency({ setActiveCertificate }) {
+function CertificateIndigency() {
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [requests, setRequests] = useState([]);
@@ -133,6 +133,11 @@ function CertificateIndigency({ setActiveCertificate }) {
   const totalFilteredPages = Math.ceil(filteredRequests.length / entriesToShow);
   const currentFilteredRequests = filteredRequests.slice(startIndex, endIndex); 
 
+  const handleBack = () => {
+    localStorage.setItem("activeSection", "Certificates");
+    navigate('/Certificates');
+  };
+
   return (
     <div>
       <div className="text-sm">
@@ -140,8 +145,8 @@ function CertificateIndigency({ setActiveCertificate }) {
           <p className='text-xl'>Certificate of Indigency Issuance</p>
           
           <div className='flex justify-center items-center gap-x-2 text-sm'>
-            <button onClick={() => setActiveCertificate(null)} className="text-green-600 hover:underline">
-              Certificates
+            <button onClick={handleBack} className="text-green-600 hover:underline">
+            Certificates
             </button>
             /
             <p className='text-gray-400 cursor-pointer'>Certificate of Indigency</p>

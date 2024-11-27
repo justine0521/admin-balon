@@ -63,6 +63,11 @@ function CertificateOfIndigency() {
     ];
     const currentMonth = monthNames[currentDate.getMonth()];
 
+    const handleBack = () => {
+        localStorage.setItem("activeSection", "CertificateOfIndigency");
+        navigate('/CertificateOfIndigency');
+    };
+
   return (
     <section className='bg-gray-300 fixed top-0 left-0 w-full h-screen z-50 overflow-auto no-scrollbar'>
         <div className="header-container">
@@ -71,7 +76,7 @@ function CertificateOfIndigency() {
                         <FaPrint /> Print Certificate
                     </button>
 
-                    <button onClick={() => navigate(-1)} className='flex items-center border border-red-400 p-1 px-2 transition-all ease-in duration-400 rounded-full text-Red hover:bg-red-500 hover:text-White'>
+                    <button onClick={handleBack} className='flex items-center border border-red-400 p-1 px-2 transition-all ease-in duration-400 rounded-full text-Red hover:bg-red-500 hover:text-White'>
                         <IoArrowBackOutline /> Back
                     </button>
                 </header>

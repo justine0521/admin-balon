@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../App.css";
+
 import BarangayClearance from "./CertificatePages/BarangayClearance";
 import CertificateOfResidency from "./CertificatePages/CertificateResidency";
 import CertificateOfIndigency from "./CertificatePages/CertificateIndigency";

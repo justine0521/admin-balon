@@ -1,10 +1,9 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Profile from "../images/defaultProfile.png";
 import LogoContext from "../pages/LogoContext";
 import { FaRegBell, FaAngleDown, FaAngleUp, FaUserAlt } from "react-icons/fa";
-import { RxHamburgerMenu } from "react-icons/rx";
 import { IoMdSettings } from "react-icons/io";
 import { BiLogOut } from "react-icons/bi";
 import { formatDistanceToNow } from "date-fns";
@@ -25,6 +24,10 @@ function NewHeader({ setActiveSection }) {
     const [dropdownIndex, setDropdownIndex] = useState(null);
     const [barangayName, setBarangayName] = useState('');
     const { imageUrl } = useContext(LogoContext);
+    const [barangayLogo, setBarangayLogo] = useState('');
+
+    const dropdownRef = useRef(null); 
+    const notificationsRef = useRef(null); 
 
     useEffect(() => {
         const fetchBarangayInfo = async () => {
@@ -32,6 +35,7 @@ function NewHeader({ setActiveSection }) {
                 const response = await fetch(`${API_BASE_URL}/api/barangay-info`);
                 if (response.ok) {
                     const data = await response.json();
+                    setBarangayLogo(data.logoUrl || '');
                     setBarangayName(data.name);
                 } else {
                     console.error('Failed to fetch barangay name');
@@ -90,6 +94,23 @@ function NewHeader({ setActiveSection }) {
         fetchProfile();
     }, []);
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setDropdownIndex(null);
+            }
+            if (notificationsRef.current && !notificationsRef.current.contains(event.target)) {
+                setShowNotifications(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
     const toggleNotifications = () => {
         setShowNotifications(!showNotifications);
     };
@@ -139,7 +160,7 @@ function NewHeader({ setActiveSection }) {
         <header className="fixed top-0 w-full h-16 flex items-center justify-between px-4 bg-gray-100 shadow-md z-20">
             <div className="flex items-center gap-10">
                 <div className="flex items-center gap-2">
-                    <img src={imageUrl} alt="Logo" className="h-12 w-12" />
+                    <img src={barangayLogo} alt="Logo" className="h-12 w-12 object-cover" />
                     <p className="text-xl">{barangayName}</p>
                 </div>
             </div>
@@ -147,15 +168,13 @@ function NewHeader({ setActiveSection }) {
             <div className="flex items-center gap-4">
                 <button onClick={toggleNotifications} className="relative focus:outline-none">
                     <FaRegBell className="p-1 h-7 w-6 text-gray-700" />
-
                     {notificationCount > 0 && (
                         <div className="absolute -top-1.5 -right-2 flex items-center justify-center w-5 h-5 rounded-full bg-red-500 text-white text-xs font-bold">
                             {notificationCount}
                         </div>
                     )}
-
                     {showNotifications && (
-                        <div className="absolute -right-16 top-5 mt-2 w-80 bg-white border border-gray-300 rounded-lg shadow-lg z-20 max-h-80 overflow-y-auto custom-scrollbar">
+                        <div ref={notificationsRef} className="absolute -right-16 top-5 mt-2 w-80 bg-white border border-gray-300 rounded-lg shadow-lg z-20 max-h-80 overflow-y-auto custom-scrollbar">
                             <div className="p-4 border-b border-gray-200 bg-green-500">
                                 <p className="text-lg font-semibold text-white text-left">Notifications</p>
                             </div>
@@ -164,7 +183,10 @@ function NewHeader({ setActiveSection }) {
                                 {notifications.length > 0 ? (
                                     notifications.map((notification) => (
                                         <div key={notification._id} className="px-4 py-2 border-b border-gray-200 hover:bg-gray-100 cursor-pointer" onClick={() => handleNotificationClick(notification.certificateType)}>
-                                            <p className="text-sm font-medium text-green-500 text-left">{notification.certificateType}</p>
+                                            <p className="text-sm font-medium text-green-500 text-left">
+                                                {notification.certificateType}
+                                            </p>
+
                                             <p className="text-xs text-gray-500 text-left">{timeAgo(notification.createdAt)}</p>
                                         </div>
                                     ))
@@ -176,9 +198,9 @@ function NewHeader({ setActiveSection }) {
                     )}
                 </button>
 
-                <div className="relative">
+                <div className="relative" ref={dropdownRef}>
                     <div className="flex items-center gap-2">
-                        <img src={profileData.imageUrl || Profile} alt="profile" className="h-12 w-12 rounded-full" />
+                        <img src={profileData.imageUrl || Profile} alt="profile" className="h-12 w-12 rounded-full object-cover" />
                         <div className="text-left hidden sm:block">
                             <p className="font-semibold text-sm">{profileData.fullName}</p>
                             <p className="text-sm text-gray-400">{profileData.position}</p>
@@ -197,10 +219,10 @@ function NewHeader({ setActiveSection }) {
                                     <FaUserAlt className="mr-2" /> Profile
                                 </button>
 
-                                <button onClick={() => handleDropdown("settings")} className="flex items-center px-4 py-2 text-md text-blue-500 hover:bg-gray-100 w-full">
+                                <button onClick={() => handleDropdown("settings")} className="flex items-center px-4 py-2 text-md text-blue-500 hover:bg-gray-100 w-full" >
                                     <IoMdSettings className="mr-2" /> Settings
                                 </button>
-
+                                
                                 <button onClick={() => handleDropdown("logout")} className="flex items-center px-4 py-2 text-md text-red-500 hover:bg-gray-100 w-full">
                                     <BiLogOut className="mr-2" /> Logout
                                 </button>

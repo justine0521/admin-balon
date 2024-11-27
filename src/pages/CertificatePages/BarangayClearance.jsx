@@ -10,12 +10,15 @@ import { MdDeleteOutline } from "react-icons/md";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-function BarangayClearance({ setActiveCertificate }) {
+function BarangayClearance() {
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [requests, setRequests] = useState([]);
   const [dropdown, setDropdown] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRequestID, setSelectedRequestID] = useState(null);
 
   const navigate = useNavigate();
 
@@ -133,6 +136,11 @@ function BarangayClearance({ setActiveCertificate }) {
   const totalFilteredPages = Math.ceil(filteredRequests.length / entriesToShow);
   const currentFilteredRequests = filteredRequests.slice(startIndex, endIndex);
 
+  const handleBack = () => {
+    localStorage.setItem("activeSection", "Certificates");
+    navigate('/Certificates');
+  };
+
   return (
     <div className="">
       <div className="text-sm">
@@ -140,8 +148,8 @@ function BarangayClearance({ setActiveCertificate }) {
           <p className='text-xl'>Barangay Clearance Issuance</p>
           
           <div className='flex justify-center items-center gap-x-2 text-sm'>
-            <button onClick={() => setActiveCertificate(null)} className="flex items-center hover:gap-1 text-green-600 hover:underline">
-              <FaArrowLeft /> Back
+            <button onClick={handleBack} className="flex items-center hover:gap-1 text-green-600 hover:underline">
+              Certificates
             </button>
             /
             <p className='text-gray-400 cursor-pointer'>Barangay Clearance</p>

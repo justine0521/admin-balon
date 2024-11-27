@@ -62,6 +62,10 @@ function CommonLawViewDetails() {
     return date.getFullYear();
   };
 
+  const handleBack = () => {
+    localStorage.setItem("activeSection", "CommonLaw");
+    navigate('/CommonLaw');
+};
 
   return (
     <section className='bg-white fixed top-0 left-0 w-full h-screen z-50 overflow-auto no-scrollbar p-5'>
@@ -73,7 +77,7 @@ function CommonLawViewDetails() {
               Print Report
             </button>
 
-            <button onClick={() => navigate(-1)} className='border border-red-500 text-red-500 rounded-full py-1 px-3 transition-all ease-in duration-400 hover:bg-red-500 hover:text-white'>
+            <button onClick={handleBack} className='border border-red-500 text-red-500 rounded-full py-1 px-3 transition-all ease-in duration-400 hover:bg-red-500 hover:text-white'>
               Back
             </button>
           </div>

@@ -3,7 +3,9 @@ import { FaSpinner, FaCheck } from 'react-icons/fa';
 import axios from 'axios';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import ReactQuill from 'react-quill';
+import Swal from 'sweetalert2';
 import 'react-quill/dist/quill.snow.css'; // Import Quill's CSS
+import '../App.css';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -64,7 +66,11 @@ function EditAnnouncementModal({ announcement, isOpen, onClose, onSave }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!imageUrl) {
-            alert('Please upload an image before submitting.');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Missing Image',
+                text: 'Please upload an image before submitting.',
+            });
             return;
         }
 
@@ -79,18 +85,31 @@ function EditAnnouncementModal({ announcement, isOpen, onClose, onSave }) {
 
         try {
             await axios.put(`${API_BASE_URL}/api/announcements/${announcement._id}`, updatedAnnouncement);
-            alert('Announcement updated successfully!');
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Announcement updated successfully!',
+                showConfirmButton: false,
+                timer: 2000,
+            });
             onSave(updatedAnnouncement);
             onClose();
         } catch (error) {
             console.error('Error updating announcement:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to update announcement. Please try again later.',
+                showConfirmButton: false,
+                timer: 2000,
+            });
         }
     };
 
     return (
         isOpen ? (
             <div className="fixed inset-0 bg-gray-800 bg-opacity-70 flex items-center justify-center z-50">
-                <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+                <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg max-h-[calc(100%-4rem)] overflow-y-auto hide-scrollbar">
                     <h3 className="text-2xl font-bold mb-4">Edit Announcement</h3>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-4">

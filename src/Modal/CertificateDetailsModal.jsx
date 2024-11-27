@@ -189,7 +189,7 @@ const CertificateDetailsModal = ({ certificate, onClose }) => {
 
     return (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg shadow-lg max-w-lg w-full p-6">
+            <div className="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 max-h-[calc(100%-4rem)] overflow-y-auto hide-scrollbar">
                 <div className="flex justify-between items-center mb-4 border-b border-gray-200 pb-4">
                     <h2 className="text-2xl font-semibold text-green-600">Certificate Details</h2>
                     <button

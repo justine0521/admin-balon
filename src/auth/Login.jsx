@@ -15,14 +15,6 @@ function Login({ onLogin }) {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-//   useEffect(() => {
-//     const isLoggedIn = localStorage.getItem('isLoggedIn');
-//     if (isLoggedIn === 'true') {
-//       navigate('/otp-verification');
-//       onLogin();
-//     }
-//   }, [onLogin, navigate]);
-
   const handleSubmit = async (e) => {
   e.preventDefault();
   setLoading(true);
