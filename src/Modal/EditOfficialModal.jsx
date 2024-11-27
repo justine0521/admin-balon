@@ -4,6 +4,7 @@ import { IoClose } from "react-icons/io5";
 import { TiCamera } from "react-icons/ti";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import axios from 'axios';
+import '../App.css'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -89,7 +90,7 @@ function EditOfficialModal({ isOpen, onClose, officialData, onUpdateOfficial }) 
 
     return (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-70 flex justify-center items-center z-50">
-            <div className="bg-white p-5 w-full max-w-lg mx-4 rounded-2xl shadow-xl max-h-[calc(100%-4rem)] overflow-y-auto relative">
+            <div className="bg-white p-5 w-full max-w-lg mx-4 rounded-2xl shadow-xl max-h-[calc(100%-4rem)] overflow-y-auto relative hide-scrollbar">
                 {/* Close Button */}
                 <button
                     onClick={onClose}

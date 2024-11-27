@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import Profile from '../images/defaultProfile.png';
+import { TiCamera } from "react-icons/ti";
+import { IoClose } from "react-icons/io5";
+import Swal from 'sweetalert2';
+import '../App.css';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -16,8 +19,7 @@ const s3Client = new S3Client({
   },
 });
 
-function CreateAccount() {
-  const navigate = useNavigate();
+function CreateAccount({ closeModal }) {
   const [formData, setFormData] = useState({
     fullName: '',
     position: '',
@@ -122,15 +124,28 @@ function CreateAccount() {
 
     try {
       const existingAdmins = await axios.get(`${API_BASE_URL}/api/accounts?position=Admin`);
+      const emailExists = await axios.get(`${API_BASE_URL}/api/accounts/email/${formData.email}`);
 
-      if (existingAdmins.data.length > 0 && formData.position === 'Admin') {
+      if (existingAdmins.data.length > 0 && (formData.position.toLowerCase() === 'admin')) {
         setErrors(prev => ({ ...prev, position: 'An admin already exists. Only one admin is allowed.' }));
         return;
       }
 
+      if (emailExists.data.exists) {
+        setErrors(prev => ({ ...prev, email: 'An account with this email already exists. Please try another email.' }));
+        return;
+      }
+
       const response = await axios.post(`${API_BASE_URL}/api/accounts`, formData);
-      if (response.status === 200) {
-        alert("Account created successfully!");
+        if (response.status === 200) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Account created successfully!',
+            showConfirmButton: false,
+            timer: 2000,
+        });
+
         setFormData({
           fullName: '',
           position: '',
@@ -139,7 +154,8 @@ function CreateAccount() {
           confirmPassword: '',
           imageUrl: Profile,
         });
-        navigate('/settings');
+
+        closeModal();  
       }
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -148,108 +164,100 @@ function CreateAccount() {
         setErrors(prev => ({ ...prev, general: 'Error creating account: ' + error.message }));
       }
     }
+
+  const handleDeleteAccount = async (userId) => {
+    try {
+      const user = await axios.get(`${API_BASE_URL}/api/accounts/${userId}`);
+      if (user.data.position.toLowerCase() === 'admin') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'You cannot delete or deactivate an admin account.',
+        });
+        return; 
+      }
+
+      const response = await axios.delete(`${API_BASE_URL}/api/accounts/${userId}`);
+      Swal.fire({
+        icon: 'success',
+        title: 'Deleted',
+        text: 'Account deleted successfully.',
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to delete account: ' + error.message,
+      });
+    }
+  };
+
   };
 
   return (
-    <section className="w-4/5 h-screen mt-14 left-56 p-7 absolute">
-      <div className='flex justify-center p-10 h-fit bg-gray-100'>
-        <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-center mb-6">Create Account</h2>
-          <form className="space-y-4" onSubmit={handleSubmit}>
-            <div className='flex flex-col items-center mb-4'>
-              <img src={formData.imageUrl} alt="Profile Preview" className="w-32 h-32 border border-gray-300 rounded-full object-cover mb-4" />
-              <input
-                onChange={handleImageChange}
-                type="file"
-                accept="image/*"
-                className="border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-green-500"
-              />
-            </div>
+    <section className="fixed inset-0 bg-gray-900 bg-opacity-70 flex justify-center items-center z-50">
+      <div className="bg-white p-6 w-full max-w-lg mx-4 rounded-2xl shadow-xl max-h-[calc(100%-4rem)] overflow-y-auto relative hide-scrollbar">
+        <button onClick={closeModal} className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 hover:bg-gray-200 rounded-full p-2 transition-all" >
+          <IoClose size={24} />
+        </button>
 
-            <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="fullName">
-                Full Name
+        <header className="text-center mb-6">
+          <h2 className="text-2xl font-semibold text-gray-800">Create Account</h2>
+          <p className="text-gray-500 mt-2">Fill in the details to create a new account</p>
+        </header>
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+          <div className="flex flex-col items-center">
+            <div className="relative w-32 h-32 mb-4">
+              <img src={formData.imageUrl} alt="Preview" className="w-full h-full border border-gray-300 rounded-full object-cover"/>
+              <label className="absolute bottom-0 right-0 bg-green-500 text-white rounded-full p-2 cursor-pointer hover:bg-green-600 transition-all">
+                <input type="file" accept="image/*" onChange={handleImageChange} className="hidden"/>
+                <TiCamera size={20} />
               </label>
-              <input
-                type="text"
-                id="fullName"
-                value={formData.fullName}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.fullName ? 'border-red-500' : 'border-gray-300'} focus:ring-green-500`}
-              />
+            </div>
+            <p className="text-sm text-gray-500">Upload a profile picture</p>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <div>
+              <label htmlFor="fullName" className="font-medium text-gray-700">Name</label>
+              <input type="text" id="fullName" value={formData.fullName} onChange={handleChange} onFocus={handleFocus} className={`w-full border border-gray-300 rounded-lg py-3 px-4 mt-1 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500`}/>
               {errors.fullName && <p className="text-red-500 text-sm">{errors.fullName}</p>}
             </div>
 
             <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="position">
-                Position
-              </label>
-              <input
-                type="text"
-                id="position"
-                value={formData.position}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.position ? 'border-red-500' : 'border-gray-300'} focus:ring-green-500`}
-              />
+              <label htmlFor="position" className="font-medium text-gray-700">Position</label>
+              <input type="text" id="position" value={formData.position} onChange={handleChange} onFocus={handleFocus} className={`w-full border border-gray-300 rounded-lg py-3 px-4 mt-1 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500`} />
               {errors.position && <p className="text-red-500 text-sm">{errors.position}</p>}
             </div>
 
             <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                Email Address
-              </label>
-              <input
-                type="email"
-                id="email"
-                value={formData.email}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:ring-green-500`}
-              />
+              <label htmlFor="email" className="font-medium text-gray-700">Email Address</label>
+              <input type="email" id="email" value={formData.email} onChange={handleChange} onFocus={handleFocus} className={`w-full border border-gray-300 rounded-lg py-3 px-4 mt-1 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500`}/>
               {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
             </div>
 
             <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                value={formData.password}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:ring-green-500`}
-              />
+              <label htmlFor="password" className="font-medium text-gray-700">Password</label>
+              <input type="password" id="password" value={formData.password} onChange={handleChange} onFocus={handleFocus} className={`w-full border border-gray-300 rounded-lg py-3 px-4 mt-1 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500`} />
               {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
             </div>
 
             <div>
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="confirmPassword">
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} focus:ring-green-500`}
-              />
+              <label htmlFor="confirmPassword" className="font-medium text-gray-700">Confirm Password</label>
+              <input type="password" id="confirmPassword" value={formData.confirmPassword} onChange={handleChange} onFocus={handleFocus} className={`w-full border border-gray-300 rounded-lg py-3 px-4 mt-1 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500`} />
               {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
             </div>
+          </div>
 
-            {errors.general && (
-              <p className="text-red-500 text-center">{errors.general}</p>
-            )}
-
-            <button type="submit" className="w-full py-2 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
-              Sign Up
+          <div>
+            <button type="submit" className="w-full font-medium bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 transition-all">
+              Create Account
             </button>
-          </form>
-        </div>
+          </div>
+
+          {errors.general && <p className="text-red-500 text-sm text-center mt-2">{errors.general}</p>}
+        </form>
       </div>
     </section>
   );

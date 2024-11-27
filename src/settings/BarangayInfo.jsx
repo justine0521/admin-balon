@@ -154,25 +154,8 @@ function BarangayInfo() {
   }
 
   return (
-    <section className="w-full max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-md mt-10">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold text-gray-800">Barangay Information</h1>
-        {!isEditable ? (
-          <button onClick={handleEditClick} className="flex items-center bg-green-500 text-white p-2 rounded-md hover:bg-green-600">
-            <MdModeEdit className="mr-1" />
-            Edit
-          </button>
-        ) : (
-          <div className="flex space-x-4">
-            <button onClick={handleSubmit} className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600">
-              Save
-            </button>
-            <button onClick={handleCancelClick} className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600">
-              Cancel
-            </button>
-          </div>
-        )}
-      </div>
+    <section className="w-full max-w-4xl mx-auto p-6 rounded-md">
+      
 
       <div className="flex flex-col items-center mb-6">
         <label className="text-lg font-medium text-gray-700 mb-2">Barangay Logo</label>
@@ -238,6 +221,22 @@ function BarangayInfo() {
           />
         </div>
       </div>
+
+      {!isEditable ? (
+          <button onClick={handleEditClick} className="flex items-center float-end bg-green-500 text-white p-1.5 px-5 mt-5 rounded-md hover:bg-green-600">
+            <MdModeEdit className="mr-1" />
+            Edit
+          </button>
+        ) : (
+          <div className="flex space-x-4 float-end">
+            <button onClick={handleSubmit} className="bg-green-500 text-white py-1.5 px-5 mt-5 rounded-md hover:bg-green-600">
+              Save
+            </button>
+            <button onClick={handleCancelClick} className="bg-red-500 text-white py-1.5 px-5 mt-5 rounded-md hover:bg-red-600">
+              Cancel
+            </button>
+          </div>
+        )}
 
       {updateBarangayInfo && (
         <div className="mt-4 relative">

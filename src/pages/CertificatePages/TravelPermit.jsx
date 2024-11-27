@@ -10,7 +10,7 @@ import { MdDeleteOutline } from "react-icons/md";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-function TravelPermit({ setActiveCertificate }) {
+function TravelPermit() {
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [requests, setRequests] = useState([]);
@@ -136,11 +136,16 @@ function TravelPermit({ setActiveCertificate }) {
   };
 
   const filteredRequests = requests.filter((request) =>
-    request.owner.toLowerCase().includes(searchTerm.toLowerCase()) // Filter by fullName
+    request.owner.toLowerCase().includes(searchTerm.toLowerCase()) 
   );
 
   const totalFilteredPages = Math.ceil(filteredRequests.length / entriesToShow);
-  const currentFilteredRequests = filteredRequests.slice(startIndex, endIndex); // Slice filtered requests for pagination
+  const currentFilteredRequests = filteredRequests.slice(startIndex, endIndex);
+
+  const handleBack = () => {
+    localStorage.setItem("activeSection", "Certificates");
+    navigate('/Certificates');
+  };
 
   return (
     <div className="">
@@ -149,7 +154,7 @@ function TravelPermit({ setActiveCertificate }) {
           <p className='text-xl'>Travel Permit Issuance</p>
           
           <div className='flex justify-center items-center gap-x-2 text-sm'>
-            <button onClick={() => setActiveCertificate(null)} className="text-green-600 hover:underline">
+            <button onClick={handleBack} className="text-green-600 hover:underline">
               Certificates
             </button>
             /

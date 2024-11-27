@@ -2,6 +2,7 @@ import { useState } from 'react';
 import ResidenceModal from '../Modal/ResidenceModal';
 import {useNavigate} from 'react-router-dom'
 import ViewResidentProfile from '../view/ViewResidentProfile';
+import BlocklistModal from '../Modal/BlocklistModal';
 import '../App.css'
 
 import { FaPlus, FaEdit, FaFileExport, FaEye } from "react-icons/fa";
@@ -10,6 +11,7 @@ import { ImBlocked } from "react-icons/im";
 import { BsPersonFillDash } from "react-icons/bs";
 import {RiArrowDownSLine} from "react-icons/ri"
 import {IoWarningOutline} from "react-icons/io5"
+import { IoMdSearch } from "react-icons/io";
 
 function Blocked() {
 
@@ -49,19 +51,6 @@ function Blocked() {
   const blocked = [
     {fname: 'Justine', mname: 'Ribano', lname: 'Santos', gender: 'Male', age: '21', status: 'Active'},
     {fname: 'Justine', mname: 'Ribano', lname: 'Santos', gender: 'Male', age: '21', status: 'Active'},
-    {fname: 'Justine', mname: 'Ribano', lname: 'Santos', gender: 'Male', age: '21', status: 'Active'},
-    {fname: 'Justine', mname: 'Ribano', lname: 'Santos', gender: 'Male', age: '21', status: 'Inactive'},
-    {fname: 'Justine', mname: 'Ribano', lname: 'Santos', gender: 'Male', age: '21', status: 'Active'},
-    {fname: 'Justine', mname: 'Ribano', lname: 'Santos', gender: 'Male', age: '21', status: 'Active'},
-    {fname: 'Justine', mname: 'Ribano', lname: 'Santos', gender: 'Male', age: '21', status: 'Active'},
-    {fname: 'Justine', mname: 'Ribano', lname: 'Santos', gender: 'Male', age: '21', status: 'Active'},
-    {fname: 'Justine', mname: 'Ribano', lname: 'Santos', gender: 'Male', age: '21', status: 'Active'},
-    {fname: 'Justine', mname: 'Ribano', lname: 'Santos', gender: 'Male', age: '21', status: 'Active'},
-    {fname: 'Justine', mname: 'Ribano', lname: 'Santos', gender: 'Male', age: '21', status: 'Active'},
-    {fname: 'Justine', mname: 'Ribano', lname: 'Santos', gender: 'Male', age: '21', status: 'Active'},
-    {fname: 'Justine', mname: 'Ribano', lname: 'Santos', gender: 'Male', age: '21', status: 'Active'},
-    {fname: 'Justine', mname: 'Ribano', lname: 'Santos', gender: 'Male', age: '21', status: 'Active'},
-    {fname: 'Justine', mname: 'Ribano', lname: 'Santos', gender: 'Male', age: '21', status: 'Active'},
   ];
 
   const totalPages = Math.ceil(blocked.length / entriesToShow);
@@ -79,19 +68,21 @@ function Blocked() {
   return (
     <section className="hide-scrollbar">
       <div className="">
-        <div className="flex justify-between items-center h-16  px-3 w-full border-b-2 border-gray-400">
+        <div className="flex justify-between items-center h-16 w-full border-b-2 border-gray-400">
           <p className="text-2xl">Block Listed</p>
 
           <div>
-            <button className="flex justify-center items-center gap-x-1 bg-Blue text-white rounded-md px-3 py-1 hover:bg-blue-500"><FaFileExport /> Export</button>
+            <button className="flex justify-center items-center gap-x-1 bg-green-500 text-white rounded-md px-3 py-1 hover:bg-green-600">
+              <FaPlus /> Blocklist
+            </button>
           </div>
         </div>
         
 
-        <div className="flex justify-between items-center p-5">
+        <div className="flex justify-between items-center py-3">
           <div>
             <label htmlFor="">Show Entries:  </label>
-            <select name="entries" id="entries" value={entriesToShow} onChange={handleEntriesChange} className='p-1 px-3 rounded-md border border-gray-300'>
+            <select name="entries" id="entries" value={entriesToShow} onChange={handleEntriesChange} className='p-1 px-2 rounded-md border border-gray-300'>
               <option value={10}>10</option>
               <option value={25}>25</option>
               <option value={50}>50</option>
@@ -99,11 +90,11 @@ function Blocked() {
             </select>
           </div>
 
-          <form action="">
-            <label htmlFor="search">Search: </label>
+          <div className="flex items-center my-2 px-3 bg-gray-300 rounded-full">
+            <IoMdSearch className="text-x text-gray-700" />
 
-            <input type="text" name="search" id="search" className="border border-gray-300 rounded-md px-3 py-1 focus:outline-none focus:border-Green"/>
-          </form>
+            <input type="text" placeholder="Search" className="bg-gray-300 p-1.5 w-full outline-none"/>
+          </div>
         </div>
         
         <table className="w-full border-collapse">

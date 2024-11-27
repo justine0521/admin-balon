@@ -5,6 +5,7 @@ import { FaCheck, FaSpinner } from 'react-icons/fa'; // Import icons
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import styles for React Quill
 import Logo from '../images/Logo.png'; // Import the logo
+import Swal from 'sweetalert2';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -68,7 +69,13 @@ function AnnouncementModal({ isOpen, onClose }) {
 
         try {
             await axios.post(`${API_BASE_URL}/api/announcements`, announcementData);
-            alert('Announcement added successfully!');
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Announcement added successfully!',
+                showConfirmButton: false,
+                timer: 2000,
+            });
             setTitle('');
             setDescription('');
             setImageUrl('');
@@ -76,7 +83,7 @@ function AnnouncementModal({ isOpen, onClose }) {
             if (fileInputRef.current) {
                 fileInputRef.current.value = '';
             }
-            onClose(); // Close modal on success
+            onClose(); 
         } catch (error) {
             console.error('Error saving announcement:', error);
         }
