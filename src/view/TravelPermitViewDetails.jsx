@@ -106,7 +106,7 @@ function TravelPermitViewDetails() {
       </header>
 
       <div className="bg-white p-5 flex flex-col md:flex-row items-start gap-8 h-[600px]">
-        <img src={DefaultProfile} alt="Profile" className="w-32 h-32 md:w-40 md:h-40  object-cover shadow-lg border-2 border-gray-300" />
+        {/* <img src={DefaultProfile} alt="Profile" className="w-32 h-32 md:w-40 md:h-40  object-cover shadow-lg border-2 border-gray-300" /> */}
 
         <div className="flex-1">
           <h2 className="text-xl font-semibold mb-2">Resident Information</h2>
