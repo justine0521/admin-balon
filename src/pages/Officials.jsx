@@ -111,8 +111,8 @@ function Officials() {
   return (
     <section className="">
       <div className="">
-        <div className="flex justify-between items-center h-14 w-full border-b-2 border-gray-400">
-          <p className="text-2xl">Barangay Officials</p>
+        <div className="flex justify-between items-center px-3 h-14 w-full border-b-2 border-gray-400">
+          <p className="text-2xl font-semibold">Barangay Officials</p>
 
           <div className="flex items-center gapy-5">
             <button
@@ -208,7 +208,7 @@ function Officials() {
                 {filteredOfficials.slice(startIndex, endIndex).map((official, index) => (
                   <tr key={index} className="hover:bg-white">
                     <td className="py-4 flex justify-center items-center">
-                      <img src={official.imageUrl || "https://via.placeholder.com/50"} alt="Profile" className="w-10 h-10 rounded-full object-cover"/>
+                      <img src={official.imageUrl || "https://via.placeholder.com/50"} alt="Profile" className="w-10 h-10 rounded-full object-cover" />
                     </td>
                     <td className="py-3">{official.fullname}</td>
                     <td className="py-3">{official.position}</td>
@@ -224,7 +224,7 @@ function Officials() {
                       <button onClick={() => openEditModal(official)} title="Edit" className="text-xl text-blue-500 hover:text-blue-700 focus:outline-none">
                         <FaEdit />
                       </button>
-                      <button onClick={() => {setSelectedOfficial(official); setIsdeleteModal(true);}} title="Delete" className="text-xl text-red-500 hover:text-red-700 focus:outline-none">
+                      <button onClick={() => { setSelectedOfficial(official); setIsdeleteModal(true); }} title="Delete" className="text-xl text-red-500 hover:text-red-700 focus:outline-none">
                         <MdDelete />
                       </button>
                     </td>

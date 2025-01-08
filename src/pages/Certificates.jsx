@@ -65,8 +65,8 @@ function Certificates() {
   return (
     <section className="hide-scrollbar">
       {activeCertificate === null && (
-        <div className="h-14 flex items-center border-b-2 border-gray-400">
-          <h1 className="text-2xl font-semibold text-gray-800">
+        <div className="px-3 h-14 flex items-center border-b-2 border-gray-400">
+          <h1 className="text-2xl font-semibold">
             Certificate Issuance
           </h1>
         </div>
