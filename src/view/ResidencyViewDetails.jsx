@@ -85,7 +85,7 @@ function ResidencyViewDetails() {
       </div>
 
       <header className='h-fit p-3 flex justify-evenly items-center border-b-2 border-black opacity-80'>
-        <img src={MarivelesLogo} alt="Mariveles Logo" className='h-32 w-32' />
+        {/* <img src={MarivelesLogo} alt="Mariveles Logo" className='h-32 w-32' /> */}
 
         <div className='text-center'>
           <p className='text-sm'>Republic of the Philippines</p>

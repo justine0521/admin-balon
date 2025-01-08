@@ -2,26 +2,41 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useParams, NavLink } from 'react-router-dom';
 import './Certificates.css';
 import LogoContext from '../pages/LogoContext';
-import { IoMdSkipBackward } from "react-icons/io";
 import { FaPrint } from "react-icons/fa";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 import MarivelesLogo from '../images/Mariveles-Logo.png'
 import BarangayLogo from '../images/Logo.png'
+import DefaultProfile from '../images/defaultProfile.png'
 
 import { FaLocationDot } from "react-icons/fa6";
 import { FaFacebookF, FaPhoneAlt } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
 import { IoArrowBackOutline } from "react-icons/io5";
+import { IoIosAdd } from "react-icons/io";
+
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+const bucketName = import.meta.env.VITE_AWS_BUCKET_NAME;
+const s3Client = new S3Client({
+  region: import.meta.env.VITE_AWS_REGION,
+  credentials: {
+    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID,
+    secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY,
+  },
+});
 
 function BrgyClearance() {
 
     const { id } = useParams(); 
     const [requestDetails, setRequestDetails] = useState(null);
     const [punongBarangay, setPunongBarangay] = useState(null);
+    const [isPhotoUploaded, setIsPhotoUploaded] = useState(false);
+    const [photoUrl, setPhotoUrl] = useState(DefaultProfile);
+    const [updateCertInfo, setUpdateCertInfo] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -48,6 +63,12 @@ function BrgyClearance() {
             fetchRequestDetails();
         }
         fetchPunongBarangay(); 
+        
+        const storedPhotoUrl = localStorage.getItem(`photoUrl-${id}`);
+        if (storedPhotoUrl) {
+            setPhotoUrl(storedPhotoUrl);
+            setIsPhotoUploaded(true);
+        }
     }, [id]);
 
     const handlePrint = () => {
@@ -68,11 +89,64 @@ function BrgyClearance() {
         navigate('/barangayClearance');
     };
 
+    const handleFileUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) {
+            console.error('No file selected');
+            return;
+        }
+    
+        if (!id) {
+            console.error("Certificate ID is undefined");
+            return;
+        }
+    
+        const params = {
+            Bucket: bucketName,
+            Key: `profiles/${file.name}`,
+            Body: file,
+            ContentType: file.type,
+            ACL: 'public-read',
+        };
+    
+        try {
+            const command = new PutObjectCommand(params);
+            await s3Client.send(command);
+            const uploadedPhotoUrl = `https://${bucketName}.s3.amazonaws.com/profiles/${file.name}`;
+            setPhotoUrl(uploadedPhotoUrl);
+    
+            localStorage.setItem(`photoUrl-${id}`, uploadedPhotoUrl);
+    
+            const response = await fetch(`${API_BASE_URL}/api/barangayClearanceUpdatePhoto/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    imageUrl: uploadedPhotoUrl,
+                }),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to update photo URL on server');
+            }
+    
+            setUpdateCertInfo(true);
+            setIsPhotoUploaded(true); 
+        } catch (err) {
+            console.error("Error uploading photo: ", err);
+        }
+    };
+    
   return (
     <section className='bg-gray-300 fixed top-0 left-0 w-full h-screen z-50 overflow-auto no-scrollbar'>
         <div className="header-container">
                 <header className="flex justify-end items-center gap-x-3 h-16 px-5 w-full">
-                    <button onClick={handlePrint} className='flex items-center gap-x-2 border border-Blue text-Blue rounded-full py-1 px-3 transition-all ease-in duration-400 hover:bg-Blue hover:text-White'>
+                    <button className="flex items-center gap-x-2 border border-green-700 text-green-700 rounded-full py-1 px-3 transition-all ease-in duration-400 hover:bg-green-700 hover:text-white" onClick={() => document.getElementById('fileInput').click()}>
+                        <IoIosAdd className="text-2xl" /> Add Photo
+                    </button>
+
+                    <input id="fileInput" type="file" accept="image/*" onChange={handleFileUpload} className="hidden"/>
+
+                    <button onClick={handlePrint} className={`flex items-center gap-x-2 border ${isPhotoUploaded ? 'border-blue-700 text-blue-700 hover:bg-blue-700 hover:text-white' : 'border-gray-400 text-gray-400 cursor-not-allowed'} rounded-full py-1 px-3 transition-all ease-in duration-400`}  disabled={!isPhotoUploaded}>
                         <FaPrint /> Print Certificate
                     </button>
 
@@ -180,13 +254,30 @@ function BrgyClearance() {
                         <p className='font-semibold'>Bleassie Diwa Yumol</p>
                         <span className='text- text-green-900 font-bold'>Barangay Secretary</span>
                     </div>
-
                 </aside>
 
                 <main className='w-[800px] flex flex-col items-center relative'>
                     <h1 className='text-4xl mt-16  font-serif'>BARANGAY CLEARANCE</h1>
 
-                    <div contenteditable="true" className='px-7 mt-20'>
+                    <div className='flex items-center justify-start w-full my-5 gap-3'>
+                        <img src={requestDetails?.imageUrl || DefaultProfile} alt="" className='h-28 w-28 object-cover border'/>
+                    
+                        <div className='h-24 w-24 border flex items-center justify-center text-center'>
+                            <div>
+                                <p className='text-sm opacity-60'>RIGHT</p>
+                                <p className='text-[9px] opacity-60'>THUMBMARK</p>
+                            </div>
+                        </div>
+
+                        <div className='h-24 w-24 border flex items-center justify-center text-center'>
+                            <div>
+                                <p className='text-sm opacity-60'>LEFT</p>
+                                <p className='text-[9px] opacity-60'>THUMBMARK</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div contenteditable="true" className='px-7 '>
                         <p className='mb-5'>TO WHOM IT MAY CONCERN:</p>
 
                         <p className='mb-5'>&nbsp; &nbsp; &nbsp; &nbsp; This is to certify that <span className='font-bold'>{requestDetails?.fullName || '_________________'}</span>, of {requestDetails?.age > 18 ? 'Legal age' : '___'}, {requestDetails?.civilStatus}, Filifino and a Bonifide resident of <span>{requestDetails?.address || '_______________'}</span>, Barangay Balon-Anito, Mariveles, Bataan. To Certify further, that {requestDetails?.gender === 'Male' ? 'he' : 'she'} has no derogatory and/or criminal records filed in this barangay.</p>

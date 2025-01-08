@@ -10,14 +10,25 @@ import { FaLocationDot } from "react-icons/fa6";
 import { FaFacebookF, FaPhoneAlt } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
 import { IoArrowBackOutline } from "react-icons/io5";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+const bucketName = import.meta.env.VITE_AWS_BUCKET_NAME;
+const s3Client = new S3Client({
+  region: import.meta.env.VITE_AWS_REGION,
+  credentials: {
+    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID,
+    secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY,
+  },
+});
 
 function JobSeekerViewDetails() {
   const { id } = useParams();
   const [resident, setResident] = useState(null);
   const [loading, setLoading] = useState(true); 
   const [error, setError] = useState(null); 
+  const [photoUrl, setPhotoUrl] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,6 +37,7 @@ function JobSeekerViewDetails() {
         const response = await axios.get(`${API_BASE_URL}/api/jobSeeker?id=${id}`);
         if (response.data.length > 0) {
           setResident(response.data[0]);
+          setPhotoUrl(response.data[0]?.imageUrl);
         } else {
           setError('Resident not found.');
         }
@@ -44,6 +56,42 @@ function JobSeekerViewDetails() {
       setLoading(false);
     }
   }, [id]);
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) {
+      console.error('No file selected');
+      return;
+    }
+
+    const params = {
+      Bucket: bucketName,
+      Key: `profiles/${file.name}`,
+      Body: file,
+      ContentType: file.type,
+      ACL: 'public-read',
+    };
+
+    try {
+      const command = new PutObjectCommand(params);
+      await s3Client.send(command);
+      const uploadedPhotoUrl = `https://${bucketName}.s3.amazonaws.com/profiles/${file.name}`;
+
+      setPhotoUrl(uploadedPhotoUrl); 
+
+      const response = await axios.put(`${API_BASE_URL}/api/jobSeekerUpdatePhoto/${id}`, {
+        imageUrl: uploadedPhotoUrl,
+      });
+
+      if (response.status === 200) {
+        console.log('Photo updated successfully');
+      } else {
+        console.error('Failed to update photo on server');
+      }
+    } catch (err) {
+      console.error('Error uploading photo: ', err);
+    }
+  };
 
   const handlePrint = () => {
     window.print();
@@ -105,7 +153,7 @@ function JobSeekerViewDetails() {
       </header>
 
       <div className="bg-white p-5 flex flex-col  md:flex-row items-start gap-8">
-        <img src={DefaultProfile} alt="Profile" className="w-32 h-32 md:w-40 md:h-40  object-cover shadow-lg border-2 border-gray-300" />
+        <img src={photoUrl || DefaultProfile} alt="Profile" className="w-32 h-32 md:w-40 md:h-40 object-cover shadow-lg border-2 border-gray-300"/>
 
         <div className="flex-1">
           <h2 className="text-xl font-semibold mb-2">Resident Information</h2>
