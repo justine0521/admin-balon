@@ -133,7 +133,7 @@ function Announcements() {
         <section className="hide-scrollbar">
             <div>
                 <div className="flex justify-between items-center h-14 bg-gray-100 px-3 w-full border-b-2 border-gray-400 rounded-t-xl">
-                    <p className="text-2xl">Announcements</p>
+                    <p className="text-2xl font-semibold">Announcements</p>
                     <div className="flex items-center gap-5">
                         <button
                             onClick={openModal}

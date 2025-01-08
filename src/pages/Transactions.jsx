@@ -17,11 +17,11 @@ const TransactionHistory = () => {
         const fetchCompletedCertificates = async () => {
             try {
                 const response = await axios.get(`${API_BASE_URL}/api/completed-certificates`);
-                
+
                 const sortedCertificates = response.data.sort(
                     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
                 );
-                
+
                 setCompletedCertificates(sortedCertificates);
                 setLoading(false);
             } catch (error) {
@@ -29,10 +29,10 @@ const TransactionHistory = () => {
                 setLoading(false);
             }
         };
-    
+
         fetchCompletedCertificates();
     }, []);
-    
+
     const handleViewDetails = (certificate) => {
         setSelectedCertificate(certificate);
         setIsModalOpen(true);
@@ -75,8 +75,8 @@ const TransactionHistory = () => {
     return (
         <section className=''>
             <div className=''>
-                <div className='flex justify-between items-center py-3 '>
-                    <h1 className="text-lg font-semibold whitespace-nowrap">Transaction History</h1>
+                <div className='flex justify-between px-3 items-center py-3 '>
+                    <h1 className="text-2xl font-semibold whitespace-nowrap">Transaction History</h1>
 
                     <form>
                         <label htmlFor="search">Search: </label>

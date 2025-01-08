@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import ResidenceModal from '../Modal/ResidenceModal';
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import ViewResidentProfile from '../view/ViewResidentProfile';
 import BlocklistModal from '../Modal/BlocklistModal';
 import '../App.css'
@@ -9,8 +9,8 @@ import { FaPlus, FaEdit, FaFileExport, FaEye } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { ImBlocked } from "react-icons/im";
 import { BsPersonFillDash } from "react-icons/bs";
-import {RiArrowDownSLine} from "react-icons/ri"
-import {IoWarningOutline} from "react-icons/io5"
+import { RiArrowDownSLine } from "react-icons/ri"
+import { IoWarningOutline } from "react-icons/io5"
 import { IoMdSearch } from "react-icons/io";
 
 function Blocked() {
@@ -49,7 +49,7 @@ function Blocked() {
   }
 
   const blocked = [
-    {fname: 'Justine', mname: 'Ribano', lname: 'Santos', gender: 'Male', age: '21', status: 'Active'},
+    { fname: 'Justine', mname: 'Ribano', lname: 'Santos', gender: 'Male', age: '21', status: 'Active' },
   ];
 
   const totalPages = Math.ceil(blocked.length / entriesToShow);
@@ -67,8 +67,8 @@ function Blocked() {
   return (
     <section className="hide-scrollbar">
       <div className="">
-        <div className="flex justify-between items-center h-16 w-full border-b-2 border-gray-400">
-          <p className="text-2xl">Block Listed</p>
+        <div className="flex justify-between items-center px-3 h-16 w-full border-b-2 border-gray-400">
+          <p className="text-2xl font-semibold">Block Listed</p>
 
           <div>
             <button className="flex justify-center items-center gap-x-1 bg-green-500 text-white rounded-md px-3 py-1 hover:bg-green-600">
@@ -76,7 +76,7 @@ function Blocked() {
             </button>
           </div>
         </div>
-        
+
 
         <div className="flex justify-between items-center py-3">
           <div>
@@ -92,10 +92,10 @@ function Blocked() {
           <div className="flex items-center my-2 px-3 bg-gray-300 rounded-full">
             <IoMdSearch className="text-x text-gray-700" />
 
-            <input type="text" placeholder="Search" className="bg-gray-300 p-1.5 w-full outline-none"/>
+            <input type="text" placeholder="Search" className="bg-gray-300 p-1.5 w-full outline-none" />
           </div>
         </div>
-        
+
         <table className="w-full border-collapse">
           <thead className="bg-Green">
             <tr>
@@ -133,16 +133,16 @@ function Blocked() {
                   {dropdownIndex === index && (
                     <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-md shadow-lg z-10">
                       <button onClick={() => handleAction('edit')} className="flex items-center px-4 py-2 text-md text-Green hover:bg-gray-100 w-full">
-                        <FaEdit className="mr-2"/> Edit
+                        <FaEdit className="mr-2" /> Edit
                       </button>
                       <button onClick={() => handleAction('viewDetails')} className="flex items-center px-4 py-2 text-md text-Blue hover:bg-gray-100 w-full">
-                        <FaEye className="mr-2"/> View Details
+                        <FaEye className="mr-2" /> View Details
                       </button>
                       <button onClick={() => handleAction('delete')} className="flex items-center px-4 py-2 text-md text-Red hover:bg-gray-100 w-full">
-                        <MdDelete className="mr-2"/> Delete
+                        <MdDelete className="mr-2" /> Delete
                       </button>
                       <button onClick={() => handleAction('unblock')} className="flex items-center px-4 py-2 text-md text-gray-700 hover:bg-gray-100 w-full">
-                        <BsPersonFillDash className="mr-2"/> Unblock
+                        <BsPersonFillDash className="mr-2" /> Unblock
                       </button>
                     </div>
                   )}
@@ -173,10 +173,10 @@ function Blocked() {
       </div>
 
       {/* This is Modal for Delete Button in Action */}
-      {deleteModal && 
+      {deleteModal &&
         <div className='fixed top-0 left-0 m-0 h-full w-full flex justify-center items-center z-50'>
           <div className='bg-white w-96 h-72 rounded-xl shadow-xl drop-shadow-xl flex flex-col justify-center items-center gap-y-5'>
-            <IoWarningOutline className='text-6xl p-2 rounded-full bg-red-200 text-red-600 font-bold'/>
+            <IoWarningOutline className='text-6xl p-2 rounded-full bg-red-200 text-red-600 font-bold' />
             <p className='text-center px-5'>This action cannot be undone. All information of this person will be lost.</p>
             <div className='w-full px-5 flex flex-col gap-y-3'>
               <button className='bg-Red text-White w-full p-1 rounded-md font-semibold'>Delete</button>
@@ -187,10 +187,10 @@ function Blocked() {
       }
 
       {/* This is Modal for Block Button in Action */}
-      {blockModal && 
+      {blockModal &&
         <div className='fixed top-0 left-0 m-0 h-full w-full flex justify-center items-center z-50'>
           <div className='bg-white w-96 h-72 rounded-xl shadow-xl drop-shadow-xl flex flex-col justify-center items-center gap-y-5'>
-            <IoWarningOutline className='text-6xl p-2 rounded-full bg-red-200 text-black font-bold'/>
+            <IoWarningOutline className='text-6xl p-2 rounded-full bg-red-200 text-black font-bold' />
             <p className='text-center px-5'>Are you sure you want to Unblock this person?</p>
             <div className='w-full px-5 flex flex-col gap-y-3'>
               <button className='bg-black text-White w-full p-1 rounded-md font-semibold'>Unblock</button>
