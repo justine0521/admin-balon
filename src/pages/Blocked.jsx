@@ -7,7 +7,7 @@ function Blocked() {
   const [blocklist, setBlocklist] = useState([]);
   const [blockModal, setBlockModal] = useState(false);
   const [selectedPerson, setSelectedPerson] = useState(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(null);
   const [personData, setPersonData] = useState({
     fullName: '',
     email: '',
@@ -16,7 +16,6 @@ function Blocked() {
   });
   const [error, setError] = useState('');
 
-  // Using dynamic API_BASE_URL from environment variables
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const fetchBlocklist = async () => {
@@ -39,13 +38,15 @@ function Blocked() {
     setBlockModal(true);
   };
 
-  const handleDelete = async (personId) => {
-    try {
-      await axios.delete(`${API_BASE_URL}/api/blocklist/${personId}`);
-      fetchBlocklist();
-      setShowDeleteModal(false);
-    } catch (error) {
-      console.error("Failed to delete blocklist entry:", error);
+  const handleDelete = async () => {
+    if (showDeleteModal) {
+      try {
+        await axios.delete(`${API_BASE_URL}/api/blocklist/${showDeleteModal}`);
+        fetchBlocklist();
+        setShowDeleteModal(null);
+      } catch (error) {
+        console.error("Failed to delete blocklist entry:", error);
+      }
     }
   };
 
@@ -54,7 +55,6 @@ function Blocked() {
       setError('');
 
       if (selectedPerson) {
-        // Update existing blocklist entry
         try {
           await axios.put(`${API_BASE_URL}/api/blocklist/${selectedPerson._id}`, personData);
           fetchBlocklist();
@@ -64,16 +64,26 @@ function Blocked() {
           console.error("Failed to update blocklist entry:", error);
         }
       } else {
-        // Add new blocklist entry
         try {
           await axios.post(`${API_BASE_URL}/api/blocklist`, personData);
           fetchBlocklist();
-          setBlockModal(false);
+          resetForm();
         } catch (error) {
           console.error("Failed to add to blocklist:", error);
         }
       }
     }
+  };
+
+  const resetForm = () => {
+    setPersonData({
+      fullName: '',
+      email: '',
+      birthday: '',
+      reason: ''
+    });
+    setBlockModal(false);
+    setSelectedPerson(null);
   };
 
   const validateInputs = () => {
@@ -83,14 +93,12 @@ function Blocked() {
       return false;
     }
 
-    // Validate email format
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailPattern.test(email)) {
       setError('Please enter a valid email address.');
       return false;
     }
 
-    // Validate birthday format (YYYY-MM-DD)
     const birthdayPattern = /^\d{4}-\d{2}-\d{2}$/;
     if (!birthdayPattern.test(birthday)) {
       setError('Please enter a valid birthday (YYYY-MM-DD).');
@@ -141,7 +149,7 @@ function Blocked() {
                     Edit
                   </button>
                   <button
-                    onClick={() => setShowDeleteModal(true)}
+                    onClick={() => setShowDeleteModal(person._id)}
                     className="bg-red-500 text-white px-3 py-1 rounded-md"
                   >
                     Delete
@@ -152,6 +160,29 @@ function Blocked() {
           ))}
         </tbody>
       </table>
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-5 rounded-lg shadow-lg">
+            <IoWarningOutline className="text-red-500 text-4xl mb-3" />
+            <p>Are you sure you want to delete this entry?</p>
+            <div className="flex justify-between mt-4">
+              <button
+                onClick={handleDelete}
+                className="bg-red-500 text-white px-4 py-2 rounded-md"
+              >
+                Yes, Delete
+              </button>
+              <button
+                onClick={() => setShowDeleteModal(null)}
+                className="bg-gray-500 text-white px-4 py-2 rounded-md"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {blockModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
@@ -181,7 +212,7 @@ function Blocked() {
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="birthday" className="block mb-1">birthday</label>
+              <label htmlFor="birthday" className="block mb-1">Birthday</label>
               <input
                 type="date"
                 id="birthday"
