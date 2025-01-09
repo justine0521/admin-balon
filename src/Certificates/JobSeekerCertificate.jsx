@@ -36,6 +36,7 @@ function JobSeekerCertificate() {
     const [punongBarangay, setPunongBarangay] = useState(null);
     const [isPhotoUploaded, setIsPhotoUploaded] = useState(false);
     const [photoUrl, setPhotoUrl] = useState(DefaultProfile);
+    const [imageUrl, setImageUrl] = useState(DefaultProfile);
     const [updateCertInfo, setUpdateCertInfo] = useState(false);
     const navigate = useNavigate();
 
@@ -59,9 +60,28 @@ function JobSeekerCertificate() {
             }
         };
 
+        const fetchPhotoUrl = async () => {
+            if (!id) return;
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/jobSeekerPhoto/${id}`);
+                const data = await response.json();
+                if (data?.imageUrl) {
+                    setImageUrl(data.imageUrl);
+                    setIsPhotoUploaded(true);
+                } else {
+                    setIsPhotoUploaded(false);
+                }
+
+            } catch (error) {
+                console.error('Error fetching photo URL:', error);
+            }
+        };
+
         if (id) {
             fetchRequestDetails();
+            fetchPhotoUrl();
         }
+
         fetchPunongBarangay();
 
         const storedPhotoUrl = localStorage.getItem(`photoUrl-${id}`);
@@ -113,9 +133,7 @@ function JobSeekerCertificate() {
             const command = new PutObjectCommand(params);
             await s3Client.send(command);
             const uploadedPhotoUrl = `https://${bucketName}.s3.amazonaws.com/profiles/${file.name}`;
-            setPhotoUrl(uploadedPhotoUrl);
-
-            localStorage.setItem(`photoUrl-${id}`, uploadedPhotoUrl);
+            setImageUrl(uploadedPhotoUrl);
 
             const response = await fetch(`${API_BASE_URL}/api/jobSeekerUpdatePhoto/${id}`, {
                 method: 'PUT',
@@ -129,7 +147,6 @@ function JobSeekerCertificate() {
                 throw new Error('Failed to update photo URL on server');
             }
 
-            // Optionally re-fetch request details if needed
             const updatedDetails = await axios.get(`${API_BASE_URL}/api/generate-jobSeeker/${id}`);
             setRequestDetails(updatedDetails.data);
 
@@ -264,7 +281,7 @@ function JobSeekerCertificate() {
                         <h1 className='text-4xl mt-16 w-full text-center font-serif'>FIRST TIME JOB SEEKER</h1>
 
                         <div className='flex items-center justify-start w-full  my-5 gap-3'>
-                            <img src={requestDetails?.imageUrl || DefaultProfile} alt="" className='h-28 w-28 object-cover border' />
+                            <img src={requestDetails?.imageUrl || DefaultProfile} alt="" className='h-28 w-28 ' />
 
                             <div className='h-24 w-24 border flex items-center justify-center text-center'>
                                 <div>

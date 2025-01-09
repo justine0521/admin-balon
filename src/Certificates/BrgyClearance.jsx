@@ -35,7 +35,7 @@ function BrgyClearance() {
     const [requestDetails, setRequestDetails] = useState(null);
     const [punongBarangay, setPunongBarangay] = useState(null);
     const [isPhotoUploaded, setIsPhotoUploaded] = useState(false);
-    const [photoUrl, setPhotoUrl] = useState(DefaultProfile);
+    const [imageUrl, setImageUrl] = useState(DefaultProfile);
     const [updateCertInfo, setUpdateCertInfo] = useState(false);
     const navigate = useNavigate();
 
@@ -59,16 +59,29 @@ function BrgyClearance() {
             }
         };
 
+        const fetchPhotoUrl = async () => {
+            if (!id) return;
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/barangayClearancePhoto/${id}`);
+                const data = await response.json();
+                if (data?.imageUrl) {
+                    setImageUrl(data.imageUrl);
+                    setIsPhotoUploaded(true);
+                } else {
+                    setIsPhotoUploaded(false);
+                }
+
+            } catch (error) {
+                console.error('Error fetching photo URL:', error);
+            }
+        };
+
         if (id) {
             fetchRequestDetails();
+            fetchPhotoUrl();
         }
-        fetchPunongBarangay();
 
-        const storedPhotoUrl = localStorage.getItem(`photoUrl-${id}`);
-        if (storedPhotoUrl) {
-            setPhotoUrl(storedPhotoUrl);
-            setIsPhotoUploaded(true);
-        }
+        fetchPunongBarangay();
     }, [id]);
 
     const handlePrint = () => {
@@ -113,9 +126,7 @@ function BrgyClearance() {
             const command = new PutObjectCommand(params);
             await s3Client.send(command);
             const uploadedPhotoUrl = `https://${bucketName}.s3.amazonaws.com/profiles/${file.name}`;
-            setPhotoUrl(uploadedPhotoUrl);
-
-            localStorage.setItem(`photoUrl-${id}`, uploadedPhotoUrl);
+            setImageUrl(uploadedPhotoUrl);
 
             const response = await fetch(`${API_BASE_URL}/api/barangayClearanceUpdatePhoto/${id}`, {
                 method: 'PUT',
@@ -129,10 +140,10 @@ function BrgyClearance() {
                 throw new Error('Failed to update photo URL on server');
             }
 
-            // Optionally re-fetch request details if needed
             const updatedDetails = await axios.get(`${API_BASE_URL}/api/generate-barangayClearance/${id}`);
             setRequestDetails(updatedDetails.data);
 
+            setUpdateCertInfo(true);
             setIsPhotoUploaded(true);
         } catch (err) {
             console.error("Error uploading photo: ", err);
@@ -149,7 +160,7 @@ function BrgyClearance() {
 
                     <input id="fileInput" type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
 
-                    <button onClick={handlePrint} className={`flex items-center gap-x-2 border ${isPhotoUploaded ? 'border-blue-700 text-blue-700 hover:bg-blue-700 hover:text-white' : 'border-gray-400 text-gray-400 cursor-not-allowed'} rounded-full py-1 px-3 transition-all ease-in duration-400`} disabled={!isPhotoUploaded}>
+                    <button disabled={!isPhotoUploaded} onClick={handlePrint} className={`flex items-center gap-x-2 border ${isPhotoUploaded ? 'border-blue-700 text-blue-700 hover:bg-blue-700 hover:text-white' : 'border-gray-400 text-gray-400 cursor-not-allowed'} rounded-full py-1 px-3 transition-all ease-in duration-400`}>
                         <FaPrint /> Print Certificate
                     </button>
 
