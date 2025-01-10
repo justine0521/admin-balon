@@ -5,6 +5,7 @@ import NewHero from "./New-Hero";
 import Residence from "./Residence";
 import Certificates from "./Certificates";
 import Officials from "./Officials";
+import Accomplishments from "./Accomplishments";
 import Announcements from "./Announcement";
 import Blocked from "./Blocked";
 import Transaction from "./Transactions";
@@ -59,11 +60,12 @@ function NewHome() {
           <NewSidebar isSidebarOpen={isSidebarOpen} activeSection={activeSection} setActiveSection={setActiveSection} />
         </div>
 
-        <div className={`w-full h-fit bg-gray-100 rounded-lg p-3 transition-all duration-300 ${ isSidebarOpen ? "ml-64" : "ml-14"}`}>
+        <div className={`w-full h-fit bg-gray-100 rounded-lg p-3 transition-all duration-300 ${isSidebarOpen ? "ml-64" : "ml-14"}`}>
           {activeSection === "Dashboard" && <NewHero />}
           {activeSection === "Residence Record" && <Residence />}
           {activeSection === "Certificates" && <Certificates />}
           {activeSection === "Officials" && <Officials />}
+          {activeSection === "Accomplishments" && <Accomplishments />}
           {activeSection === "Announcement" && <Announcements />}
           {activeSection === "Block listed" && <Blocked />}
           {activeSection === "Transaction History" && <Transaction />}
