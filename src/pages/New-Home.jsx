@@ -9,6 +9,7 @@ import Accomplishments from "./Accomplishments";
 import Announcements from "./Announcement";
 import Blocked from "./Blocked";
 import Transaction from "./Transactions";
+import Faq from "./Faq";
 
 import Profile from "./Profile";
 import Settings from "./Settings";
@@ -67,6 +68,7 @@ function NewHome() {
           {activeSection === "Officials" && <Officials />}
           {activeSection === "Accomplishments" && <Accomplishments />}
           {activeSection === "Announcement" && <Announcements />}
+          {activeSection === "FAQs" && <Faq />}
           {activeSection === "Block listed" && <Blocked />}
           {activeSection === "Transaction History" && <Transaction />}
 
