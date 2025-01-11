@@ -1,6 +1,6 @@
 import React from 'react';
 import { RxDashboard } from 'react-icons/rx';
-import { FaUsers, FaCertificate, FaUserTie } from 'react-icons/fa6';
+import { FaUsers, FaCertificate, FaUserTie, FaQuestion } from 'react-icons/fa6';
 import { FaAward, FaBullhorn } from 'react-icons/fa';
 import { BsClockHistory, BsPersonFillSlash } from 'react-icons/bs';
 
@@ -13,6 +13,7 @@ function NewSidebar({ isSidebarOpen, activeSection, setActiveSection }) {
         { label: 'Officials', icon: <FaUserTie /> },
         { label: 'Accomplishments', icon: <FaAward /> },
         { label: 'Announcement', icon: <FaBullhorn /> },
+        { label: 'FAQs', icon: <FaQuestion /> },
         { label: 'Block listed', icon: <BsPersonFillSlash /> },
         { label: 'Transaction History', icon: <BsClockHistory /> },
     ];
