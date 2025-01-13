@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaPlus } from 'react-icons/fa6';
-import { FaRegEdit } from 'react-icons/fa';
+import { FaEdit } from "react-icons/fa";
 import { MdDelete } from 'react-icons/md';
 import AddFaqModal from '../Modal/AddFaqModal';
 import EditFaqModal from '../Modal/EditFaqModal';
@@ -157,10 +157,10 @@ function Faq() {
           {paginatedFaqs.map((faq) => (
             <tr key={faq._id} className="hover:bg-white border-b">
               <td className="py-3 px-4 text-left font-semibold">{faq.question}</td>
-              <td className="py-3 px-4 text-left font-semibold">{faq.answer}</td>
+              <td className="py-3 px-4 text-left text-sm">{faq.answer}</td>
               <td className="py-3 px-4 text-left font-semibold flex gap-2 items-center w-full">
                 <button title="Edit" className="text-xl text-blue-500 hover:text-blue-700" onClick={() => openEditModal(faq)}>
-                  <FaRegEdit />
+                  <FaEdit />
                 </button>
 
                 <button title="Delete" className="text-xl text-red-500 hover:text-red-700" onClick={() => handleDelete(faq._id)}>
